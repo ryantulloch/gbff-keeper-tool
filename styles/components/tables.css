@@ -114,15 +114,15 @@
     font-weight: 500 !important;
   }
   
-  /* Larger, more touch-friendly checkboxes for mobile - 16px */
+  /* Larger, more touch-friendly checkboxes for mobile - 18px */
   .mobile-checkbox,
   .player-checkbox-mobile {
     appearance: none !important;
     -webkit-appearance: none !important;
-    width: 16px !important;
-    height: 16px !important;
-    min-width: 16px !important;
-    min-height: 16px !important;
+    width: 18px !important;
+    height: 18px !important;
+    min-width: 18px !important;
+    min-height: 18px !important;
     border: 2px solid #d1d5db !important;
     border-radius: 3px !important;
     background: white !important;
@@ -141,8 +141,8 @@
   .player-checkbox-mobile:checked::after {
     content: '';
     position: absolute;
-    left: 3px;
-    top: 0px;
+    left: 4px;
+    top: 1px;
     width: 6px;
     height: 10px;
     border: solid white;
