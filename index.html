@@ -547,12 +547,16 @@
                     </div>
                 </div>
                 <!-- Actions Section -->
-                <div class="flex items-center space-x-2">
+                <div class="flex items-center space-x-1 sm:space-x-2">
                     <button type="button" id="clear-selection" title="Clear selection" class="p-2 text-blue-200 hover:text-white rounded-full focus:outline-none focus:ring-2 focus:ring-white">
                         <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                     </button>
-                    <button type="button" id="submit-selection" class="rounded-md bg-white/10 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white" style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;">
-                        Submit Keepers
+                    <button type="button" id="edit-keepers" title="Edit existing submission" class="p-2 text-blue-200 hover:text-white rounded-full focus:outline-none focus:ring-2 focus:ring-white">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                    </button>
+                    <button type="button" id="submit-selection" class="rounded-md bg-white/10 px-2 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-white shadow-sm hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white" style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;">
+                        <span class="hidden sm:inline">Submit Keepers</span>
+                        <span class="sm:hidden">Submit</span>
                     </button>
                 </div>
             </div>
