@@ -1,7 +1,79 @@
 /* =================================================================
-   Post-Reveal State Styles - Dark Theme with Gold (lines 1503-1669)
+   Post-Reveal State Styles - Dark Theme with Gold
    ================================================================= */
 
+.post-reveal-mode {
+  background: var(--background-dark);
+  min-height: 100vh;
+}
+
+.post-reveal-mode * {
+  /* Ensure all elements maintain consistent styling */
+}
+
+/* View Submissions button in reveal mode */
+.post-reveal-mode button,
+.post-reveal-mode .btn {
+  background: transparent;
+  border: 1px solid var(--amber-gold-rgba-30);
+  color: var(--primary-gold);
+  padding: 12px 32px;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  transition: all 0.2s ease;
+}
+
+.post-reveal-mode button:hover,
+.post-reveal-mode .btn:hover {
+  background: var(--amber-gold-rgba-20);
+  border-color: var(--amber-gold-rgba-50);
+  transform: translateY(-2px);
+}
+
+.post-reveal-header {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem; /* matches rounded-2xl from main header */
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); /* matches shadow-2xl */
+  margin-bottom: 2rem;
+  animation: revealHeader 0.6s ease-out;
+}
+
+/* Match the main header's exact gradient (from-slate-900 to-slate-800) */
+.post-reveal-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgb(15, 23, 42), rgb(30, 41, 59));
+  opacity: 0.95;
+}
+
+.post-reveal-header::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.2;
+  background: linear-gradient(to bottom right, rgba(59, 130, 246, 0.1), transparent, rgba(16, 185, 129, 0.1));
+}
+
+/* Content positioning to match original */
+.post-reveal-header > div {
+  position: relative;
+  padding: 1.5rem 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .post-reveal-header > div {
+    padding: 2rem 1.5rem;
+  }
+}
+
+/* Bottom border effect like original */
+.post-reveal-header .bottom-border {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
   height: 1px;
   background: linear-gradient(to right, transparent, rgba(59, 130, 246, 0.5), transparent);
 }
@@ -91,81 +163,4 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-left: 0.5rem;
-}
-
-
-/* =================================================================
-   Print Styles
-   ================================================================= */
-
-@media print {
-  .no-print {
-    display: none !important;
-  }
-  
-  body {
-    font-size: 12pt;
-    color: black;
-    background: white;
-  }
-  
-  .mobile-card {
-    page-break-inside: avoid;
-    border: 1px solid #000;
-    box-shadow: none;
-  }
-}
-
-/* =================================================================
-   COUNTDOWN SYSTEM - CONSOLIDATED
-   ================================================================= */
-/*
-   COUNTDOWN IMPLEMENTATIONS CONSOLIDATED:
-   - Premium dark countdown (primary system with circle progress)
-   - Compact countdown removed (redundant)
-   - Timer display integrated with CSS variables
-   - All animations unified under single system
-*/
-
-/* Timer glow animation - consolidated */
-.timer.active-countdown {
-    display: inline-block;
-    animation: subtle-glow 3s ease-in-out infinite;
-}
-
-@keyframes subtle-glow {
-    0%, 100% {
-        filter: brightness(1) drop-shadow(0 0 10px rgba(16, 185, 129, 0.2));
-    }
-    50% {
-        filter: brightness(1.05) drop-shadow(0 0 20px rgba(16, 185, 129, 0.4));
-    }
-}
-
-/* Removed duplicate mobile countdown styles - using main mobile styles above */
-
-
-/* =================================================================
-   PREMIUM NOTIFICATION TOAST
-   ================================================================= */
-
-.premium-notification {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%) translateY(100px);
-  background: linear-gradient(135deg, var(--surface-dark) 0%, var(--surface-elevated) 100%);
-  color: var(--text-primary);
-  padding: 16px 24px;
-  border-radius: 12px;
-  border: 1px solid var(--border-color);
-  box-shadow: 
-    0 10px 30px rgba(0, 0, 0, 0.8),
-    0 0 40px rgba(255, 215, 0, 0.1);
-  z-index: var(--z-notification);
-  transition: transform 0.3s ease;
-}
-
-.premium-notification.show {
-  transform: translateX(-50%) translateY(0);
 }
