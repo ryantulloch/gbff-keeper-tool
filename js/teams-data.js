@@ -29,7 +29,7 @@ window.TEAMS = {
     { name: 'Kimani Vidal', cost: 5 }, { name: 'Tyler Allgeier', cost: 9 },
     { name: 'Jahan Dotson', cost: 5 }, { name: 'Rashid Shaheed', cost: 9 },
     { name: 'Demario Douglas', cost: 6 }, { name: 'Dallas Goedert', cost: 22 },
-    { name: 'Brandon Aiyuk', cost: 23 }
+    { name: 'Brandon Aiyuk', cost: 23 }, { name: 'Justin Fields', cost: 6 }
   ],
   'mike-loseth': [
     { name: 'Jalen Hurts', cost: 70 }, { name: 'Christian McCaffrey', cost: 113 },
