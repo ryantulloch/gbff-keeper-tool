@@ -32,6 +32,7 @@ const EXPIRY_AUTO_START_WINDOW = 86400000; // 24 hours in ms
 
 // Debug logging for countdown duration
 console.log('🔧 CONFIG LOADED: COUNTDOWN_DURATION =', COUNTDOWN_DURATION, 'seconds');
+console.log('🔧 CONFIG VERSION: 2025-01-28-v2 (60 seconds + 57 images)');
 
 // Default deadline
 const DEFAULT_DEADLINE = '2025-09-02T00:00';
