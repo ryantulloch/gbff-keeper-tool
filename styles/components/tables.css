@@ -108,10 +108,17 @@
     background-color: rgb(241 245 249) !important; /* Very light grey for dark mode too */
   }
   
-  /* Fix player name text color - make it dark and readable */
+  /* Fix player name text color and size - make it dark, readable, and proportional to larger checkboxes */
   .player-card .text-xs {
     color: #1f2937 !important; /* Dark gray for better readability */
     font-weight: 500 !important;
+    font-size: 0.875rem !important; /* Increased from text-xs (0.75rem) to text-sm (0.875rem) */
+  }
+  
+  /* Increase cost/value text size to match */
+  .player-card .text-right {
+    font-size: 0.875rem !important;
+    font-weight: 600 !important;
   }
   
   /* Larger, more touch-friendly checkboxes for mobile - 18px */
