@@ -2,6 +2,8 @@
  * Background Images Module - 57 Micah/Jerry Images for Countdown Seconds 60-4
  */
 
+console.log('🖼️ BACKGROUND IMAGES VERSION: 2025-01-28-v2 (57 images system)');
+
 let imageContainer = null;
 let currentImageElement = null;
 
