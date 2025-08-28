@@ -54,7 +54,7 @@ function initiateCountdown() {
 }
 
 /**
- * Start the 10-second reveal countdown
+ * Start the 30-second reveal countdown
  */
 function startCountdown() {
     if (window.getIsCountdownActive() || window.getIsAutoRevealing()) {
@@ -68,6 +68,11 @@ function startCountdown() {
     // Show the countdown overlay
     const overlay = document.getElementById('countdownOverlay');
     overlay.classList.add('active');
+    
+    // Initialize background images
+    if (typeof window.initializeBackgroundImages === 'function') {
+        window.initializeBackgroundImages();
+    }
     
     // Show the notice banner
     const notice = document.getElementById('autoRevealNotice');
@@ -103,6 +108,7 @@ function startCountdown() {
 /**
  * Update countdown display every second
  * Premium version with smooth transitions for FUCK/YOU/DANNY at 3/2/1
+ * Now includes faint pulsing background images!
  */
 function updateCountdown() {
     if (!window.getCountdownStartTime()) return;
@@ -114,6 +120,23 @@ function updateCountdown() {
     const countdownNumber = document.getElementById('countdownNumber');
     const countdownText = document.getElementById('countdownText');
     const countdownMessage = document.getElementById('countdownMessage');
+    
+    // Trigger background image pulse on each second
+    if (typeof window.triggerImagePulse === 'function') {
+        window.triggerImagePulse();
+    }
+    
+    // Cycle images every 7 seconds for variety
+    if (remaining % 7 === 0 && typeof window.cycleToNextImage === 'function') {
+        window.cycleToNextImage();
+    }
+    
+    // Special test: Show meme at 25 seconds instead of countdown number
+    if (remaining === 25 && typeof window.showMemeAt25Seconds === 'function') {
+        window.showMemeAt25Seconds();
+        // Skip normal text update when showing meme
+        return;
+    }
     
     // Smooth transition function with premium timing
     const smoothTransition = (newText, newClass, newSubtext, newMessage) => {
@@ -169,6 +192,11 @@ function updateCountdown() {
     
     // Trigger reveal when countdown reaches 0
     if (remaining <= 0) {
+        // Cleanup background images
+        if (typeof window.cleanupBackgroundImages === 'function') {
+            window.cleanupBackgroundImages();
+        }
+        
         // Immediately stop intervals and trigger reveal
         clearInterval(countdownInterval);
         window.stopProgressAnimation();
@@ -193,6 +221,11 @@ function updateCountdown() {
  */
 function escapeCountdown() {
     console.log('🚪 Escaping countdown overlay - countdown continues in background');
+    
+    // Cleanup background images when escaping
+    if (typeof window.cleanupBackgroundImages === 'function') {
+        window.cleanupBackgroundImages();
+    }
     
     // Hide overlay with fade out
     const overlay = document.getElementById('countdownOverlay');
