@@ -1,0 +1,171 @@
+/* =================================================================
+   Post-Reveal State Styles - Dark Theme with Gold (lines 1503-1669)
+   ================================================================= */
+
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(59, 130, 246, 0.5), transparent);
+}
+
+@keyframes revealHeader {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reveal-complete-title {
+  font-size: 1.875rem;
+  font-weight: 300;
+  color: white;
+  letter-spacing: 0.025em;
+  margin-bottom: 0.25rem;
+  transition: all 300ms;
+  line-height: 1.2;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .reveal-complete-title {
+    font-size: 2.25rem;
+    text-align: left;
+  }
+}
+
+.reveal-complete-subtitle {
+  color: rgb(148, 163, 184);
+  font-size: 0.75rem;
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .reveal-complete-subtitle {
+    text-align: left;
+  }
+}
+
+.submissions-reveal-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.submission-item.final-reveal {
+  background: linear-gradient(135deg, var(--surface-dark) 0%, var(--background-dark) 100%);
+  border: 1px solid var(--amber-gold-rgba-20);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  margin-bottom: 1.5rem;
+  animation: quickReveal 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation-fill-mode: both;
+  padding: 1.5rem;
+  border-radius: 8px;
+  transform: translateZ(0);
+  will-change: transform, opacity;
+}
+
+@keyframes quickReveal {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.final-keeper-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #00d4ff 0%, #06b6d4 100%);
+  color: #0c4a6e;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-left: 0.5rem;
+}
+
+
+/* =================================================================
+   Print Styles
+   ================================================================= */
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  body {
+    font-size: 12pt;
+    color: black;
+    background: white;
+  }
+  
+  .mobile-card {
+    page-break-inside: avoid;
+    border: 1px solid #000;
+    box-shadow: none;
+  }
+}
+
+/* =================================================================
+   COUNTDOWN SYSTEM - CONSOLIDATED
+   ================================================================= */
+/*
+   COUNTDOWN IMPLEMENTATIONS CONSOLIDATED:
+   - Premium dark countdown (primary system with circle progress)
+   - Compact countdown removed (redundant)
+   - Timer display integrated with CSS variables
+   - All animations unified under single system
+*/
+
+/* Timer glow animation - consolidated */
+.timer.active-countdown {
+    display: inline-block;
+    animation: subtle-glow 3s ease-in-out infinite;
+}
+
+@keyframes subtle-glow {
+    0%, 100% {
+        filter: brightness(1) drop-shadow(0 0 10px rgba(16, 185, 129, 0.2));
+    }
+    50% {
+        filter: brightness(1.05) drop-shadow(0 0 20px rgba(16, 185, 129, 0.4));
+    }
+}
+
+/* Removed duplicate mobile countdown styles - using main mobile styles above */
+
+
+/* =================================================================
+   PREMIUM NOTIFICATION TOAST
+   ================================================================= */
+
+.premium-notification {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: linear-gradient(135deg, var(--surface-dark) 0%, var(--surface-elevated) 100%);
+  color: var(--text-primary);
+  padding: 16px 24px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.8),
+    0 0 40px rgba(255, 215, 0, 0.1);
+  z-index: var(--z-notification);
+  transition: transform 0.3s ease;
+}
+
+.premium-notification.show {
+  transform: translateX(-50%) translateY(0);
+}
