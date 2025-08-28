@@ -138,15 +138,9 @@ function initializeKeeperTables() {
       
       isDropdownOpen = true;
       optionsContainer.style.display = 'block';
-      
-      // Force reflow before adding animation classes
-      optionsContainer.offsetHeight;
-      
-      requestAnimationFrame(() => {
-        optionsContainer.style.opacity = '1';
-        optionsContainer.style.visibility = 'visible';
-        optionsContainer.classList.add('dropdown-open');
-      });
+      optionsContainer.style.opacity = '1';
+      optionsContainer.style.visibility = 'visible';
+      optionsContainer.classList.add('dropdown-open');
     }
     
     function closeDropdown() {
@@ -154,22 +148,18 @@ function initializeKeeperTables() {
       
       isDropdownOpen = false;
       optionsContainer.classList.remove('dropdown-open');
-      
-      // Use transition end to properly hide element
-      const hideDropdown = () => {
-        if (!isDropdownOpen) {
-          optionsContainer.style.display = 'none';
-        }
-        optionsContainer.removeEventListener('transitionend', hideDropdown);
-      };
-      
-      optionsContainer.addEventListener('transitionend', hideDropdown);
+      optionsContainer.style.display = 'none';
       optionsContainer.style.opacity = '0';
       optionsContainer.style.visibility = 'hidden';
     }
     
-    // Initialize dropdown as closed
-    closeDropdown();
+    // Initialize dropdown as closed - set initial state directly without calling closeDropdown
+    if (optionsContainer) {
+      optionsContainer.style.display = 'none';
+      optionsContainer.style.opacity = '0';
+      optionsContainer.style.visibility = 'hidden';
+      optionsContainer.classList.remove('dropdown-open');
+    }
   }
 
   // --- Table Rendering ---
