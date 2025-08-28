@@ -304,7 +304,7 @@ function initializeKeeperTables() {
       
       // Show warning colors if over limits
       if (count > window.MAX_KEEPERS) {
-        selectionCountEl.style.color = '#ef4444'; // red
+        selectionCountEl.style.color = '#fbbf24'; // soft amber warning
         selectionCountEl.textContent += ` (max ${window.MAX_KEEPERS})`;
       } else {
         selectionCountEl.style.color = '';
@@ -312,8 +312,8 @@ function initializeKeeperTables() {
       
       if (remainingBudget < 0) {
         remainingBudgetEl.textContent = window.currency.format(remainingBudget);
-        remainingBudgetEl.style.color = '#ef4444'; // red
-        totalCostEl.style.color = '#ef4444'; // red
+        remainingBudgetEl.style.color = '#fbbf24'; // soft amber warning
+        totalCostEl.style.color = '#fbbf24'; // soft amber warning
       } else {
         remainingBudgetEl.textContent = window.currency.format(remainingBudget);
         remainingBudgetEl.style.color = '';
