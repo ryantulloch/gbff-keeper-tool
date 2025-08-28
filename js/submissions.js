@@ -432,6 +432,21 @@ function executeAutoReveal() {
         // Update page title
         document.title = 'GBFF Keepers - Final Results';
         
+        // Analyze available free agents after keepers are revealed
+        if (typeof window.analyzeAvailableFreeAgents === 'function') {
+            console.log('Triggering free agent analysis...');
+            const currentSubmissions = window.getSubmissions();
+            const analysisResults = window.analyzeAvailableFreeAgents(currentSubmissions);
+            if (analysisResults) {
+                console.log('Free agent analysis completed successfully');
+                // Results are stored in window.availableFreeAgents for UI access
+            } else {
+                console.log('Free agent analysis returned no results');
+            }
+        } else {
+            console.log('Free agent analyzer not available');
+        }
+        
         // No confetti or audio - keep it clean and fast
     });
 }

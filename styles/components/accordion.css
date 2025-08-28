@@ -1,0 +1,394 @@
+/* =================================================================
+   ACCORDION COMPONENT STYLES - Refactored and Consolidated
+   ================================================================= */
+
+/* Shared Accordion Section Styles */
+.accordion-section {
+  overflow: hidden;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  perspective: 1000px;
+  will-change: auto;
+  contain: layout style paint;
+}
+
+.accordion-section:hover {
+  box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 10px -3px rgba(0, 0, 0, 0.05);
+}
+
+/* Shared Accordion Button Styles */
+.accordion-button {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  will-change: auto;
+  transition: background-color 0.15s ease-out, box-shadow 0.15s ease-out;
+}
+
+/* Touch active state for immediate feedback */
+.accordion-button.touch-active {
+  background-color: rgba(59, 130, 246, 0.08) !important;
+  transform: scale(0.99) translateZ(0);
+}
+
+/* Shared Accordion Toggle Icon Styles */
+.accordion-toggle {
+  transform-origin: center;
+  will-change: auto;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Shared Accordion Content Styles */
+.accordion-content {
+  transform-origin: top center;
+  will-change: auto;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  contain: layout style paint;
+}
+
+/* Enhanced Step Cards (for instructions accordion) */
+.accordion-content .grid > div {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 0.75rem;
+  will-change: background-color, transform;
+}
+
+.accordion-content .grid > div:hover {
+  background-color: rgba(59, 130, 246, 0.03);
+  transform: translateY(-1px);
+}
+
+/* Enhanced Step Numbers */
+.accordion-content .grid > div span {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, box-shadow;
+}
+
+.accordion-content .grid > div:hover span {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px -2px rgba(0, 0, 0, 0.1);
+}
+
+/* Enhanced Warning Callout */
+.accordion-content .mt-5 {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 0.75rem;
+}
+
+.accordion-content .mt-5:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px -2px rgba(245, 158, 11, 0.15);
+}
+
+/* Enhanced Input and Button Styles (for commissioner accordion) */
+.accordion-content input,
+.accordion-content button {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.accordion-content input:hover {
+  background-color: rgba(248, 250, 252, 1);
+}
+
+.accordion-content button:hover {
+  transform: translateY(-1px);
+}
+
+/* Mobile-Specific Enhancements - Spring Physics Optimized */
+@media (max-width: 768px) {
+  .accordion-button {
+    padding: 1rem;
+    min-height: 60px;
+    touch-action: manipulation;
+  }
+  
+  /* Enhanced mobile touch feedback - handled by JS .touch-active class */
+  .accordion-button.touch-active {
+    transform: scale(0.98) translateZ(0);
+    background-color: rgba(59, 130, 246, 0.1);
+  }
+  
+  /* Mobile-optimized content spacing */
+  .accordion-content > div {
+    padding: 1rem;
+  }
+  
+  .accordion-content .grid {
+    gap: 1rem;
+    grid-template-columns: 1fr;
+  }
+  
+  /* Enhanced mobile step cards - GPU optimized */
+  .accordion-content .grid > div {
+    padding: 1rem;
+    border-radius: 1rem;
+    background: rgba(248, 250, 252, 0.8);
+    border: 1px solid rgba(226, 232, 240, 0.6);
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+  }
+  
+  .accordion-content .grid > div:active {
+    transform: scale(0.98) translateZ(0);
+    background-color: rgba(59, 130, 246, 0.05);
+  }
+  
+  /* Mobile warning callout */
+  .accordion-content .mt-5 {
+    padding: 1.25rem;
+    border-radius: 1rem;
+  }
+  
+  /* Enhanced mobile buttons for commissioner */
+  .accordion-content button {
+    min-height: 44px;
+    font-size: 0.875rem;
+  }
+  
+  .accordion-content input {
+    min-height: 44px;
+    font-size: 1rem;
+  }
+}
+
+/* Touch device optimizations - Spring Physics Compatible */
+@media (hover: none) and (pointer: coarse) {
+  .accordion-button {
+    transition: background-color 0.1s ease-out;
+  }
+  
+  .accordion-button.touch-active {
+    transform: scale(0.97) translateZ(0);
+    background-color: rgba(59, 130, 246, 0.12);
+  }
+  
+  .accordion-content .grid > div:hover {
+    background-color: transparent;
+    transform: translateZ(0);
+  }
+  
+  .accordion-content .grid > div:active {
+    background-color: rgba(59, 130, 246, 0.08);
+    transform: scale(0.98) translateZ(0);
+  }
+  
+  .accordion-content input:hover {
+    background-color: rgba(248, 250, 252, 0.5);
+  }
+  
+  .accordion-content button:hover {
+    transform: translateZ(0);
+  }
+  
+  .accordion-content button:active {
+    transform: scale(0.98) translateZ(0);
+  }
+}
+
+/* Reduced motion support for accordion */
+@media (prefers-reduced-motion: reduce) {
+  .accordion-button,
+  .accordion-toggle,
+  .accordion-content,
+  .accordion-content .grid > div,
+  .accordion-content .grid > div span,
+  .accordion-content .mt-5,
+  .accordion-content input,
+  .accordion-content button {
+    transition: none;
+    animation: none;
+    transform: none;
+  }
+  
+  .accordion-button:active,
+  .accordion-content .grid > div:active,
+  .accordion-content button:active {
+    transform: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .accordion-section {
+    border-width: 2px;
+    border-color: #000;
+  }
+  
+  .accordion-button {
+    border-bottom: 2px solid #000;
+  }
+  
+  .accordion-content .grid > div {
+    border: 2px solid #000;
+  }
+  
+  .accordion-content .mt-5 {
+    border-width: 2px;
+  }
+  
+  .accordion-content input,
+  .accordion-content button {
+    border-width: 2px;
+  }
+}
+
+/* Accessibility Enhancements */
+.accordion-button[aria-expanded="true"] .accordion-toggle {
+  transform: rotate(180deg);
+}
+
+.accordion-button[aria-expanded="false"] .accordion-toggle {
+  transform: rotate(0deg);
+}
+
+/* Enhanced loading state for content */
+.accordion-content[data-open="true"] {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.accordion-content[data-open="false"] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Stagger animation for step cards - Disabled on mobile for better performance */
+@media (min-width: 769px) {
+  .accordion-content[data-open="true"] .grid > div:nth-child(1) {
+    animation: slideInStagger 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s both;
+  }
+
+  .accordion-content[data-open="true"] .grid > div:nth-child(2) {
+    animation: slideInStagger 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.15s both;
+  }
+
+  .accordion-content[data-open="true"] .grid > div:nth-child(3) {
+    animation: slideInStagger 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s both;
+  }
+
+  .accordion-content[data-open="true"] .grid > div:nth-child(4) {
+    animation: slideInStagger 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.25s both;
+  }
+
+  .accordion-content[data-open="true"] .mt-5 {
+    animation: slideInStagger 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s both;
+  }
+}
+
+@keyframes slideInStagger {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Disable stagger animations on reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .accordion-content[data-open="true"] .grid > div,
+  .accordion-content[data-open="true"] .mt-5 {
+    animation: none;
+  }
+}
+
+/* Stagger animation for commissioner controls when opening */
+.accordion-content[data-open="true"] .flex:nth-child(1) {
+  animation: slideInStagger 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s both;
+}
+
+.accordion-content[data-open="true"] .grid {
+  animation: slideInStagger 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.15s both;
+}
+
+.accordion-content[data-open="true"] .mt-2 {
+  animation: slideInStagger 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s both;
+}
+
+/* Disable commissioner stagger animations on reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .accordion-content[data-open="true"] .flex,
+  .accordion-content[data-open="true"] .grid,
+  .accordion-content[data-open="true"] .mt-2 {
+    animation: none;
+  }
+}
+
+/* =================================================================
+   LEGACY ID-SPECIFIC STYLES (for backward compatibility)
+   These maintain existing functionality while classes are applied
+   ================================================================= */
+
+/* Instructions Accordion - Legacy ID Support */
+#instructionsSection {
+  /* All styles moved to .accordion-section class above */
+}
+
+#instructionsButton {
+  /* All styles moved to .accordion-button class above */
+  /* Focus-visible rule removed - handled by universal focus styles */
+}
+
+#instructionsToggle {
+  /* All styles moved to .accordion-toggle class above */
+}
+
+#instructionsContent {
+  /* All styles moved to .accordion-content class above */
+}
+
+/* Commissioner Accordion - Legacy ID Support */
+#commissionerSection {
+  /* All styles moved to .accordion-section class above */
+}
+
+#commissionerButton {
+  /* All styles moved to .accordion-button class above */
+  /* Focus-visible rule removed - handled by universal focus styles */
+  padding: 0.5rem 0;
+  border-radius: 0.5rem;
+  background-color: transparent !important;
+}
+
+#commissionerToggle {
+  /* All styles moved to .accordion-toggle class above */
+}
+
+#commissionerContent {
+  /* All styles moved to .accordion-content class above */
+}
+
+/* Mobile Commissioner Button Specific */
+@media (max-width: 768px) {
+  #commissionerButton {
+    padding: 0.75rem;
+    min-height: 60px;
+    touch-action: manipulation;
+  }
+  
+  #commissionerButton.touch-active {
+    transform: scale(0.98) translateZ(0);
+    background-color: rgba(59, 130, 246, 0.1);
+  }
+  
+  /* Mobile-optimized content spacing */
+  #commissionerContent > div {
+    padding: 0.75rem 0;
+  }
+}
