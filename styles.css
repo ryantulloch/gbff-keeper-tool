@@ -2580,3 +2580,42 @@ textarea:focus-visible {
     background-color: transparent !important;
   }
 }
+
+/* Mobile Floating Bar - Final safe-area and grid fixes */
+@media (max-width: 640px) {
+  /* Respect iOS safe areas so content isn't clipped off-screen */
+  #floating-bar > .px-4 {
+    padding-left: calc(1rem + env(safe-area-inset-left, 0px)) !important;
+    padding-right: calc(1rem + env(safe-area-inset-right, 0px)) !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Force inner layout to [info | actions] with minimal actions width */
+  #floating-bar > .px-4 > .flex {
+    display: grid !important;
+    grid-template-columns: 1fr max-content !important;
+    align-items: center !important;
+    column-gap: 0.5rem !important;
+    row-gap: 0.5rem !important;
+    justify-content: initial !important;
+  }
+
+  /* Ensure the actions group never wraps and keeps a tight gap */
+  #floating-bar .flex.items-center.space-x-2 {
+    gap: 0.375rem !important;
+    white-space: nowrap !important;
+  }
+
+  /* Submit button - shorter, two-line label, no overflow */
+  #floating-bar #submit-selection {
+    padding: 0.35rem 0.5rem !important;
+    font-size: 0.74rem !important;
+    line-height: 1.05 !important;
+    min-width: 78px !important;
+    max-width: 88px !important;
+    white-space: normal !important; /* allow "Submit" and "Keepers" to wrap */
+    text-align: center !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+}
