@@ -29,17 +29,49 @@
   display: none;
 }
 
-/* Disable hover/active highlight on desktop rows for touch devices */
+/* Complete touch/tap highlight removal for mobile devices */
 @media (hover: none) and (pointer: coarse) {
+  .keepers-table-row,
+  .player-card {
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+    touch-action: manipulation !important;
+  }
+  
   .keepers-table-row:hover,
   .keepers-table-row:active,
-  .keepers-table-row:focus {
+  .keepers-table-row:focus,
+  .keepers-table-row:target {
     background-color: transparent !important;
+    box-shadow: none !important;
   }
+  
+  .player-card:hover,
+  .player-card:active,
+  .player-card:focus,
+  .player-card:target {
+    background-color: transparent !important;
+    box-shadow: none !important;
+  }
+  
   .dark .keepers-table-row:hover,
   .dark .keepers-table-row:active,
-  .dark .keepers-table-row:focus {
+  .dark .keepers-table-row:focus,
+  .dark .keepers-table-row:target {
     background-color: transparent !important;
+    box-shadow: none !important;
+  }
+  
+  .dark .player-card:hover,
+  .dark .player-card:active,
+  .dark .player-card:focus,
+  .dark .player-card:target {
+    background-color: transparent !important;
+    box-shadow: none !important;
   }
 }
 
@@ -55,10 +87,6 @@
   }
   
   .keeper-table-container .mobile-table-header {
-    display: block !important;
-  }
-  
-  .keeper-table-container .mobile-team-dropdown {
     display: block !important;
   }
   

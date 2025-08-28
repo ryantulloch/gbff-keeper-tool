@@ -141,11 +141,6 @@ function initializeKeeperTables() {
     
     const tableHtml = `
       <div class="keeper-table-container">
-        <!-- Mobile Team Dropdown -->
-        <div class="mobile-team-dropdown hidden px-3 pb-2">
-          <div class="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Team Selected:</div>
-          <div class="text-sm font-bold text-gray-900 dark:text-white">${currentTeamSlug ? window.TEAM_OPTIONS.find(opt => opt.value === currentTeamSlug)?.label || 'None' : 'None'}</div>
-        </div>
         <div class="mt-2 sm:mt-8">
           <!-- Mobile-friendly header -->
           <div class="mobile-table-header hidden">
