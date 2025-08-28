@@ -491,13 +491,17 @@ function initializeKeeperTables() {
     }
     
     // Check if password is already in the form field
-    let password = document.getElementById('password')?.value;
+    let password = document.getElementById('password')?.value?.trim();
+    console.log('Password field value:', password ? 'Has value' : 'Empty');
+    
     if (!password) {
       password = prompt('Enter your password:');
       if (!password) {
         console.log('No password entered');
         return;
       }
+    } else {
+      console.log('Using password from form field');
     }
     
     console.log('Password entered, attempting decrypt');
@@ -528,9 +532,8 @@ function initializeKeeperTables() {
     // Parse the keepers for reference (but don't auto-select them)
     const keeperNames = decrypted.split('\n').map(k => k.trim()).filter(k => k);
     
-    // Clear current selection - start fresh
-    selectedPlayers.clear();
-    updateFloatingBar();
+    // Clear current selection - start fresh (both Map and UI)
+    clearSelection(false); // false to not re-render the table, just clear UI state
     
     // Try to decrypt and populate cost data if available (for password fields)
     let passwordValue = '';
