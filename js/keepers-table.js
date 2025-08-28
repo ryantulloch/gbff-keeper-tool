@@ -445,127 +445,55 @@ function initializeKeeperTables() {
   function editExistingSubmission() {
     console.log('editExistingSubmission called');
     
-    // Debug: Check if dependencies are available
-    console.log('window.getSubmissions available:', typeof window.getSubmissions);
-    console.log('window.decrypt available:', typeof window.decrypt);
-    console.log('window.getDb available:', typeof window.getDb);
-    console.log('window.TEAM_OPTIONS available:', typeof window.TEAM_OPTIONS);
-    
-    // Use currently selected team instead of prompting
+    // Check if team is selected
     if (!currentTeamSlug) {
       alert('Please select your team first, then click Edit Keepers.');
       return;
     }
     
-    console.log('Using currently selected team:', currentTeamSlug);
-    
-    const teamKey = currentTeamSlug.replace(/[.$#\[\]\/]/g, '_');
-    console.log('Team key (slug format):', teamKey);
-    
-    const submissions = window.getSubmissions();
-    console.log('Submissions retrieved:', submissions);
-    console.log('Available team keys:', Object.keys(submissions || {}));
-    
-    // Also try the original team name format
-    const teamOption = window.TEAM_OPTIONS.find(opt => opt.value === currentTeamSlug);
-    let originalTeamKey = '';
-    if (teamOption) {
-      originalTeamKey = teamOption.label.trim().replace(/[.$#\[\]\/]/g, '_');
-      console.log('Original team name:', teamOption.label);
-      console.log('Original team key format:', originalTeamKey);
-    }
-    
-    let submission = submissions[teamKey];
-    console.log('Found submission with slug key:', submission);
-    
-    // If not found with slug, try with original team name format
-    if (!submission && originalTeamKey) {
-      submission = submissions[originalTeamKey];
-      console.log('Found submission with original team name key:', submission);
-    }
-    
-    if (!submission) {
-      alert(`No submission found for this team. Looked for keys: "${teamKey}" and "${originalTeamKey}". Available keys: ${Object.keys(submissions || {}).join(', ')}`);
-      console.log('No submission found for team. Available keys:', Object.keys(submissions || {}));
+    // Check if players are selected
+    if (selectedPlayers.size === 0) {
+      alert('Please select the players you want to keep, then click Edit Keepers.');
       return;
     }
     
-    // Check if password is already in the form field
-    let password = document.getElementById('password')?.value?.trim();
-    console.log('Password field value:', password ? 'Has value' : 'Empty');
-    
+    // Check if password is entered
+    const password = document.getElementById('password')?.value?.trim();
     if (!password) {
-      password = prompt('Enter your password:');
-      if (!password) {
-        console.log('No password entered');
-        return;
-      }
-    } else {
-      console.log('Using password from form field');
-    }
-    
-    console.log('Password entered, attempting decrypt');
-    
-    // Try to decrypt to verify password
-    const decrypted = window.decrypt(submission.encryptedKeepers, password);
-    console.log('Decrypt result:', decrypted ? 'Success' : 'Failed');
-    
-    if (!decrypted) {
-      alert('Incorrect password!');
+      alert('Please enter your password first, then click Edit Keepers.');
       return;
     }
     
-    // Find the team slug for this submission
-    const teamSlug = submission.teamName;
-    const foundTeamOption = window.TEAM_OPTIONS.find(opt => opt.value === teamSlug);
-    if (!foundTeamOption) {
-      alert('Could not find team in roster. Please contact the commissioner.');
+    console.log('Team:', currentTeamSlug);
+    console.log('Selected players:', selectedPlayers.size);
+    console.log('Password entered');
+    
+    // Validate selection limits
+    if (selectedPlayers.size > window.MAX_KEEPERS) {
+      alert(`You can only keep up to ${window.MAX_KEEPERS} players. You currently have ${selectedPlayers.size} selected.`);
       return;
     }
     
-    // Team is already selected, just verify it matches
-    if (currentTeamSlug !== teamSlug) {
-      alert('The submission is for a different team than currently selected. Please select the correct team first.');
+    const totalCost = window.getTotalKeeperCost();
+    if (totalCost > window.TEAM_BUDGET) {
+      alert(`Your selected keepers cost ${window.currency.format(totalCost)}, which exceeds your ${window.currency.format(window.TEAM_BUDGET)} budget.`);
       return;
     }
     
-    // Parse the keepers for reference (but don't auto-select them)
-    const keeperNames = decrypted.split('\n').map(k => k.trim()).filter(k => k);
+    // Confirm the edit
+    const keepersList = Array.from(selectedPlayers.values())
+      .map(p => `${p.name} (${window.currency.format(p.cost)})`)
+      .join('\n');
     
-    // Clear current selection - start fresh (both Map and UI)
-    clearSelection(false); // false to not re-render the table, just clear UI state
+    const confirmMessage = `Update your keeper submission with these ${selectedPlayers.size} players?\n\n${keepersList}\n\nTotal Cost: ${window.currency.format(totalCost)}`;
     
-    // Try to decrypt and populate cost data if available (for password fields)
-    let passwordValue = '';
-    if (submission.encryptedKeepersCostData) {
-      try {
-        const decryptedCostData = window.decrypt(submission.encryptedKeepersCostData, password);
-        if (decryptedCostData) {
-          // We have the correct password, so we can prefill it
-          passwordValue = password;
-        }
-      } catch (e) {
-        console.log('Could not decrypt cost data, password will need to be re-entered');
-      }
+    if (!confirm(confirmMessage)) {
+      return;
     }
     
-    // Populate password fields if we have the password
-    if (passwordValue) {
-      const passwordField = document.getElementById('password');
-      const confirmPasswordField = document.getElementById('confirmPassword');
-      if (passwordField) passwordField.value = passwordValue;
-      if (confirmPasswordField) confirmPasswordField.value = passwordValue;
-    }
-    
-    // Delete the old submission from Firebase
-    window.getDb().ref('submissions/' + teamKey).remove().then(() => {
-      alert('Previous submission loaded for editing. IMPORTANT: Select ALL keepers you want to keep (including previous ones). This will completely replace your old submission.');
-      
-      // Show a notice about the loaded submission
-      showNotice(`✓ Loaded ${keeperNames.length} previous keeper${keeperNames.length === 1 ? '' : 's'}. Select ALL keepers you want (old + new).`);
-    }).catch((error) => {
-      alert('Error loading submission: ' + error.message);
-    });
+    // Submit the updated keepers using the existing submission system
+    console.log('Submitting updated keepers...');
+    window.submitKeepersFromTable();
   }
   
   // Expose showNotice globally for other modules
