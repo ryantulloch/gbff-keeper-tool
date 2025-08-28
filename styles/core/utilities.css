@@ -1,0 +1,242 @@
+/* =================================================================
+   REUSABLE UTILITY CLASSES
+   ================================================================= */
+
+/* GPU Acceleration Utility Class */
+.gpu-accelerated {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Animation Utilities */
+.animate-smooth {
+  transition: all var(--animation-normal) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-fast {
+  transition: all var(--animation-fast) ease;
+}
+
+.animate-slow {
+  transition: all var(--animation-slow) ease;
+}
+
+/* Z-index Utilities */
+.z-overlay { z-index: var(--z-overlay); }
+.z-modal { z-index: var(--z-modal); }
+.z-notification { z-index: var(--z-notification); }
+.z-top { z-index: var(--z-top); }
+
+/* Ensure minimum touch targets on mobile */
+@media (max-width: 640px) {
+  button,
+  input,
+  select,
+  textarea,
+  a {
+    min-height: var(--touch-target-min);
+    min-width: var(--touch-target-min);
+  }
+}
+
+/* =================================================================
+   Responsive Utilities
+   ================================================================= */
+
+/* Smooth transitions between breakpoints */
+.responsive-transition {
+  transition: all var(--animation-normal) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Mobile-first hide/show utilities */
+@media (max-width: 640px) {
+  .hide-mobile {
+    display: none !important;
+  }
+  
+  .show-mobile {
+    display: block !important;
+  }
+  
+  .stack-mobile {
+    flex-direction: column !important;
+  }
+  
+  .full-width-mobile {
+    width: 100% !important;
+    max-width: none !important;
+  }
+}
+
+@media (min-width: 641px) {
+  .hide-desktop {
+    display: none !important;
+  }
+  
+  .show-desktop {
+    display: block !important;
+  }
+}
+
+/* Touch-friendly spacing on mobile */
+@media (max-width: 640px) {
+  .touch-spacing > * {
+    margin-bottom: 1rem;
+  }
+  
+  .touch-padding {
+    padding: 1rem;
+  }
+}
+
+/* =================================================================
+   Loading States
+   ================================================================= */
+
+.skeleton-loader {
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Spinner */
+.spinner {
+  border: 2px solid #f3f4f6;
+  border-top-color: var(--primary-color);
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spinner-rotate 0.6s linear infinite;
+}
+
+@keyframes spinner-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =================================================================
+   Accessibility Enhancements - Consolidated Focus Styles
+   ================================================================= */
+
+/* Universal focus-visible styles - using box-shadow for consistency */
+:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+  border-radius: inherit;
+}
+
+/* Skip to content link */
+.skip-to-content {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--primary-color);
+  color: white;
+  padding: 8px;
+  text-decoration: none;
+  z-index: 100;
+  transition: top 0.2s;
+}
+
+.skip-to-content:focus {
+  top: 0;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --border-color: #000;
+  }
+  
+  .mobile-card,
+  .hash-display {
+    border-width: 2px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Global button states: pressed/disabled */
+button {
+  transition: transform 0.06s ease, filter 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+  border-radius: inherit;
+}
+
+button:active:not(:disabled) {
+  filter: brightness(0.98);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+button:disabled:hover,
+button:disabled:active {
+  transform: none;
+  box-shadow: none;
+}
+
+/* Inputs and forms ergonomics */
+input[type="text"],
+input[type="password"],
+input[type="datetime-local"],
+select,
+textarea {
+  border-radius: 0.5rem;
+}
+input::placeholder,
+textarea::placeholder {
+  color: #9ba3af;
+}
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+  border-color: #3b82f6;
+}
+
+/* Ensure focus-visible for keyboard navigation */
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+  border-color: #3b82f6;
+}
+@media (max-width: 640px) {
+  input,
+  select,
+  textarea {
+    padding-top: 0.8rem;
+    padding-bottom: 0.8rem;
+  }
+}

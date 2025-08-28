@@ -1,0 +1,50 @@
+/* =================================================================
+   CSS Custom Properties (Theme Variables)
+   ================================================================= */
+:root {
+  /* Premium Dark & Gold Color Palette */
+  --primary-gold: #FFD700;
+  --primary-amber: #FFA500;
+  --accent-gold: #F59E0B;
+  --dark-gold: #B8860B;
+  --danger-red: #DC2626;
+  
+  /* Gold color variations for consistent usage */
+  --gold-rgba-20: rgba(255, 215, 0, 0.2);
+  --gold-rgba-30: rgba(255, 215, 0, 0.3);
+  --gold-rgba-40: rgba(255, 215, 0, 0.4);
+  --gold-rgba-50: rgba(255, 215, 0, 0.5);
+  --gold-rgba-80: rgba(255, 215, 0, 0.8);
+  --amber-gold-rgba-20: rgba(212, 175, 55, 0.2);
+  --amber-gold-rgba-30: rgba(212, 175, 55, 0.3);
+  --amber-gold-rgba-40: rgba(212, 175, 55, 0.4);
+  --amber-gold-rgba-50: rgba(212, 175, 55, 0.5);
+  
+  --background-dark: #0F0F0F;
+  --surface-dark: #1A1A1A;
+  --surface-elevated: #2A2A2A;
+  
+  /* Consolidated primary color - removing duplicate */
+  --primary-color: #FFD700;
+  --success-color: #10b981;
+  --warning-color: #FFA500;
+  --error-color: #DC2626;
+  --text-primary: #FFFFFF;
+  --text-secondary: #B8B8B8;
+  --border-color: var(--gold-rgba-20);
+  
+  /* Animation timings */
+  --animation-fast: 200ms;
+  --animation-normal: 300ms;
+  --animation-slow: 500ms;
+  --animation-very-slow: 1000ms;
+  
+  /* Touch target minimum size */
+  --touch-target-min: 44px;
+  
+  /* Z-index layers - updated for consistency */
+  --z-overlay: 50;
+  --z-modal: 60;
+  --z-notification: 70;
+  --z-top: 1000;
+}

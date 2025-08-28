@@ -1,0 +1,21 @@
+/* STYLES/MAIN.CSS */
+
+/* 1. Core (Variables, Resets, Base Styles) */
+@import url('core/variables.css');
+@import url('core/base.css');
+@import url('core/utilities.css');
+
+/* 2. Animations (Keyframes) */
+@import url('animations/keyframes.css');
+
+/* 3. Components (Individual UI Components) */
+@import url('components/accordion.css');
+@import url('components/countdown.css');
+@import url('components/floating-bar.css');
+@import url('components/forms.css');
+@import url('components/post-reveal.css');
+@import url('components/tables.css');
+@import url('components/other-components.css');
+
+/* 4. Responsive (All Media Queries, Last for Overrides) */
+@import url('responsive/mobile.css');
