@@ -447,6 +447,9 @@ function executeAutoReveal() {
             console.log('Free agent analyzer not available');
         }
         
+        // Transform final results into tabbed interface
+        transformToTabbedInterface();
+        
         // No confetti or audio - keep it clean and fast
     });
 }
