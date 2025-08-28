@@ -1471,15 +1471,18 @@ textarea:focus-visible {
 }
 
 .keepers-table-row.selected {
-  background-color: rgb(248 250 252) !important; /* Very light grey instead of dark blue */
+  background-color: rgba(79, 70, 229, 0.10) !important; /* Indigo tint on selection */
+}
+.dark .keepers-table-row.selected {
+  background-color: rgba(79, 70, 229, 0.22) !important; /* Indigo tint in dark mode */
 }
 
 .keepers-table-row.selected:hover {
-  background-color: rgb(241 245 249) !important; /* Slightly darker light grey on hover */
+  background-color: rgba(79, 70, 229, 0.14) !important;
 }
 
 .keepers-table-row.selected .player-name {
-  color: #1f2937 !important; /* Dark grey text instead of blue */
+  color: #111827 !important;
   font-weight: 600;
 }
 
@@ -1512,7 +1515,8 @@ textarea:focus-visible {
     border-radius: 0.5rem 0.5rem 0 0;
     padding: 0.75rem 1rem !important; /* More compact padding */
     font-size: 0.875rem !important; /* Smaller font size */
-    flex-direction: column !important; /* Stack elements vertically */
+    flex-direction: row !important; /* Single-row layout on mobile */
+    align-items: center !important;
     gap: 0.5rem !important;
   }
   
@@ -1576,6 +1580,12 @@ textarea:focus-visible {
   #floating-bar-info > div.text-right .text-lg {
     font-size: 1rem !important;
     font-weight: 700 !important;
+  }
+
+  /* Tighten Tailwind space-x utilities inside floating bar */
+  #floating-bar .space-x-6 > * + * ,
+  #floating-bar .space-x-4 > * + * {
+    margin-left: 0.5rem !important;
   }
   
   /* Keep player count text together but allow it to be smaller */
