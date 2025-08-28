@@ -574,8 +574,15 @@
     <!-- Firebase manager -->
     <script src="js/firebase-manager.js"></script>
     
-    <!-- Feature modules -->
+    <!-- Countdown modules - loaded in dependency order -->
+    <script src="js/countdown/notifications.js"></script>
+    <script src="js/countdown/progress-animation.js"></script>
+    <script src="js/countdown/timer.js"></script>
+    <script src="js/countdown/countdown-overlay.js"></script>
+    <script src="js/countdown/countdown-test.js"></script>
     <script src="js/countdown.js"></script>
+    
+    <!-- Other feature modules -->
     <script src="js/ui-controller.js"></script>
     <script src="js/teams-data.js"></script>
     <script src="js/keepers-table.js"></script>

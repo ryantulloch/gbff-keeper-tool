@@ -149,35 +149,10 @@ function exportSubmissions() {
     linkElement.click();
 }
 
-/**
- * Test countdown with commissioner authentication
- */
-function testCountdownWithAuth() {
-    // Check commissioner password
-    const password = (document.getElementById('commissionerPassword') || {}).value || '';
-    if (!password) {
-        alert('Enter the commissioner password to access the test countdown.');
-        return;
-    }
-    if (password !== window.CONFIG.COMMISSIONER_PASSWORD) {
-        alert('❌ Invalid commissioner password! Only the commissioner can run test countdowns.');
-        return;
-    }
-    
-    // Password is correct, run the test countdown
-    console.log('✅ Commissioner authenticated - running test countdown');
-    if (typeof window.testCountdown === 'function') {
-        window.testCountdown();
-    } else {
-        alert('Test countdown function not available. Ensure countdown.js is loaded.');
-    }
-}
-
-
 // Make functions globally accessible
 window.setDeadline = setDeadline;
 window.resetEverything = resetEverything;
 window.forceReveal = forceReveal;
 window.clearAllSubmissions = clearAllSubmissions;
 window.exportSubmissions = exportSubmissions;
-window.testCountdownWithAuth = testCountdownWithAuth;
+// testCountdownWithAuth is now handled by countdown-test.js module

@@ -30,14 +30,20 @@ Deploy directly to Netlify - **NO BUILD PROCESS REQUIRED!**
 ```
 keeper-tool-project/
 ├── index.html          # Main application
-├── styles.css          # Premium animations & custom styles  
+├── styles/             # Modular CSS architecture
+│   ├── main.css        # CSS entry point with @imports
+│   ├── core/           # Foundation styles (variables, base, utilities)
+│   ├── components/     # UI component styles (tables, forms, accordion)
+│   ├── animations/     # All @keyframes definitions
+│   └── responsive/     # Mobile-specific responsive styles
 └── js/                 # Modular JavaScript architecture
     ├── config.js       # Configuration & Firebase settings
     ├── encryption.js   # XOR cipher for password protection
     ├── firebase-manager.js    # Real-time database sync
     ├── countdown.js    # Timer & auto-reveal countdown
     ├── ui-controller.js        # DOM updates & UI management
-    ├── keeper-fields.js        # Dynamic keeper field management (0-10)
+    ├── teams-data.js   # Team roster data and selection interface
+    ├── keepers-table.js        # Enhanced team selection & edit functionality
     ├── submissions.js  # Form handling & submission logic
     ├── commissioner.js # Admin controls & functions
     └── accordion.js    # Smooth accordion animations
@@ -46,6 +52,8 @@ keeper-tool-project/
 
 ### Core Functionality
 - **🔐 Encrypted Submissions**: Password-protected keeper selections using XOR encryption
+- **✏️ Edit Keepers**: Complete submission overwrite system with bypass for "already submitted" blocks
+- **⚽ Team Roster Interface**: Interactive team selection with budget tracking and player costs
 - **⏱️ Auto-Reveal Countdown**: Dramatic 10-second countdown with "FUCK/YOU/DANNY" finale
 - **🔄 Real-Time Sync**: Firebase-powered live updates across all connected users
 - **👮 Commissioner Controls**: Password-protected admin panel for deadline management
@@ -59,10 +67,12 @@ keeper-tool-project/
 - **Gradient Accents**: Professional blue-to-emerald color schemes
 
 ### Technical Features
-- **Dynamic Keeper Fields**: Add/remove 0-10 keeper slots
+- **Team Selection Interface**: Interactive roster selection with real-time budget calculations
+- **Edit Submissions**: Complete keeper replacement with password auto-detection
+- **Modular CSS Architecture**: Organized styles with core, components, animations, and responsive modules
 - **Smooth Accordion UI**: Hardware-accelerated animations
 - **Post-Reveal State**: Clean results display with preserved header styling
-- **Mobile Optimized**: Touch-friendly targets, responsive grid layouts
+- **Mobile Optimized**: Touch-friendly targets, responsive grid layouts, enhanced checkbox sizing
 - **No Build Required**: CDN-based Tailwind CSS, vanilla JavaScript
 
 ## 🎯 How to Deploy
@@ -85,12 +95,18 @@ Edit `js/config.js` to customize:
 
 ### For Players
 1. **Submit Keepers**
-   - Enter your team name
-   - Add keeper players (0-10 allowed)
+   - Select your team from the dropdown
+   - Choose keeper players from your roster (budget: $300, max keepers vary by configuration)
    - Set a secure password
    - Submit before the deadline
 
-2. **View Submissions**
+2. **Edit Keepers** ✨ *New Feature*
+   - Select your team and enter your password
+   - Choose your new keeper selection
+   - Click "Edit Keepers" for complete submission replacement
+   - Crystal clear confirmation shows your NEW ENTIRE team
+
+3. **View Submissions**
    - Switch to "View Submissions" tab
    - See encrypted submissions before deadline
    - Watch live reveals after countdown
@@ -180,4 +196,29 @@ Premium countdown experience dedicated to Danny.
 
 ---
 
-**Status**: ✅ Production Ready | **Version**: 2.0 | **Last Updated**: 2024
+**Status**: ✅ Production Ready | **Version**: 2.1 | **Last Updated**: August 2025
+
+## 🔄 Recent Updates (v2.1)
+
+### ✨ Enhanced Edit Functionality
+- **Complete Submission Overwrite**: Edit keepers with full replacement system
+- **Auto-Password Detection**: Form password automatically used for edits
+- **Bypass "Already Submitted"**: Edit existing submissions without restrictions
+- **Crystal Clear Confirmation**: Enhanced messaging emphasizing complete replacement
+
+### 🏗️ CSS Architecture Refactoring
+- **Modular Structure**: Migrated from monolithic `styles.css` to organized `styles/` directory
+- **Performance**: Improved load times with targeted CSS imports
+- **Maintainability**: Separated concerns with core, components, animations, and responsive modules
+- **Mobile Enhancements**: Better checkbox sizing and touch targets
+
+### 🐛 Bug Fixes
+- **Floating Bar Math**: Fixed calculation sync issues during edit workflow
+- **Password Validation**: Enhanced form field detection with `.trim()` validation
+- **UI State Management**: Proper reset of both Map and UI state during edits
+- **Player Data**: Updated roster data (Daniel Lock → Drew Lock)
+
+### 🧹 Code Cleanup
+- **Eliminated Duplication**: Consolidated CSS `@keyframes` into dedicated module
+- **Enhanced Logging**: Better debugging for edit workflow and team lookup
+- **Clean Database**: Removed test submissions and maintained production-ready state
