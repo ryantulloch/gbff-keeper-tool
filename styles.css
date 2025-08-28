@@ -1376,6 +1376,119 @@ textarea:focus-visible {
   overflow-y: auto;
 }
 
+/* Fix checkbox styling and checkmarks */
+.player-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #d1d5db;
+  border-radius: 3px;
+  background: white;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.player-checkbox:checked {
+  background: #4f46e5;
+  border-color: #4f46e5;
+}
+
+.player-checkbox:checked::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 6px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.player-checkbox:hover {
+  border-color: #6366f1;
+}
+
+/* Header checkbox styling */
+#toggle-all-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #d1d5db;
+  border-radius: 3px;
+  background: white;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+#toggle-all-checkbox:checked {
+  background: #4f46e5;
+  border-color: #4f46e5;
+}
+
+#toggle-all-checkbox:checked::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 6px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+#toggle-all-checkbox:indeterminate {
+  background: #4f46e5;
+  border-color: #4f46e5;
+}
+
+#toggle-all-checkbox:indeterminate::after {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: 6px;
+  width: 8px;
+  height: 2px;
+  background: white;
+  border: none;
+  transform: none;
+}
+
+#toggle-all-checkbox:hover {
+  border-color: #6366f1;
+}
+
+/* Row highlighting when selected */
+.keepers-table-row {
+  transition: background-color 0.2s ease;
+}
+
+.keepers-table-row.selected {
+  background-color: rgba(79, 70, 229, 0.08) !important;
+}
+
+.keepers-table-row.selected:hover {
+  background-color: rgba(79, 70, 229, 0.12) !important;
+}
+
+.keepers-table-row.selected .player-name {
+  color: #4f46e5 !important;
+  font-weight: 600;
+}
+
+/* Hide the default SVG checkmarks since we're using CSS checkmarks */
+.player-checkbox + svg,
+#toggle-all-checkbox + svg {
+  display: none;
+}
+
 /* Responsive adjustments for the floating bar on small screens */
 @media (max-width: 640px) {
   #floating-bar {

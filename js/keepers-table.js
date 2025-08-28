@@ -66,6 +66,25 @@ function initializeKeeperTables() {
   function setupTeamSelectHandler() {
     if (!teamSelect) return;
     
+    const selectButton = teamSelect.querySelector('button');
+    const optionsContainer = teamSelect.querySelector('el-options');
+    
+    if (!selectButton || !optionsContainer) return;
+    
+    // Handle button click to toggle dropdown
+    selectButton.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleDropdown();
+    });
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!teamSelect.contains(e.target)) {
+        closeDropdown();
+      }
+    });
+    
     // Listen for value changes on the el-select component (web component standard)
     teamSelect.addEventListener('change', (event) => {
       currentTeamSlug = event.target.value;
@@ -73,8 +92,7 @@ function initializeKeeperTables() {
       renderTeamTable(currentTeamSlug);
     });
     
-    // Also handle clicks on options for immediate feedback
-    const optionsContainer = teamSelect.querySelector('el-options');
+    // Handle clicks on options for immediate feedback
     if (optionsContainer) {
       // Use event delegation for dynamically added options
       optionsContainer.addEventListener('click', (e) => {
@@ -109,11 +127,53 @@ function initializeKeeperTables() {
           clearSelection(false);
           renderTeamTable(currentTeamSlug);
           
+          // Close dropdown after selection
+          closeDropdown();
+          
           // Dispatch change event for consistency
           teamSelect.dispatchEvent(new Event('change', { bubbles: true }));
         }
       });
     }
+    
+    function toggleDropdown() {
+      const optionsContainer = teamSelect.querySelector('el-options');
+      if (!optionsContainer) return;
+      
+      const isVisible = optionsContainer.style.display === 'block';
+      if (isVisible) {
+        closeDropdown();
+      } else {
+        openDropdown();
+      }
+    }
+    
+    function openDropdown() {
+      const optionsContainer = teamSelect.querySelector('el-options');
+      if (!optionsContainer) return;
+      
+      optionsContainer.style.display = 'block';
+      optionsContainer.style.opacity = '1';
+      optionsContainer.style.visibility = 'visible';
+      
+      // Add open class for animations
+      optionsContainer.classList.add('dropdown-open');
+    }
+    
+    function closeDropdown() {
+      const optionsContainer = teamSelect.querySelector('el-options');
+      if (!optionsContainer) return;
+      
+      optionsContainer.style.display = 'none';
+      optionsContainer.style.opacity = '0';
+      optionsContainer.style.visibility = 'hidden';
+      
+      // Remove open class
+      optionsContainer.classList.remove('dropdown-open');
+    }
+    
+    // Initialize dropdown as closed
+    closeDropdown();
   }
 
   // --- Table Rendering ---
@@ -135,12 +195,8 @@ function initializeKeeperTables() {
                 <thead>
                   <tr>
                     <th scope="col" class="relative px-7 sm:w-12 sm:px-6">
-                      <div class="group absolute top-1/2 left-4 -mt-2 grid size-4 grid-cols-1">
-                        <input type="checkbox" id="toggle-all-checkbox" class="col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:border-white/20 dark:bg-gray-800/50 dark:checked:border-indigo-500 dark:checked:bg-indigo-500 dark:indeterminate:border-indigo-500 dark:indeterminate:bg-indigo-500" />
-                        <svg viewBox="0 0 14 14" fill="none" class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25 dark:group-has-disabled:stroke-white/25">
-                            <path d="M3 8L6 11L11 3.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-0 group-has-checked:opacity-100" />
-                            <path d="M3 7H11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-0 group-has-indeterminate:opacity-100" />
-                        </svg>
+                      <div class="absolute top-1/2 left-4 -mt-2">
+                        <input type="checkbox" id="toggle-all-checkbox" />
                       </div>
                     </th>
                     <th scope="col" class="min-w-48 py-3.5 pr-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Player</th>
@@ -149,17 +205,14 @@ function initializeKeeperTables() {
                 </thead>
                 <tbody class="divide-y divide-gray-200 bg-white dark:divide-white/10 dark:bg-gray-900">
                   ${roster.map(player => `
-                    <tr class="group has-checked:bg-indigo-50 hover:bg-gray-50 dark:has-checked:bg-indigo-950/50">
+                    <tr class="keepers-table-row hover:bg-gray-50 dark:hover:bg-gray-800" data-player-name="${sanitizeForAttribute(player.name)}">
                       <td class="relative px-7 sm:w-12 sm:px-6">
-                        <div class="absolute inset-y-0 left-0 hidden w-0.5 bg-indigo-500 group-has-checked:block"></div>
-                        <div class="group absolute top-1/2 left-4 -mt-2 grid size-4 grid-cols-1">
-                            <input type="checkbox" data-player-name="${sanitizeForAttribute(player.name)}" data-player-cost="${player.cost}" class="player-checkbox col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:border-white/20 dark:bg-gray-800/50 dark:checked:border-indigo-500 dark:checked:bg-indigo-500" />
-                            <svg viewBox="0 0 14 14" fill="none" class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25 dark:group-has-disabled:stroke-white/25">
-                                <path d="M3 8L6 11L11 3.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-0 group-has-checked:opacity-100" />
-                            </svg>
+                        <div class="absolute inset-y-0 left-0 w-0.5 bg-indigo-500 opacity-0 row-selected-indicator"></div>
+                        <div class="absolute top-1/2 left-4 -mt-2">
+                            <input type="checkbox" data-player-name="${sanitizeForAttribute(player.name)}" data-player-cost="${player.cost}" class="player-checkbox" />
                         </div>
                       </td>
-                      <td class="py-4 pr-3 text-sm font-medium whitespace-nowrap text-gray-900 group-has-checked:text-indigo-600 dark:text-white dark:group-has-checked:text-indigo-400">${player.name}</td>
+                      <td class="py-4 pr-3 text-sm font-medium whitespace-nowrap text-gray-900 dark:text-white player-name">${player.name}</td>
                       <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">${window.currency.format(player.cost)}</td>
                     </tr>
                   `).join('')}
@@ -194,6 +247,7 @@ function initializeKeeperTables() {
     
     const name = checkbox.dataset.playerName;
     const cost = parseInt(checkbox.dataset.playerCost, 10);
+    const row = checkbox.closest('tr');
 
     if (checkbox.checked) {
       if (selectedPlayers.size >= window.MAX_KEEPERS) {
@@ -207,8 +261,26 @@ function initializeKeeperTables() {
         return;
       }
       selectedPlayers.set(name, { name, cost });
+      
+      // Add selected styling to row
+      if (row) {
+        row.classList.add('selected');
+        const indicator = row.querySelector('.row-selected-indicator');
+        if (indicator) {
+          indicator.style.opacity = '1';
+        }
+      }
     } else {
       selectedPlayers.delete(name);
+      
+      // Remove selected styling from row
+      if (row) {
+        row.classList.remove('selected');
+        const indicator = row.querySelector('.row-selected-indicator');
+        if (indicator) {
+          indicator.style.opacity = '0';
+        }
+      }
     }
     updateFloatingBar();
   }
@@ -230,7 +302,18 @@ function initializeKeeperTables() {
     if (reRender && currentTeamSlug) {
       renderTeamTable(currentTeamSlug);
     } else {
-        document.querySelectorAll('.player-checkbox').forEach(cb => cb.checked = false);
+      // Clear checkboxes and row highlighting
+      document.querySelectorAll('.player-checkbox').forEach(cb => {
+        cb.checked = false;
+        const row = cb.closest('tr');
+        if (row) {
+          row.classList.remove('selected');
+          const indicator = row.querySelector('.row-selected-indicator');
+          if (indicator) {
+            indicator.style.opacity = '0';
+          }
+        }
+      });
     }
     updateFloatingBar();
   }
