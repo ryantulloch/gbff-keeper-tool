@@ -491,9 +491,17 @@ function initializeKeeperTables() {
       return;
     }
     
+    // Set edit flag to bypass "already submitted" check
+    window.isEditingSubmission = true;
+    
     // Submit the updated keepers using the existing submission system
     console.log('Submitting updated keepers...');
     window.submitKeepersFromTable();
+    
+    // Clear the edit flag after submission
+    setTimeout(() => {
+      window.isEditingSubmission = false;
+    }, 1000);
   }
   
   // Expose showNotice globally for other modules
