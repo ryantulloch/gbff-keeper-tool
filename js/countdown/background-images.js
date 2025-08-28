@@ -74,7 +74,7 @@ function showMemeAt25Seconds() {
     const parentContainer = document.querySelector('.countdown-background-images');
     if (parentContainer) {
         console.log('🔧 Temporarily increasing parent container opacity for debugging');
-        parentContainer.style.opacity = '0.3'; // Much more visible for testing
+        parentContainer.style.opacity = '0.4'; // Perfect visibility for testing
     }
     
     imageContainer.appendChild(testImageElement);
