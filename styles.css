@@ -2488,3 +2488,95 @@ textarea:focus-visible {
     font-weight: 500 !important;
   }
 }
+
+/* =================================================================
+   Mobile Floating Bar - Condensed, No Overflow
+   ================================================================= */
+@media (max-width: 640px) {
+  /* Ensure bar always fits viewport width */
+  #floating-bar {
+    left: 0 !important;
+    right: 0 !important;
+    max-width: 100vw !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Convert inner container to grid: [info | actions] */
+  #floating-bar &gt; .px-4 &gt; .flex {
+    display: grid !important;
+    grid-template-columns: 1fr auto;
+    align-items: center !important;
+    column-gap: 0.5rem !important;
+    row-gap: 0.5rem !important;
+    justify-content: initial !important; /* override justify-between pushing overflow */
+  }
+
+  /* Info group: count | total | remaining (works with or without #floating-bar-info id) */
+  #floating-bar &gt; .px-4 &gt; .flex &gt; .flex.items-center.space-x-4,
+  #floating-bar-info {
+    display: grid !important;
+    grid-template-columns: auto 1fr 1fr !important;
+    align-items: center !important;
+    column-gap: 0.5rem !important;
+    min-width: 0 !important;
+  }
+
+  /* Keep actions docked on the right, prevent wrap jitter */
+  #floating-bar &gt; .px-4 &gt; .flex &gt; .flex.items-center.space-x-2 {
+    justify-self: end !important;
+    flex-wrap: nowrap !important;
+  }
+
+  /* Tighten Tailwind spacing utilities inside the bar */
+  #floating-bar .space-x-6 &gt; * + *,
+  #floating-bar .space-x-4 &gt; * + * {
+    margin-left: 0.5rem !important;
+  }
+
+  /* Submit button - compact, two-line label allowed, fixed small width */
+  #submit-selection {
+    padding: 0.35rem 0.55rem !important;
+    font-size: 0.75rem !important;
+    line-height: 1 !important;
+    min-width: 84px !important;
+    max-width: 92px !important;
+    white-space: normal !important;     /* allow "Submit" and "Keepers" to stack */
+    text-align: center !important;
+    border-radius: 10px !important;
+    background: rgba(255, 255, 255, 0.16) !important;
+    border: 1px solid rgba(255, 255, 255, 0.35) !important;
+    color: #fff !important;
+    box-shadow: none !important;
+  }
+
+  /* Clear (X) button sizing tightened */
+  #clear-selection {
+    padding: 0.35rem !important;
+  }
+  #clear-selection svg {
+    width: 16px !important;
+    height: 16px !important;
+  }
+
+  /* Keep player count on one line */
+  #selection-count {
+    white-space: nowrap !important;
+    font-weight: 600 !important;
+  }
+}
+
+/* =================================================================
+   Touch devices: prevent row darkening on tap (hover/active/ focus)
+   ================================================================= */
+@media (hover: none) and (pointer: coarse) {
+  .keepers-table-row:hover,
+  .keepers-table-row:active,
+  .keepers-table-row:focus {
+    background-color: transparent !important;
+  }
+  .dark .keepers-table-row:hover,
+  .dark .keepers-table-row:active,
+  .dark .keepers-table-row:focus {
+    background-color: transparent !important;
+  }
+}
