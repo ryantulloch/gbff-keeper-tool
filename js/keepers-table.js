@@ -73,7 +73,7 @@ function initializeKeeperTables() {
     
     // Consolidated click handler to prevent event conflicts from the web component
     document.addEventListener('click', (e) => {
-      const isVisible = optionsContainer.style.display === 'block';
+      const isVisible = optionsContainer.classList.contains('dropdown-open');
 
       if (selectButton.contains(e.target)) {
         // User clicked the button, so we toggle the dropdown.
@@ -141,7 +141,7 @@ function initializeKeeperTables() {
       const optionsContainer = teamSelect.querySelector('el-options');
       if (!optionsContainer) return;
       
-      const isVisible = optionsContainer.style.display === 'block';
+      const isVisible = optionsContainer.classList.contains('dropdown-open');
       if (isVisible) {
         closeDropdown();
       } else {
@@ -153,12 +153,7 @@ function initializeKeeperTables() {
       const optionsContainer = teamSelect.querySelector('el-options');
       if (!optionsContainer) return;
 
-      // Use absolute positioning via CSS anchored to #team-select
-      optionsContainer.style.display = 'block';
-      optionsContainer.style.opacity = '1';
-      optionsContainer.style.visibility = 'visible';
-
-      // Add open class for animations
+      // Use class-based state management; CSS handles the rest
       optionsContainer.classList.add('dropdown-open');
     }
     
@@ -166,11 +161,7 @@ function initializeKeeperTables() {
       const optionsContainer = teamSelect.querySelector('el-options');
       if (!optionsContainer) return;
       
-      optionsContainer.style.display = 'none';
-      optionsContainer.style.opacity = '0';
-      optionsContainer.style.visibility = 'hidden';
-      
-      // Remove open class
+      // Use class-based state management; CSS handles the rest
       optionsContainer.classList.remove('dropdown-open');
     }
     
