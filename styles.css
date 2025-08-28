@@ -1498,6 +1498,8 @@ textarea:focus-visible {
     border-radius: 0.5rem 0.5rem 0 0;
     padding: 0.75rem 1rem !important; /* More compact padding */
     font-size: 0.875rem !important; /* Smaller font size */
+    flex-direction: column !important; /* Stack elements vertically */
+    gap: 0.5rem !important;
   }
   
   /* Make floating bar content more compact */
@@ -1513,30 +1515,54 @@ textarea:focus-visible {
     font-weight: 600 !important;
   }
   
-  /* Reduce spacing between elements in floating bar */
-  #floating-bar > div {
+  /* Top row: player count, cost info, and button */
+  #floating-bar > div:first-child {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
     gap: 0.5rem !important;
+    flex-wrap: nowrap !important;
   }
   
   /* Make button more compact */
   #floating-bar button {
-    padding: 0.5rem 1rem !important;
-    font-size: 0.875rem !important;
-  }
-  
-  /* Prevent text wrapping in floating bar - keep "X players" on same line */
-  #floating-bar * {
-    white-space: nowrap !important;
-  }
-  
-  /* Ensure proper flex layout to prevent wrapping */
-  #floating-bar .flex {
-    flex-wrap: nowrap !important;
-  }
-  
-  /* Make sure player count text stays together */
-  #floating-bar .text-center {
+    padding: 0.5rem 0.75rem !important;
+    font-size: 0.8rem !important;
     min-width: fit-content !important;
+    flex-shrink: 0 !important;
+  }
+  
+  /* Keep player count text together but allow it to be smaller */
+  #floating-bar .text-center {
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    font-size: 0.8rem !important;
+  }
+  
+  /* Allow cost information to wrap if needed */
+  #floating-bar .text-center:nth-child(2) {
+    flex: 1 !important;
+    text-align: center !important;
+  }
+  
+  /* Warning message: allow wrapping and full width */
+  #floating-bar .text-yellow-600,
+  #floating-bar .text-red-600,
+  #floating-bar .text-orange-600 {
+    white-space: normal !important; /* Allow text wrapping */
+    word-wrap: break-word !important;
+    width: 100% !important;
+    text-align: center !important;
+    font-size: 0.75rem !important;
+    line-height: 1.3 !important;
+    margin-top: 0 !important;
+  }
+  
+  /* Close button positioning */
+  #floating-bar .absolute {
+    top: 0.5rem !important;
+    right: 0.5rem !important;
   }
 }
 
