@@ -13,6 +13,7 @@ function initializeKeeperTables() {
   const remainingBudgetEl = document.getElementById('remaining-budget');
   const clearSelectionBtn = document.getElementById('clear-selection');
   const submitSelectionBtn = document.getElementById('submit-selection');
+  const editKeepersBtn = document.getElementById('edit-keepers');
   const noticeEl = document.getElementById('constraint-notice');
 
   // --- State ---
@@ -36,6 +37,7 @@ function initializeKeeperTables() {
     setupTeamSelectHandler();
     clearSelectionBtn.addEventListener('click', () => clearSelection(true));
     submitSelectionBtn.addEventListener('click', () => window.submitKeepersFromTable());
+    editKeepersBtn.addEventListener('click', () => editExistingSubmission());
   }
 
   function populateTeamDropdown() {
