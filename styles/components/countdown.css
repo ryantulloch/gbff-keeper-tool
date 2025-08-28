@@ -460,7 +460,7 @@
   right: 0;
   bottom: 0;
   z-index: 1; /* Between backdrop (0) and content (10) */
-  opacity: 0.15; /* Less faint - more visible but still background */
+  opacity: 0.4; /* Much more visible! */
   overflow: hidden;
   pointer-events: none;
 }
@@ -480,7 +480,7 @@
   object-fit: contain; /* Show full image without cropping */
   object-position: center;
   opacity: 0;
-  transition: opacity 1.5s ease-in-out;
+  transition: opacity 0.3s ease-in-out; /* Much faster transition */
   transform: translateZ(0); /* GPU acceleration */
   will-change: opacity, filter;
 }

@@ -1,13 +1,13 @@
 /**
- * Background Images Module - 57 Micah/Jerry Images for Countdown Seconds 60-4
+ * Background Images Module - 57 Cowboys/Micah/Jerry Images for Countdown Seconds 60-4
  */
 
-console.log('🖼️ BACKGROUND IMAGES VERSION: 2025-01-28-v2 (57 images system)');
+console.log('🖼️ BACKGROUND IMAGES VERSION: 2025-01-28-v3 (57 images system - FIXED PATHS)');
 
 let imageContainer = null;
 let currentImageElement = null;
 
-// Complete array of 57 images for countdown seconds 60-4
+// Complete array of 57 images for countdown seconds 60-4 - CORRECT PATHS
 const COUNTDOWN_IMAGES = [
     // Cowboys Memes Square (10 images) - FOUND THE DIRECTORY!
     'cowboys_memes_square/cowboys_meme_002.jpg',
@@ -57,7 +57,19 @@ const COUNTDOWN_IMAGES = [
     'micah_jerry_square_crop/micah_jerry_021.jpg',
     'micah_jerry_square_crop/micah_jerry_022.jpg',
     
-    // Jerry Jones Solo Crop (remaining 15 images)
+    // Cowboys Memes Funny Crop (1 image)
+    'cowboys_memes_funny_crop/cowboys_memes_funny_crop_006.jpg',
+    
+    // Jerry Jones Solo Crop (14 images)
+    'jerry_jones_solo_crop/jerry_jones_solo_crop_001.jpg',
+    'jerry_jones_solo_crop/jerry_jones_solo_crop_002.jpg',
+    'jerry_jones_solo_crop/jerry_jones_solo_crop_003.jpg',
+    'jerry_jones_solo_crop/jerry_jones_solo_crop_004.jpg',
+    'jerry_jones_solo_crop/jerry_jones_solo_crop_006.jpg',
+    'jerry_jones_solo_crop/jerry_jones_solo_crop_008.jpg',
+    'jerry_jones_solo_crop/jerry_jones_solo_crop_009.jpg',
+    'jerry_jones_solo_crop/jerry_jones_solo_crop_010.jpg',
+    'jerry_jones_solo_crop/jerry_jones_solo_crop_011.jpg',
     'jerry_jones_solo_crop/jerry_jones_solo_crop_014.jpg',
     'jerry_jones_solo_crop/jerry_jones_solo_crop_015.jpg',
     'jerry_jones_solo_crop/jerry_jones_solo_crop_017.jpg',
@@ -150,7 +162,7 @@ function showImageAtSecond(remainingSeconds) {
     
     // Add error handling
     currentImageElement.onload = () => {
-        console.log(`✅ Image ${imageIndex + 1} loaded: ${imagePath}`);
+        console.log(`✅ Image ${imageIndex + 1} loaded and should be VISIBLE: ${imagePath}`);
     };
     
     currentImageElement.onerror = () => {
@@ -159,13 +171,14 @@ function showImageAtSecond(remainingSeconds) {
     
     imageContainer.appendChild(currentImageElement);
     
-    // Auto-remove after 1 second (cleanup for next image)
+    // FIXED: Remove after 0.8 seconds (giving time for CSS transition which is now 0.3s)
     setTimeout(() => {
         if (currentImageElement) {
             currentImageElement.remove();
             currentImageElement = null;
+            console.log(`🗑️ Removed image ${imageIndex + 1} after display`);
         }
-    }, 1000);
+    }, 800);
 }
 
 /**
