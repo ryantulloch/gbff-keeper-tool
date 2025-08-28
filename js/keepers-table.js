@@ -5,9 +5,7 @@ function initializeKeeperTables() {
   if (!window.ENABLE_TEAM_TABLES) return;
 
   // --- Element Cache ---
-  const teamDropdownButton = document.getElementById('team-dropdown-button');
-  const teamDropdownSelected = document.getElementById('team-dropdown-selected');
-  const teamDropdownOptions = document.getElementById('team-dropdown-options');
+  const teamSelect = document.getElementById('team-select');
   const tableContainer = document.getElementById('keepers-table-container');
   const floatingBar = document.getElementById('floating-bar');
   const selectionCountEl = document.getElementById('selection-count');
@@ -35,19 +33,21 @@ function initializeKeeperTables() {
   // --- Initialization ---
   function initialize() {
     populateTeamDropdown();
-    setupDropdownHandlers();
+    setupTeamSelectHandler();
     clearSelectionBtn.addEventListener('click', () => clearSelection(true));
     submitSelectionBtn.addEventListener('click', () => window.submitKeepersFromTable());
   }
 
   function populateTeamDropdown() {
-    const optionsContainer = document.getElementById('team-options');
+    if (!teamSelect) return;
+    
+    const optionsContainer = teamSelect.querySelector('el-options');
     if (!optionsContainer) return;
     
     // Clear existing options
     optionsContainer.innerHTML = '';
     
-    // Create option elements with proper structure
+    // Create option elements with proper structure for TailwindPlus Elements
     window.TEAM_OPTIONS.forEach(opt => {
       const optionHTML = `
         <el-option value="${opt.value}" class="group/option relative block cursor-default py-2 pr-9 pl-3 text-gray-900 select-none focus:bg-indigo-600 focus:text-white focus:outline-hidden dark:text-white dark:focus:bg-indigo-500">
@@ -61,31 +61,35 @@ function initializeKeeperTables() {
       `;
       optionsContainer.insertAdjacentHTML('beforeend', optionHTML);
     });
+  }
+
+  function setupTeamSelectHandler() {
+    if (!teamSelect) return;
     
-    // Update selected content when option is clicked
-    const selectedContent = teamSelect.querySelector('el-selectedcontent');
-    if (selectedContent) {
+    // Listen for value changes on the el-select component
+    teamSelect.addEventListener('change', (event) => {
+      currentTeamSlug = event.target.value;
+      clearSelection(false);
+      renderTeamTable(currentTeamSlug);
+    });
+    
+    // Also handle clicks on options for immediate feedback
+    const optionsContainer = teamSelect.querySelector('el-options');
+    if (optionsContainer) {
       optionsContainer.addEventListener('click', (e) => {
         const option = e.target.closest('el-option');
         if (option) {
           const value = option.getAttribute('value');
           const label = option.querySelector('span').textContent;
-          selectedContent.textContent = label;
+          const selectedContent = teamSelect.querySelector('el-selectedcontent');
+          if (selectedContent) {
+            selectedContent.textContent = label;
+          }
           currentTeamSlug = value;
           clearSelection(false);
           renderTeamTable(currentTeamSlug);
         }
       });
-    }
-  }
-
-  function handleTeamChange(event) {
-    // This is now handled in the populateTeamDropdown click event
-    // Keep this for backward compatibility if needed
-    if (event && event.target && event.target.value) {
-      currentTeamSlug = event.target.value;
-      clearSelection(false);
-      renderTeamTable(currentTeamSlug);
     }
   }
 
@@ -243,6 +247,6 @@ function initializeKeeperTables() {
 
 // Initialize when DOM is ready, with a slight delay for TailwindPlus
 document.addEventListener('DOMContentLoaded', () => {
-  // Give TailwindPlus Elements time to initialize
-  setTimeout(initializeKeeperTables, 100);
+  // Give TailwindPlus Elements time to initialize and define custom elements
+  setTimeout(initializeKeeperTables, 500);
 });
