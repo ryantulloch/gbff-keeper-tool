@@ -25,13 +25,41 @@ window.submitKeepersFromTable = function() {
             }
         }
 
-        // Final validation
+        // Final validation with nice error messages
         if (keepers.length > window.MAX_KEEPERS) {
-            alert(`Error: You have selected more than the maximum of ${window.MAX_KEEPERS} keepers.`);
+            // Use showNotice if available, otherwise fallback to alert
+            const noticeEl = document.getElementById('constraint-notice');
+            if (noticeEl && window.showNotice) {
+                window.showNotice(`⚠️ You have selected ${keepers.length} keepers. Please reduce to a maximum of ${window.MAX_KEEPERS} keepers before submitting.`);
+            } else if (noticeEl) {
+                // Fallback to direct manipulation
+                noticeEl.textContent = `⚠️ You have selected ${keepers.length} keepers. Please reduce to a maximum of ${window.MAX_KEEPERS} keepers before submitting.`;
+                noticeEl.style.color = '#ef4444'; // red color
+                setTimeout(() => {
+                    noticeEl.textContent = '';
+                    noticeEl.style.color = '';
+                }, 5000);
+            } else {
+                alert(`Error: You have selected ${keepers.length} keepers. Please reduce to a maximum of ${window.MAX_KEEPERS} keepers before submitting.`);
+            }
             return;
         }
         if (totalCost > window.TEAM_BUDGET) {
-            alert(`Error: Your total keeper cost exceeds the $${window.TEAM_BUDGET} budget.`);
+            // Use showNotice if available, otherwise fallback to alert
+            const noticeEl = document.getElementById('constraint-notice');
+            if (noticeEl && window.showNotice) {
+                window.showNotice(`⚠️ Your total keeper cost is ${window.currency.format(totalCost)}. Please reduce to stay within the $${window.TEAM_BUDGET} budget.`);
+            } else if (noticeEl) {
+                // Fallback to direct manipulation
+                noticeEl.textContent = `⚠️ Your total keeper cost is ${window.currency.format(totalCost)}. Please reduce to stay within the $${window.TEAM_BUDGET} budget.`;
+                noticeEl.style.color = '#ef4444'; // red color
+                setTimeout(() => {
+                    noticeEl.textContent = '';
+                    noticeEl.style.color = '';
+                }, 5000);
+            } else {
+                alert(`Error: Your total keeper cost is ${window.currency.format(totalCost)} which exceeds the $${window.TEAM_BUDGET} budget.`);
+            }
             return;
         }
 

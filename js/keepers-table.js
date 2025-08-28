@@ -191,7 +191,7 @@ function initializeKeeperTables() {
   }
 
   // --- Selection Logic ---
-  function handlePlayerSelection(checkbox) {
+  function handlePlayerSelection(checkbox, bypassLimits = false) {
     if (!currentTeamSlug) {
       checkbox.checked = false;
       showNotice('Please select your team first.');
@@ -203,15 +203,18 @@ function initializeKeeperTables() {
     const row = checkbox.closest('tr');
 
     if (checkbox.checked) {
-      if (selectedPlayers.size >= window.MAX_KEEPERS) {
-        showNotice(`You can only select up to ${window.MAX_KEEPERS} keepers.`);
-        checkbox.checked = false;
-        return;
-      }
-      if (window.getTotalKeeperCost() + cost > window.TEAM_BUDGET) {
-        showNotice(`This selection would exceed your $${window.TEAM_BUDGET} budget.`);
-        checkbox.checked = false;
-        return;
+      // Only enforce limits if not bypassing (for individual selections)
+      if (!bypassLimits) {
+        if (selectedPlayers.size >= window.MAX_KEEPERS) {
+          showNotice(`You can only select up to ${window.MAX_KEEPERS} keepers.`);
+          checkbox.checked = false;
+          return;
+        }
+        if (window.getTotalKeeperCost() + cost > window.TEAM_BUDGET) {
+          showNotice(`This selection would exceed your $${window.TEAM_BUDGET} budget.`);
+          checkbox.checked = false;
+          return;
+        }
       }
       selectedPlayers.set(name, { name, cost });
       
@@ -243,11 +246,21 @@ function initializeKeeperTables() {
       const checkboxes = document.querySelectorAll('.player-checkbox');
       
       if (isChecked) {
-          // Select all unchecked boxes
-          checkboxes.forEach(cb => { if(!cb.checked) { cb.click(); } });
+          // Select all - bypass individual limits
+          checkboxes.forEach(cb => {
+              if (!cb.checked) {
+                  cb.checked = true;
+                  handlePlayerSelection(cb, true); // bypass limits for select all
+              }
+          });
       } else {
-          // Deselect all checked boxes
-          checkboxes.forEach(cb => { if(cb.checked) { cb.click(); } });
+          // Deselect all
+          checkboxes.forEach(cb => {
+              if (cb.checked) {
+                  cb.checked = false;
+                  handlePlayerSelection(cb, true); // bypass limits for deselect
+              }
+          });
       }
       updateFloatingBar();
   }
@@ -309,6 +322,9 @@ function initializeKeeperTables() {
       }, 3000);
     }
   }
+  
+  // Expose showNotice globally for other modules
+  window.showNotice = showNotice;
 
   initialize();
 }
