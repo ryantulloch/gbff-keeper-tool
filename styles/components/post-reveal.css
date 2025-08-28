@@ -78,16 +78,6 @@
   background: linear-gradient(to right, transparent, rgba(59, 130, 246, 0.5), transparent);
 }
 
-@keyframes revealHeader {
-  0% {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 
 .reveal-complete-title {
   font-size: 1.875rem;
@@ -141,16 +131,6 @@
   will-change: transform, opacity;
 }
 
-@keyframes quickReveal {
-  from {
-    transform: translateY(20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
 
 .final-keeper-badge {
   display: inline-block;

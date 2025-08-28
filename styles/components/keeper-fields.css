@@ -1,0 +1,81 @@
+/* =================================================================
+   Dynamic Keeper Fields Styles
+   ================================================================= */
+
+/* Keeper field wrapper */
+.keeper-field-wrapper {
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Smooth height animations for field container */
+#keepersList {
+  transition: height 0.3s ease;
+}
+
+/* Add keeper button enhanced */
+#addKeeperBtn {
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+#addKeeperBtn:not(:disabled):active {
+  transform: scale(0.95);
+}
+
+#addKeeperBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Remove keeper button */
+.remove-keeper-btn {
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.remove-keeper-btn:hover:not(:disabled) {
+  transform: rotate(90deg) scale(1.1);
+}
+
+.remove-keeper-btn:active {
+  transform: rotate(90deg) scale(0.95);
+}
+
+/* Mobile-specific enhancements */
+@media (max-width: 640px) {
+  /* Ensure touch-friendly button sizes */
+  #addKeeperBtn,
+  .remove-keeper-btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  
+  /* Stack keeper fields on very small screens */
+  @media (max-width: 400px) {
+    .keeper-field-wrapper {
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    
+    .keeper-field-wrapper span {
+      width: 100%;
+    }
+    
+    .keeper-field-wrapper input {
+      width: calc(100% - 50px);
+    }
+  }
+}
+
+/* Field entry animation */
+
+/* Field removal animation */
+
+.keeper-field-entering {
+  animation: slideInFromTop 0.3s ease forwards;
+}
+
+.keeper-field-leaving {
+  animation: slideOutToLeft 0.3s ease forwards;
+}

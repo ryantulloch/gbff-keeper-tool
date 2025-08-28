@@ -1,0 +1,454 @@
+/* =================================================================
+   Countdown & Timer Styles - Consolidated
+   ================================================================= */
+
+.animate-countdown-pulse {
+  animation: countdown-pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-reveal {
+  animation: reveal-keeper 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Staggered Reveal */
+.animate-reveal-stagger {
+  animation: reveal-keeper 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-reveal-stagger:nth-child(1) { animation-delay: 0ms; }
+.animate-reveal-stagger:nth-child(2) { animation-delay: 100ms; }
+.animate-reveal-stagger:nth-child(3) { animation-delay: 200ms; }
+.animate-reveal-stagger:nth-child(4) { animation-delay: 300ms; }
+.animate-reveal-stagger:nth-child(5) { animation-delay: 400ms; }
+
+.progress-glow {
+  animation: progress-glow 2s ease-in-out infinite;
+}
+
+.rainbow-text {
+  animation: rainbow-text 2s linear infinite;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.number-tick {
+  animation: number-tick 0.3s ease-in-out;
+}
+
+/* =================================================================
+   PREMIUM DARK COUNTDOWN - PROFESSIONAL & SOPHISTICATED
+   ================================================================= */
+
+/* Apply .gpu-accelerated utility class to countdown elements in JavaScript */
+
+/* Main Overlay Container */
+.countdown-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: var(--z-modal);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.countdown-overlay.active {
+  display: flex;
+  animation: fadeIn 0.4s ease-out;
+}
+
+
+/* Dark Background */
+.countdown-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #0A0A0A;
+  opacity: 0.98;
+}
+
+/* Main Content Container - No Background */
+.countdown-content {
+  position: relative;
+  text-align: center;
+  color: white;
+  padding: 40px;
+  max-width: 900px;
+  width: 95%;
+  animation: scaleIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+/* Header Section */
+.countdown-header {
+  margin-bottom: 60px;
+}
+
+.countdown-label {
+  font-family: 'Playfair Display', serif !important;
+  font-size: clamp(18px, 3vw, 28px);
+  font-weight: 300;
+  letter-spacing: 0.3em;
+  color: rgb(148 163 184);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  display: block;
+  text-shadow: 0 0 20px var(--amber-gold-rgba-50);
+  opacity: 0.9;
+}
+
+.countdown-title {
+  font-family: 'Playfair Display', serif !important;
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 300;
+  letter-spacing: 0.02em;
+  margin: 0;
+  margin-bottom: 10px;
+  background: linear-gradient(135deg, #d4af37 0%, #f4e4c1 50%, #d4af37 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 30px var(--amber-gold-rgba-50));
+  animation: shimmer 3s ease-in-out infinite;
+  background-size: 200% auto;
+}
+
+
+/* Main Timer Circle */
+.countdown-main {
+  margin-bottom: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* New countdown overlay display - centered over progress bar */
+.countdown-overlay-display {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.countdown-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+  shape-rendering: geometricPrecision;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.countdown-track {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.06);
+  stroke-width: 10;
+  shape-rendering: geometricPrecision;
+}
+
+.countdown-progress {
+  fill: none;
+  stroke: url(#goldGradient);
+  stroke-width: 12;
+  stroke-linecap: butt;
+  stroke-dasharray: 879.6 879.6;
+  stroke-dashoffset: 0;
+  transition: none;
+  filter: drop-shadow(0 0 25px var(--gold-rgba-80))
+          drop-shadow(0 0 40px rgba(255, 165, 0, 0.6))
+          drop-shadow(0 0 60px var(--amber-gold-rgba-40));
+  shape-rendering: geometricPrecision;
+  vector-effect: non-scaling-stroke;
+  will-change: stroke-dashoffset, stroke-width, filter;
+  animation: progressGlow 3s ease-in-out infinite;
+}
+
+/* New countdown circle container - clean and centered */
+.countdown-circle {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  transform: translateZ(0);
+  will-change: transform;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+/* Custom ProgressBar.js Container - properly centered */
+#container {
+  margin: 0 auto;
+  width: 300px;
+  height: 300px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.countdown-number {
+  font-family: 'Playfair Display', serif !important;
+  font-size: clamp(80px, 12vw, 140px);
+  font-weight: 300;
+  line-height: 1;
+  background: linear-gradient(180deg, #FFFFFF 0%, #F4E4C1 50%, var(--dark-gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.03em;
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  text-shadow: 0 0 40px var(--amber-gold-rgba-50),
+               0 0 80px var(--amber-gold-rgba-30);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transform: translateY(-10px);
+  will-change: transform, opacity;
+  animation: breathe 2s ease-in-out infinite;
+}
+
+
+.countdown-text {
+  font-family: 'Playfair Display', serif !important;
+  font-size: clamp(0.8rem, 2vw, 1.2rem);
+  font-weight: 300;
+  letter-spacing: 0.4em;
+  color: var(--primary-gold);
+  text-transform: uppercase;
+  margin-top: 15px;
+  transform: translateY(0);
+  opacity: 0.9;
+  text-shadow: 0 0 20px var(--amber-gold-rgba-40);
+  transition: opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Special countdown states - smoother premium transitions */
+.countdown-number.fuck-text {
+  font-family: 'Playfair Display', serif !important;
+  font-size: clamp(80px, 12vw, 140px);
+  font-weight: 300;
+  background: linear-gradient(180deg, var(--primary-gold) 0%, var(--dark-gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 10px var(--amber-gold-rgba-30));
+  animation: smoothEntry 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.countdown-number.you-text {
+  font-family: 'Playfair Display', serif !important;
+  font-size: clamp(80px, 12vw, 140px);
+  font-weight: 300;
+  background: linear-gradient(180deg, var(--primary-gold) 0%, var(--dark-gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 10px var(--amber-gold-rgba-30));
+  animation: smoothEntry 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.countdown-number.danny-text {
+  font-family: 'Playfair Display', serif !important;
+  font-size: clamp(80px, 12vw, 140px);
+  font-weight: 300;
+  background: linear-gradient(180deg, #FF4444 0%, var(--danger-red) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 15px rgba(220, 38, 38, 0.5));
+  animation: smoothEntry 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+
+/* Footer Section */
+.countdown-footer {
+  margin-bottom: 40px;
+}
+
+.countdown-message {
+  font-family: 'Playfair Display', serif !important;
+  font-size: clamp(18px, 3vw, 28px);
+  font-weight: 300;
+  color: var(--text-secondary);
+  letter-spacing: 0.05em;
+  margin: 0;
+  transition: opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Escape Button */
+.countdown-escape {
+  padding: 16px 40px;
+  background: transparent;
+  border: 1px solid var(--amber-gold-rgba-20);
+  border-radius: 8px;
+  color: #666666;
+  font-size: 14px;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  margin-top: 20px;
+}
+
+.countdown-escape:hover {
+  background: transparent;
+  border-color: var(--amber-gold-rgba-40);
+  color: var(--primary-gold);
+  transform: translateY(-2px);
+}
+
+.countdown-escape:active {
+  transform: translateY(0);
+}
+
+/* Fading out animation */
+.countdown-overlay.fading-out {
+  animation: fadeOut 0.15s ease-out forwards;
+}
+
+/* Auto-reveal notice banner */
+.auto-reveal-notice {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(90deg, #ff4444, #ff6666);
+  color: white;
+  padding: 0.75rem;
+  text-align: center;
+  z-index: var(--z-top);
+  font-weight: bold;
+  animation: slide-down 0.3s ease-out;
+}
+
+/* =================================================================
+   Timer and Phase Indicator Styles - CONSOLIDATED
+   ================================================================= */
+
+/* Timer display integration with countdown system */
+#timerDisplay {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+}
+
+#timerDisplay.timer {
+  display: inline-block;
+}
+
+#timerDisplay .text-slate-500,
+#timerDisplay .text-slate-600,
+#timerDisplay .text-red-600 {
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+/* Consolidated Timer States */
+.timer {
+  font-weight: 700;
+}
+
+.timer.expired {
+  color: #ef4444;
+}
+
+.timer.countdown {
+  color: #f59e0b;
+}
+
+/* Timer glow animation - consolidated */
+.timer.active-countdown {
+  display: inline-block;
+  animation: subtle-glow 3s ease-in-out infinite;
+}
+
+/* Phase Indicator Styles */
+.phase-indicator {
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.phase-indicator.phase-submission {
+  color: #10b981;
+}
+
+.phase-indicator.phase-locked {
+  color: #ef4444;
+}
+
+.phase-indicator.phase-countdown {
+  color: #f59e0b;
+}
+
+.phase-indicator.phase-reveal {
+  color: #3b82f6;
+}
+
+/* Tailwind UI Card Reveal Animation */
+.reveal-animation {
+  animation: cardReveal 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Sync status styles */
+.sync-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.sync-status.connected {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.sync-status.disconnected {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.sync-status span::before {
+  content: '●';
+  margin-right: 0.25rem;
+}
+
+.countdown-digit {
+  display: inline-block;
+  font-variant-numeric: tabular-nums;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.countdown-digit.changing {
+  animation: number-tick 0.3s ease-in-out;
+}
+
+/* Premium countdown number readability */
+.countdown-number.premium-number {
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35), 0 0 24px rgba(0, 212, 255, 0.15);
+}
+
+/* Enhanced pulse animation for urgent state */
+
+/* =================================================================
+   Progress Bar Animations
+   ================================================================= */

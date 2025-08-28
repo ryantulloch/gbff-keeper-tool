@@ -1,0 +1,154 @@
+/* =================================================================
+   Keeper Table Component Styles
+   ================================================================= */
+
+/* Row highlighting when selected */
+.keepers-table-row {
+  transition: background-color 0.2s ease;
+}
+
+.keepers-table-row.selected {
+  background-color: rgba(79, 70, 229, 0.10) !important; /* Indigo tint on selection */
+}
+.dark .keepers-table-row.selected {
+  background-color: rgba(79, 70, 229, 0.22) !important; /* Indigo tint in dark mode */
+}
+
+.keepers-table-row.selected:hover {
+  background-color: rgba(79, 70, 229, 0.14) !important;
+}
+
+.keepers-table-row.selected .player-name {
+  color: #111827 !important;
+  font-weight: 600;
+}
+
+/* Hide the default SVG checkmarks since we're using CSS checkmarks */
+.player-checkbox + svg,
+#toggle-all-checkbox + svg {
+  display: none;
+}
+
+/* Disable hover/active highlight on desktop rows for touch devices */
+@media (hover: none) and (pointer: coarse) {
+  .keepers-table-row:hover,
+  .keepers-table-row:active,
+  .keepers-table-row:focus {
+    background-color: transparent !important;
+  }
+  .dark .keepers-table-row:hover,
+  .dark .keepers-table-row:active,
+  .dark .keepers-table-row:focus {
+    background-color: transparent !important;
+  }
+}
+
+/* Keeper Table Mobile Styles */
+@media (max-width: 640px) {
+  /* Hide desktop table and show mobile view */
+  .keeper-table-container .desktop-table-wrapper {
+    display: none !important;
+  }
+  
+  .keeper-table-container .mobile-list-view {
+    display: block !important;
+  }
+  
+  .keeper-table-container .mobile-table-header {
+    display: block !important;
+  }
+  
+  .keeper-table-container .mobile-team-dropdown {
+    display: block !important;
+  }
+  
+  /* Hide desktop header checkbox */
+  .keeper-table-container .desktop-table-header {
+    display: none !important;
+  }
+  
+  /* Style mobile player cards with better text visibility */
+  .player-card {
+    transition: background-color 0.15s ease;
+  }
+  
+  .player-card.selected {
+    background-color: rgb(248 250 252) !important; /* Very light grey instead of blue */
+  }
+  
+  .dark .player-card.selected {
+    background-color: rgb(241 245 249) !important; /* Very light grey for dark mode too */
+  }
+  
+  /* Fix player name text color - make it dark and readable */
+  .player-card .text-xs {
+    color: #1f2937 !important; /* Dark gray for better readability */
+    font-weight: 500 !important;
+  }
+  
+  /* Larger, more touch-friendly checkboxes for mobile - 16px */
+  .mobile-checkbox,
+  .player-checkbox-mobile {
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    width: 16px !important;
+    height: 16px !important;
+    min-width: 16px !important;
+    min-height: 16px !important;
+    border: 2px solid #d1d5db !important;
+    border-radius: 3px !important;
+    background: white !important;
+    position: relative !important;
+    cursor: pointer !important;
+    margin: 4px !important; /* Add margin for easier tapping */
+  }
+  
+  .mobile-checkbox:checked,
+  .player-checkbox-mobile:checked {
+    background: #4f46e5 !important;
+    border-color: #4f46e5 !important;
+  }
+  
+  .mobile-checkbox:checked::after,
+  .player-checkbox-mobile:checked::after {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 1px;
+    width: 6px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+  
+  /* Ensure team dropdown is visible and functional on mobile */
+  #team-select {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  
+  /* Ensure Pick a Team label is visible on mobile */
+  label[for="team-select"] {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  
+  /* Ensure team dropdown button is visible and clickable */
+  #team-select-button {
+    display: grid !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    background-color: white !important;
+    border: 1px solid #d1d5db !important;
+    color: #1f2937 !important;
+  }
+  
+  /* Ensure dropdown text is visible */
+  #team-select-text {
+    color: #1f2937 !important;
+    font-weight: 500 !important;
+  }
+}

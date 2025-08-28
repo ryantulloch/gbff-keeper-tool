@@ -102,14 +102,6 @@
   animation: skeleton-loading 1.5s ease-in-out infinite;
 }
 
-@keyframes skeleton-loading {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
-}
 
 /* Spinner */
 .spinner {
@@ -121,11 +113,6 @@
   animation: spinner-rotate 0.6s linear infinite;
 }
 
-@keyframes spinner-rotate {
-  to {
-    transform: rotate(360deg);
-  }
-}
 
 /* =================================================================
    Accessibility Enhancements - Consolidated Focus Styles
@@ -204,39 +191,4 @@ button:disabled:active {
   box-shadow: none;
 }
 
-/* Inputs and forms ergonomics */
-input[type="text"],
-input[type="password"],
-input[type="datetime-local"],
-select,
-textarea {
-  border-radius: 0.5rem;
-}
-input::placeholder,
-textarea::placeholder {
-  color: #9ba3af;
-}
-input:focus,
-select:focus,
-textarea:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
-  border-color: #3b82f6;
-}
-
-/* Ensure focus-visible for keyboard navigation */
-input:focus-visible,
-select:focus-visible,
-textarea:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
-  border-color: #3b82f6;
-}
-@media (max-width: 640px) {
-  input,
-  select,
-  textarea {
-    padding-top: 0.8rem;
-    padding-bottom: 0.8rem;
-  }
-}
+/* Input focus styles moved to forms.css to avoid duplication */

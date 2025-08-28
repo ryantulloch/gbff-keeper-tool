@@ -1,0 +1,92 @@
+/* =================================================================
+   Miscellaneous Component Styles
+   ================================================================= */
+
+/* =================================================================
+   Live Sync Indicator
+   ================================================================= */
+
+.sync-indicator {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sync-indicator::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: #10b981;
+  border-radius: 50%;
+  animation: sync-pulse 2s ease-in-out infinite;
+}
+
+
+.sync-indicator.syncing::before {
+  background: #f59e0b;
+  animation: sync-rotate 1s linear infinite;
+}
+
+
+/* Live Sync badge micro-interaction tweaks */
+#syncStatus .animate-ping {
+  width: 10px;
+  height: 10px;
+  opacity: 0.5;
+  animation-duration: 3s !important;
+}
+
+/* =================================================================
+   Encrypted Hash Display
+   ================================================================= */
+
+.hash-display {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.75rem;
+  background: linear-gradient(90deg, #1a1a1a 0%, #2d2d2d 100%);
+  color: #00ff00;
+  padding: 0.75rem;
+  border-radius: 0.375rem;
+  border: 1px solid #333;
+  word-break: break-all;
+  position: relative;
+  overflow: hidden;
+}
+
+.hash-display::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 255, 0, 0.2), transparent);
+  animation: hash-scan 3s linear infinite;
+}
+
+
+/* =================================================================
+   Premium Notification Toast
+   ================================================================= */
+
+.premium-notification {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: linear-gradient(135deg, var(--surface-dark) 0%, var(--surface-elevated) 100%);
+  color: var(--text-primary);
+  padding: 16px 24px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.8),
+    0 0 40px rgba(255, 215, 0, 0.1);
+  z-index: var(--z-notification);
+  transition: transform 0.3s ease;
+}
+
+.premium-notification.show {
+  transform: translateX(-50%) translateY(0);
+}
