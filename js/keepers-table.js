@@ -47,12 +47,12 @@ function initializeKeeperTables() {
     // Clear existing options
     optionsContainer.innerHTML = '';
     
-    // Create option elements with proper structure for TailwindPlus Elements
+    // Create option elements with checkmarks hidden by default
     window.TEAM_OPTIONS.forEach((opt, index) => {
       const optionHTML = `
-        <el-option value="${opt.value}" class="group/option relative block cursor-default py-2 pr-9 pl-3 text-gray-900 select-none focus:bg-indigo-600 focus:text-white focus:outline-hidden dark:text-white dark:focus:bg-indigo-500">
+        <el-option value="${opt.value}" class="group/option relative block cursor-default py-2 pr-9 pl-3 text-gray-900 select-none hover:bg-indigo-50 focus:bg-indigo-600 focus:text-white focus:outline-hidden dark:text-white dark:focus:bg-indigo-500">
           <span class="block truncate font-normal group-aria-selected/option:font-semibold">${opt.label}</span>
-          <span class="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600 group-not-aria-selected/option:hidden group-focus/option:text-white dark:text-indigo-400">
+          <span class="absolute inset-y-0 right-0 items-center pr-4 text-indigo-600 group-focus/option:text-white dark:text-indigo-400" style="display: none;">
             <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="size-5">
               <path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" fill-rule="evenodd" />
             </svg>
@@ -71,105 +71,103 @@ function initializeKeeperTables() {
     
     if (!selectButton || !optionsContainer) return;
     
-    // Consolidated click handler to prevent event conflicts from the web component
-    document.addEventListener('click', (e) => {
-      const isVisible = optionsContainer.classList.contains('dropdown-open');
-
-      if (selectButton.contains(e.target)) {
-        // User clicked the button, so we toggle the dropdown.
-        e.preventDefault();
-        toggleDropdown();
-      } else if (isVisible && !teamSelect.contains(e.target)) {
-        // User clicked outside the open dropdown, so we close it.
-        closeDropdown();
-      }
-      // Clicks on the options themselves are handled by the 'optionsContainer' listener.
-    });
+    let isDropdownOpen = false;
     
-    // Listen for value changes on the el-select component (web component standard)
-    teamSelect.addEventListener('change', (event) => {
-      currentTeamSlug = event.target.value;
-      clearSelection(false);
-      renderTeamTable(currentTeamSlug);
-    });
-    
-    // Handle clicks on options for immediate feedback
-    if (optionsContainer) {
-      // Use event delegation for dynamically added options
-      optionsContainer.addEventListener('click', (e) => {
-        const option = e.target.closest('el-option');
-        if (option) {
-          const value = option.getAttribute('value');
-          const label = option.querySelector('span').textContent;
-          const selectedContent = teamSelect.querySelector('el-selectedcontent');
-          if (selectedContent) {
-            selectedContent.textContent = label;
-          }
-          
-          // Hide all checkmarks first
-          optionsContainer.querySelectorAll('el-option').forEach(opt => {
-            opt.removeAttribute('aria-selected');
-            const checkmark = opt.querySelector('.absolute.inset-y-0.right-0');
-            if (checkmark) {
-              checkmark.style.display = 'none';
-            }
-          });
-          
-          // Show checkmark for selected option
-          option.setAttribute('aria-selected', 'true');
-          const selectedCheckmark = option.querySelector('.absolute.inset-y-0.right-0');
-          if (selectedCheckmark) {
-            selectedCheckmark.style.display = 'flex';
-          }
-          
-          // Update the el-select value attribute for web component
-          teamSelect.setAttribute('value', value);
-          currentTeamSlug = value;
-          clearSelection(false);
-          renderTeamTable(currentTeamSlug);
-          
-          // Close dropdown after selection
-          closeDropdown();
-          
-          // Dispatch change event for consistency
-          teamSelect.dispatchEvent(new Event('change', { bubbles: true }));
-        }
-      });
-    }
-    
-    function toggleDropdown() {
-      const optionsContainer = teamSelect.querySelector('el-options');
-      if (!optionsContainer) return;
+    // Handle button click to toggle dropdown
+    selectButton.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       
-      const isVisible = optionsContainer.classList.contains('dropdown-open');
-      if (isVisible) {
+      if (isDropdownOpen) {
         closeDropdown();
       } else {
         openDropdown();
       }
-    }
+    });
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!teamSelect.contains(e.target) && isDropdownOpen) {
+        closeDropdown();
+      }
+    });
+    
+    // Handle option selection with event delegation
+    optionsContainer.addEventListener('click', (e) => {
+      e.stopPropagation(); // Prevent event from bubbling up
+      
+      const option = e.target.closest('el-option');
+      if (!option) return;
+      
+      const value = option.getAttribute('value');
+      const label = option.querySelector('span').textContent;
+      const selectedContent = teamSelect.querySelector('el-selectedcontent');
+      
+      // Update the selected content text
+      if (selectedContent) {
+        selectedContent.textContent = label;
+      }
+      
+      // Hide all checkmarks first
+      optionsContainer.querySelectorAll('el-option').forEach(opt => {
+        opt.removeAttribute('aria-selected');
+        const checkmark = opt.querySelector('.absolute.inset-y-0.right-0');
+        if (checkmark) {
+          checkmark.style.display = 'none';
+        }
+      });
+      
+      // Show checkmark for selected option
+      option.setAttribute('aria-selected', 'true');
+      const selectedCheckmark = option.querySelector('.absolute.inset-y-0.right-0');
+      if (selectedCheckmark) {
+        selectedCheckmark.style.display = 'flex';
+      }
+      
+      // Update state and render table
+      currentTeamSlug = value;
+      clearSelection(false);
+      renderTeamTable(currentTeamSlug);
+      
+      // Close dropdown after selection
+      closeDropdown();
+    });
     
     function openDropdown() {
-      const optionsContainer = teamSelect.querySelector('el-options');
       if (!optionsContainer) return;
-
-      // Use class-based state management; CSS handles the rest
-      optionsContainer.classList.add('dropdown-open');
+      
+      isDropdownOpen = true;
+      optionsContainer.style.display = 'block';
+      
+      // Force reflow before adding animation classes
+      optionsContainer.offsetHeight;
+      
+      requestAnimationFrame(() => {
+        optionsContainer.style.opacity = '1';
+        optionsContainer.style.visibility = 'visible';
+        optionsContainer.classList.add('dropdown-open');
+      });
     }
     
     function closeDropdown() {
-      const optionsContainer = teamSelect.querySelector('el-options');
       if (!optionsContainer) return;
       
-      // Use class-based state management; CSS handles the rest
+      isDropdownOpen = false;
       optionsContainer.classList.remove('dropdown-open');
+      
+      // Use transition end to properly hide element
+      const hideDropdown = () => {
+        if (!isDropdownOpen) {
+          optionsContainer.style.display = 'none';
+        }
+        optionsContainer.removeEventListener('transitionend', hideDropdown);
+      };
+      
+      optionsContainer.addEventListener('transitionend', hideDropdown);
+      optionsContainer.style.opacity = '0';
+      optionsContainer.style.visibility = 'hidden';
     }
     
-    // Update dropdown position on scroll/resize - no longer needed (absolute positioning handled by CSS)
-    function updateDropdownPosition() {
-      // no-op
-    }
-    // Scroll/resize listeners removed (not required)
     // Initialize dropdown as closed
     closeDropdown();
   }
@@ -356,19 +354,10 @@ function initializeKeeperTables() {
   initialize();
 }
 
-// Initialize when DOM is ready, with proper delay for TailwindPlus Elements
+// Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-  // Wait for custom elements to be defined
-  const checkElements = () => {
-    if (customElements.get('el-select')) {
-      // Elements are ready, initialize
-      initializeKeeperTables();
-    } else {
-      // Check again in 100ms
-      setTimeout(checkElements, 100);
-    }
-  };
-  
-  // Start checking after a small initial delay
-  setTimeout(checkElements, 100);
+  // Short delay to ensure all scripts are loaded
+  setTimeout(() => {
+    initializeKeeperTables();
+  }, 100);
 });
