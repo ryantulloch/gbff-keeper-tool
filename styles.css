@@ -1316,6 +1316,7 @@ textarea:focus-visible {
 /* Fix dropdown positioning */
 #team-select {
   position: relative;
+  z-index: 20;
 }
 
 #team-select el-options {
@@ -1324,6 +1325,55 @@ textarea:focus-visible {
   left: 0 !important;
   right: 0 !important;
   margin-top: 0.25rem !important;
+  z-index: 999 !important;
+  transform: none !important;
+  display: none;
+}
+
+#team-select el-options[popover]:popover-open {
+  position: absolute !important;
+  top: 100% !important;
+  left: 0 !important;
+  right: 0 !important;
+  margin-top: 0.25rem !important;
+  z-index: 999 !important;
+  transform: none !important;
+  display: block !important;
+  inset: auto !important;
+}
+
+/* Override TailwindPlus positioning */
+#team-select el-options[anchor] {
+  position: absolute !important;
+  top: 100% !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: auto !important;
+  inset: auto !important;
+  margin-top: 0.25rem !important;
+  z-index: 999 !important;
+  transform: none !important;
+}
+
+/* Ensure proper container positioning */
+.space-y-4 > div:has(#team-select) {
+  position: relative;
+  z-index: 10;
+}
+
+/* Fix for popover positioning anchor system */
+#team-select[popover-target] + el-options,
+#team-select el-options[popover] {
+  position: absolute !important;
+  top: 100% !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: auto !important;
+  margin-top: 0.25rem !important;
+  z-index: 999 !important;
+  transform: none !important;
+  max-height: 240px;
+  overflow-y: auto;
 }
 
 /* Responsive adjustments for the floating bar on small screens */
