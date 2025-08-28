@@ -1922,7 +1922,7 @@ textarea:focus-visible {
   box-shadow: 0 4px 12px -2px rgba(245, 158, 11, 0.15);
 }
 
-/* Mobile-Specific Enhancements */
+/* Mobile-Specific Enhancements - Spring Physics Optimized */
 @media (max-width: 768px) {
   #instructionsButton {
     padding: 1rem;
@@ -1930,9 +1930,9 @@ textarea:focus-visible {
     touch-action: manipulation;
   }
   
-  /* Enhanced mobile touch feedback */
-  #instructionsButton:active {
-    transform: scale(0.98);
+  /* Enhanced mobile touch feedback - handled by JS .touch-active class */
+  #instructionsButton.touch-active {
+    transform: scale(0.98) translateZ(0);
     background-color: rgba(59, 130, 246, 0.1);
   }
   
@@ -1946,16 +1946,18 @@ textarea:focus-visible {
     grid-template-columns: 1fr;
   }
   
-  /* Enhanced mobile step cards */
+  /* Enhanced mobile step cards - GPU optimized */
   #instructionsContent .grid > div {
     padding: 1rem;
     border-radius: 1rem;
     background: rgba(248, 250, 252, 0.8);
     border: 1px solid rgba(226, 232, 240, 0.6);
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
   }
   
   #instructionsContent .grid > div:active {
-    transform: scale(0.98);
+    transform: scale(0.98) translateZ(0);
     background-color: rgba(59, 130, 246, 0.05);
   }
   
@@ -1966,29 +1968,25 @@ textarea:focus-visible {
   }
 }
 
-/* Touch device optimizations */
+/* Touch device optimizations - Spring Physics Compatible */
 @media (hover: none) and (pointer: coarse) {
-  #instructionsButton:hover::before {
-    left: -100%;
-  }
-  
   #instructionsButton {
-    transition: background-color 0.15s ease, transform 0.1s ease;
+    transition: background-color 0.1s ease-out;
   }
   
-  #instructionsButton:active {
-    transform: scale(0.97);
+  #instructionsButton.touch-active {
+    transform: scale(0.97) translateZ(0);
     background-color: rgba(59, 130, 246, 0.12);
   }
   
   #instructionsContent .grid > div:hover {
     background-color: transparent;
-    transform: none;
+    transform: translateZ(0);
   }
   
   #instructionsContent .grid > div:active {
     background-color: rgba(59, 130, 246, 0.08);
-    transform: scale(0.98);
+    transform: scale(0.98) translateZ(0);
   }
 }
 
@@ -2068,25 +2066,27 @@ textarea:focus-visible {
   pointer-events: none;
 }
 
-/* Stagger animation for step cards when opening */
-#instructionsContent[data-open="true"] .grid > div:nth-child(1) {
-  animation: slideInStagger 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s both;
-}
+/* Stagger animation for step cards - Disabled on mobile for better performance */
+@media (min-width: 769px) {
+  #instructionsContent[data-open="true"] .grid > div:nth-child(1) {
+    animation: slideInStagger 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s both;
+  }
 
-#instructionsContent[data-open="true"] .grid > div:nth-child(2) {
-  animation: slideInStagger 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.15s both;
-}
+  #instructionsContent[data-open="true"] .grid > div:nth-child(2) {
+    animation: slideInStagger 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.15s both;
+  }
 
-#instructionsContent[data-open="true"] .grid > div:nth-child(3) {
-  animation: slideInStagger 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s both;
-}
+  #instructionsContent[data-open="true"] .grid > div:nth-child(3) {
+    animation: slideInStagger 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s both;
+  }
 
-#instructionsContent[data-open="true"] .grid > div:nth-child(4) {
-  animation: slideInStagger 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.25s both;
-}
+  #instructionsContent[data-open="true"] .grid > div:nth-child(4) {
+    animation: slideInStagger 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.25s both;
+  }
 
-#instructionsContent[data-open="true"] .mt-5 {
-  animation: slideInStagger 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s both;
+  #instructionsContent[data-open="true"] .mt-5 {
+    animation: slideInStagger 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s both;
+  }
 }
 
 @keyframes slideInStagger {
@@ -2109,28 +2109,42 @@ textarea:focus-visible {
 }
 
 /* =================================================================
-   ENHANCED COMMISSIONER ACCORDION STYLES - Same as Instructions
+   ULTRA-SMOOTH COMMISSIONER ACCORDION - GPU Optimized
    ================================================================= */
 
-/* Enhanced Commissioner Accordion */
+/* Enhanced Commissioner Accordion - GPU Accelerated */
 #commissionerSection {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
-/* Enhanced Commissioner Button Styles */
+/* Enhanced Commissioner Button - Optimized for Touch */
 #commissionerButton {
   position: relative;
   cursor: pointer;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
-  transition: none !important;
+  user-select: none;
+  -webkit-user-select: none;
   padding: 0.5rem 0;
   border-radius: 0.5rem;
   background-color: transparent !important;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  will-change: auto;
+  transition: background-color 0.15s ease-out, box-shadow 0.15s ease-out;
 }
 
-/* Enhanced focus and active states - consistent styling */
+/* Touch active state for immediate feedback */
+#commissionerButton.touch-active {
+  background-color: rgba(59, 130, 246, 0.08) !important;
+  transform: scale(0.99) translateZ(0);
+}
+
+/* Focus state for accessibility */
 #commissionerButton:focus-visible {
   outline: none;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
@@ -2138,20 +2152,25 @@ textarea:focus-visible {
   background-color: transparent !important;
 }
 
-/* Enhanced Commissioner Chevron Animation */
+/* Commissioner Chevron - No CSS transitions, handled by spring physics */
 #commissionerToggle {
   transform-origin: center;
-  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  will-change: transform;
-}
-
-/* Enhanced Commissioner Content Area */
-#commissionerContent {
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  transform-origin: top;
-  will-change: height, opacity, transform;
+  will-change: auto;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+}
+
+/* Commissioner Content - Optimized for spring animations */
+#commissionerContent {
+  transform-origin: top center;
+  will-change: auto;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  contain: layout style paint;
 }
 
 /* Enhanced Commissioner Input and Button Styles */
@@ -2168,7 +2187,7 @@ textarea:focus-visible {
   transform: translateY(-1px);
 }
 
-/* Mobile-Specific Commissioner Enhancements */
+/* Mobile-Specific Commissioner Enhancements - Spring Physics Optimized */
 @media (max-width: 768px) {
   #commissionerButton {
     padding: 0.75rem;
@@ -2176,6 +2195,11 @@ textarea:focus-visible {
     touch-action: manipulation;
   }
   
+  /* Enhanced mobile touch feedback - handled by JS .touch-active class */
+  #commissionerButton.touch-active {
+    transform: scale(0.98) translateZ(0);
+    background-color: rgba(59, 130, 246, 0.1);
+  }
   
   /* Mobile-optimized content spacing */
   #commissionerContent > div {
@@ -2194,24 +2218,27 @@ textarea:focus-visible {
   }
 }
 
-/* Touch device optimizations for commissioner */
+/* Touch device optimizations for commissioner - Spring Physics Compatible */
 @media (hover: none) and (pointer: coarse) {
   #commissionerButton {
-    transition: none !important;
-    background-color: transparent !important;
+    transition: background-color 0.1s ease-out;
   }
   
+  #commissionerButton.touch-active {
+    transform: scale(0.97) translateZ(0);
+    background-color: rgba(59, 130, 246, 0.12);
+  }
   
   #commissionerContent input:hover {
     background-color: rgba(248, 250, 252, 0.5);
   }
   
   #commissionerContent button:hover {
-    transform: none;
+    transform: translateZ(0);
   }
   
   #commissionerContent button:active {
-    transform: scale(0.98);
+    transform: scale(0.98) translateZ(0);
   }
 }
 
