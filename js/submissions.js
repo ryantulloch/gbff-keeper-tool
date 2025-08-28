@@ -534,6 +534,207 @@ function refreshSubmissions() {
     window.updateDisplay();
 }
 
+/**
+ * Transform final results into tabbed interface
+ */
+function transformToTabbedInterface() {
+    const viewContent = document.getElementById('viewContent');
+    if (!viewContent) return;
+    
+    // Get existing submissions HTML
+    const existingSubmissions = viewContent.innerHTML;
+    
+    // Create tabbed interface HTML
+    const tabbedHTML = createTabbedInterfaceHTML(existingSubmissions);
+    
+    // Replace viewContent with tabbed interface
+    viewContent.innerHTML = tabbedHTML;
+    
+    // Initialize tab switching functionality
+    initializeTabSwitching();
+    
+    // Initialize free agents UI if data is available
+    if (window.availableFreeAgents) {
+        initializeFreeAgentsUI();
+    }
+}
+
+/**
+ * Create the tabbed interface HTML structure
+ */
+function createTabbedInterfaceHTML(keepersHTML) {
+    return `
+        <div class="results-tabs-container">
+            <!-- Results Tabs -->
+            <div class="results-tabs mb-6">
+                <button class="results-tab active" data-tab="keepers">
+                    <span class="tab-icon">👥</span>
+                    Team Keepers
+                </button>
+                <button class="results-tab" data-tab="free-agents">
+                    <span class="tab-icon">⭐</span>
+                    Top Free Agents
+                </button>
+            </div>
+            
+            <!-- Results Content -->
+            <div class="results-content">
+                <!-- Team Keepers Panel -->
+                <div id="keepers-results" class="results-panel active">
+                    ${keepersHTML}
+                </div>
+                
+                <!-- Top Free Agents Panel -->
+                <div id="free-agents-results" class="results-panel">
+                    ${createFreeAgentsHTML()}
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+/**
+ * Create the Free Agents HTML structure
+ */
+function createFreeAgentsHTML() {
+    if (!window.availableFreeAgents) {
+        return `
+            <div class="text-center text-gray-500 py-12">
+                <div class="text-6xl mb-4">🔍</div>
+                <h3 class="text-xl font-medium mb-2">Free Agent Analysis Unavailable</h3>
+                <p>Unable to analyze available free agents at this time.</p>
+            </div>
+        `;
+    }
+    
+    return `
+        <div class="free-agents-container">
+            <!-- Position Filters -->
+            <div class="position-filters mb-6">
+                <div class="filter-scroll-container">
+                    <button class="position-filter active" data-position="all">All</button>
+                    <button class="position-filter" data-position="QB">QB</button>
+                    <button class="position-filter" data-position="RB">RB</button>
+                    <button class="position-filter" data-position="WR">WR</button>
+                    <button class="position-filter" data-position="TE">TE</button>
+                </div>
+            </div>
+            
+            <!-- Free Agents Grid -->
+            <div id="free-agents-grid" class="free-agents-grid">
+                ${createFreeAgentsGrid('all')}
+            </div>
+        </div>
+    `;
+}
+
+/**
+ * Create the free agents grid for a specific position
+ */
+function createFreeAgentsGrid(position) {
+    if (!window.availableFreeAgents) return '';
+    
+    let players = [];
+    if (position === 'all') {
+        players = window.availableFreeAgents.all.slice(0, 50); // Show top 50 overall
+    } else {
+        players = window.availableFreeAgents.byPosition[position] || [];
+    }
+    
+    if (players.length === 0) {
+        return `
+            <div class="text-center text-gray-500 py-8">
+                <div class="text-4xl mb-3">🤷‍♂️</div>
+                <p>No available ${position === 'all' ? 'players' : position + 's'} found</p>
+            </div>
+        `;
+    }
+    
+    return players.map((player, index) => createPlayerCard(player, index + 1)).join('');
+}
+
+/**
+ * Create a player card HTML
+ */
+function createPlayerCard(player, rank) {
+    const positionClass = getPositionClass(player.positionType);
+    
+    return `
+        <div class="free-agent-card ${positionClass}">
+            <div class="player-rank">#${rank}</div>
+            <div class="player-info">
+                <div class="player-name">${player.name}</div>
+                <div class="player-details">
+                    <span class="player-team">${player.team}</span>
+                    <span class="player-position">${player.position}</span>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+/**
+ * Get CSS class for position styling
+ */
+function getPositionClass(position) {
+    const classes = {
+        'QB': 'position-qb',
+        'RB': 'position-rb',
+        'WR': 'position-wr',
+        'TE': 'position-te'
+    };
+    return classes[position] || 'position-other';
+}
+
+/**
+ * Initialize tab switching functionality
+ */
+function initializeTabSwitching() {
+    const tabs = document.querySelectorAll('.results-tab');
+    const panels = document.querySelectorAll('.results-panel');
+    
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const targetTab = tab.dataset.tab;
+            
+            // Update active tab
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            
+            // Update active panel
+            panels.forEach(panel => {
+                panel.classList.remove('active');
+                if (panel.id === `${targetTab}-results`) {
+                    panel.classList.add('active');
+                }
+            });
+        });
+    });
+}
+
+/**
+ * Initialize free agents UI functionality
+ */
+function initializeFreeAgentsUI() {
+    const positionFilters = document.querySelectorAll('.position-filter');
+    
+    positionFilters.forEach(filter => {
+        filter.addEventListener('click', () => {
+            const position = filter.dataset.position;
+            
+            // Update active filter
+            positionFilters.forEach(f => f.classList.remove('active'));
+            filter.classList.add('active');
+            
+            // Update free agents grid
+            const grid = document.getElementById('free-agents-grid');
+            if (grid) {
+                grid.innerHTML = createFreeAgentsGrid(position);
+            }
+        });
+    });
+}
+
 // Make functions globally accessible
 window.submitKeepers = submitKeepers;
 window.revealSubmission = revealSubmission;
@@ -541,3 +742,4 @@ window.executeAutoReveal = executeAutoReveal;
 window.editSubmission = editSubmission;
 window.filterSubmissions = filterSubmissions;
 window.refreshSubmissions = refreshSubmissions;
+window.transformToTabbedInterface = transformToTabbedInterface;
