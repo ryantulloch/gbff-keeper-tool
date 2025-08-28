@@ -1342,7 +1342,11 @@ textarea:focus-visible {
 }
 
 #team-select el-options {
-  position: fixed !important;
+  position: absolute !important;
+  top: calc(100% + 4px) !important;
+  left: 0 !important;
+  width: 100% !important;
+  margin-top: 0 !important;
   z-index: 9999 !important;
   transform: none !important;
   display: none;
@@ -1361,16 +1365,15 @@ textarea:focus-visible {
 #team-select el-options[anchor],
 #team-select[popover-target] + el-options,
 #team-select el-options[popover] {
-  position: fixed !important;
+  position: absolute !important;
+  top: calc(100% + 4px) !important;
+  left: 0 !important;
+  width: 100% !important;
+  margin-top: 0 !important;
   z-index: 9999 !important;
   transform: none !important;
   max-height: 240px;
   overflow-y: auto;
-  inset: auto !important;
-  top: auto !important;
-  left: auto !important;
-  right: auto !important;
-  bottom: auto !important;
 }
 
 /* Fix checkbox styling and checkmarks */
