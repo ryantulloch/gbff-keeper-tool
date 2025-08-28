@@ -2502,7 +2502,7 @@ textarea:focus-visible {
   }
 
   /* Convert inner container to grid: [info | actions] */
-  #floating-bar &gt; .px-4 &gt; .flex {
+  #floating-bar > .px-4 > .flex {
     display: grid !important;
     grid-template-columns: 1fr auto;
     align-items: center !important;
@@ -2512,7 +2512,7 @@ textarea:focus-visible {
   }
 
   /* Info group: count | total | remaining (works with or without #floating-bar-info id) */
-  #floating-bar &gt; .px-4 &gt; .flex &gt; .flex.items-center.space-x-4,
+  #floating-bar > .px-4 > .flex > .flex.items-center.space-x-4,
   #floating-bar-info {
     display: grid !important;
     grid-template-columns: auto 1fr 1fr !important;
@@ -2522,14 +2522,14 @@ textarea:focus-visible {
   }
 
   /* Keep actions docked on the right, prevent wrap jitter */
-  #floating-bar &gt; .px-4 &gt; .flex &gt; .flex.items-center.space-x-2 {
+  #floating-bar > .px-4 > .flex > .flex.items-center.space-x-2 {
     justify-self: end !important;
     flex-wrap: nowrap !important;
   }
 
   /* Tighten Tailwind spacing utilities inside the bar */
-  #floating-bar .space-x-6 &gt; * + *,
-  #floating-bar .space-x-4 &gt; * + * {
+  #floating-bar .space-x-6 > * + *,
+  #floating-bar .space-x-4 > * + * {
     margin-left: 0.5rem !important;
   }
 
