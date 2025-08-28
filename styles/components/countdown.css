@@ -460,7 +460,7 @@
   right: 0;
   bottom: 0;
   z-index: 1; /* Between backdrop (0) and content (10) */
-  opacity: 0.06; /* Super faint */
+  opacity: 0.15; /* Less faint - more visible but still background */
   overflow: hidden;
   pointer-events: none;
 }
