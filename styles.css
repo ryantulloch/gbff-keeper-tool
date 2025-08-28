@@ -1471,15 +1471,15 @@ textarea:focus-visible {
 }
 
 .keepers-table-row.selected {
-  background-color: rgba(79, 70, 229, 0.08) !important;
+  background-color: rgb(248 250 252) !important; /* Very light grey instead of dark blue */
 }
 
 .keepers-table-row.selected:hover {
-  background-color: rgba(79, 70, 229, 0.12) !important;
+  background-color: rgb(241 245 249) !important; /* Slightly darker light grey on hover */
 }
 
 .keepers-table-row.selected .player-name {
-  color: #4f46e5 !important;
+  color: #1f2937 !important; /* Dark grey text instead of blue */
   font-weight: 600;
 }
 
@@ -1522,6 +1522,21 @@ textarea:focus-visible {
   #floating-bar button {
     padding: 0.5rem 1rem !important;
     font-size: 0.875rem !important;
+  }
+  
+  /* Prevent text wrapping in floating bar - keep "X players" on same line */
+  #floating-bar * {
+    white-space: nowrap !important;
+  }
+  
+  /* Ensure proper flex layout to prevent wrapping */
+  #floating-bar .flex {
+    flex-wrap: nowrap !important;
+  }
+  
+  /* Make sure player count text stays together */
+  #floating-bar .text-center {
+    min-width: fit-content !important;
   }
 }
 
