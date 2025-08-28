@@ -320,10 +320,7 @@ function initializeKeeperTables() {
                   handlePlayerSelection(cb, true); // bypass limits for select all
               }
           });
-          // Show notice if over limits
-          if (selectedPlayers.size > window.MAX_KEEPERS || window.getTotalKeeperCost() > window.TEAM_BUDGET) {
-              showNotice(`⚠️ You've selected all players. You'll need to deselect some before submitting (max ${window.MAX_KEEPERS} keepers, $${window.TEAM_BUDGET} budget).`);
-          }
+          // Note: Removed problematic warning message that was overflowing on mobile
       } else {
           // Deselect all - clear the Map completely first
           selectedPlayers.clear();

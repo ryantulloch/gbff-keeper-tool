@@ -1,335 +1,484 @@
 (function() {
   'use strict';
 
-  const MD_BREAKPOINT = 768;
-  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const isMobile = () => window.innerWidth < MD_BREAKPOINT;
-  const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  // ============================================
+  // ULTRA-SMOOTH ACCORDION SYSTEM
+  // Spring physics + Transform-only animations
+  // Optimized for 60fps on mobile devices
+  // ============================================
 
-  function clamp(n, min, max) { return Math.min(max, Math.max(min, n)); }
+  // Performance constants
+  const MOBILE_BREAKPOINT = 768;
+  const ANIMATION_FPS = 60;
+  const FRAME_TIME = 1000 / ANIMATION_FPS;
+  const HAPTIC_DURATION = 5; // Reduced from 10ms for quicker response
+
+  // Spring physics parameters
+  const SPRING = {
+    stiffness: 0.15,
+    damping: 0.85,
+    mass: 1,
+    precision: 0.001
+  };
+
+  // Feature detection
+  const supportsHaptic = 'vibrate' in navigator;
+  const supportsTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const isLowEndDevice = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2;
+
+  // Performance monitoring
+  let frameCount = 0;
+  let lastTime = performance.now();
+  let fps = 60;
+
+  // Utilities
+  const isMobile = () => window.innerWidth < MOBILE_BREAKPOINT;
+  const clamp = (val, min, max) => Math.min(Math.max(val, min), max);
+
+  // ============================================
+  // SPRING PHYSICS ENGINE
+  // ============================================
   
-  function getAnimationDuration(h) {
-    // Enhanced duration calculation - faster on mobile for better UX
-    const baseTime = isMobile() ? 160 : 180;
-    const multiplier = isMobile() ? 0.25 : 0.35;
-    const maxTime = isMobile() ? 350 : 420;
-    return clamp(baseTime + h * multiplier, 220, maxTime);
-  }
-
-  function ensurePanelBaseStyles(panel) {
-    panel.style.overflow = 'hidden';
-    panel.style.willChange = 'height, opacity, transform';
-    panel.style.transform = 'translateZ(0)';
-    panel.style.contain = 'layout style paint';
-    panel.style.backfaceVisibility = 'hidden';
-  }
-
-  function resetPanelStyles(panel) {
-    panel.style.height = '';
-    panel.style.overflow = '';
-    panel.style.willChange = '';
-    panel.style.transform = '';
-    panel.style.contain = '';
-    panel.style.backfaceVisibility = '';
-    panel.style.opacity = '';
-  }
-
-  function setAria(button, panel, open) {
-    if (button) {
-      button.setAttribute('aria-expanded', String(open));
-      // Enhanced mobile accessibility - dynamic labels based on button content
-      const buttonText = button.querySelector('span') ? button.querySelector('span').textContent : 'section';
-      button.setAttribute('aria-label',
-        open ? `Collapse ${buttonText}` : `Expand ${buttonText}`
-      );
-    }
-    if (panel) {
-      panel.dataset.open = open ? 'true' : 'false';
-      panel.setAttribute('aria-hidden', String(!open));
-    }
-  }
-
-  function enhancedChevronRotation(chevron, open) {
-    if (!chevron) return;
-    
-    // Remove existing rotation classes
-    chevron.classList.remove('rotate-0', 'rotate-180');
-    
-    // Add smooth rotation with better mobile performance
-    if (open) {
-      chevron.style.transform = 'rotate(180deg)';
-      chevron.classList.add('rotate-180');
-    } else {
-      chevron.style.transform = 'rotate(0deg)';
-      chevron.classList.add('rotate-0');
-    }
-  }
-
-  function addButtonFeedback(button, isExpanding) {
-    if (!button) return;
-    
-    // Enhanced visual feedback for mobile
-    if (isExpanding) {
-      button.classList.add('bg-slate-100/70');
-    } else {
-      button.classList.remove('bg-slate-100/70');
-    }
-  }
-
-  async function expand(panel, button) {
-    ensurePanelBaseStyles(panel);
-    const endHeight = panel.scrollHeight;
-    const duration = getAnimationDuration(endHeight);
-
-    addButtonFeedback(button, true);
-
-    if (prefersReduced) {
-      panel.style.height = 'auto';
-      panel.style.opacity = '1';
-      return;
+  class SpringAnimation {
+    constructor(initialValue = 0) {
+      this.value = initialValue;
+      this.target = initialValue;
+      this.velocity = 0;
+      this.animationId = null;
+      this.onUpdate = null;
+      this.onComplete = null;
     }
 
-    // Enhanced animation keyframes with opacity and slight scale for mobile
-    const keyframes = isMobile() ? [
-      {
-        height: '0px',
-        opacity: '0',
-        transform: 'translateZ(0) scaleY(0.95)'
-      },
-      {
-        height: endHeight + 'px',
-        opacity: '1',
-        transform: 'translateZ(0) scaleY(1)'
+    setTarget(target, immediate = false) {
+      this.target = target;
+      
+      if (immediate || prefersReducedMotion) {
+        this.value = target;
+        this.velocity = 0;
+        if (this.onUpdate) this.onUpdate(this.value);
+        if (this.onComplete) this.onComplete();
+        return;
       }
-    ] : [
-      { height: '0px', opacity: '0' },
-      { height: endHeight + 'px', opacity: '1' }
-    ];
 
-    panel.style.height = '0px';
-    panel.style.opacity = '0';
-    if (isMobile()) panel.style.transform = 'translateZ(0) scaleY(0.95)';
-    void panel.offsetHeight; // reflow
-
-    const anim = panel.animate(keyframes, {
-      duration,
-      easing: isMobile() ? 'cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'cubic-bezier(0.22, 1, 0.36, 1)',
-      fill: 'forwards'
-    });
-    
-    panel._accAnim = anim;
-
-    try {
-      await anim.finished;
-      panel.style.height = 'auto';
-      panel.style.opacity = '1';
-      if (isMobile()) panel.style.transform = 'translateZ(0) scaleY(1)';
-    } catch {
-      /* canceled */
+      this.animate();
     }
 
-    panel._accAnim = null;
-  }
+    animate() {
+      if (this.animationId) return;
 
-  async function collapse(panel, button) {
-    ensurePanelBaseStyles(panel);
-    const startHeight = panel.offsetHeight || panel.scrollHeight;
-    const duration = getAnimationDuration(startHeight);
-
-    addButtonFeedback(button, false);
-
-    if (prefersReduced) {
-      panel.style.height = '0px';
-      panel.style.opacity = '0';
-      return;
-    }
-
-    // Enhanced animation keyframes with opacity and slight scale for mobile
-    const keyframes = isMobile() ? [
-      {
-        height: startHeight + 'px',
-        opacity: '1',
-        transform: 'translateZ(0) scaleY(1)'
-      },
-      {
-        height: '0px',
-        opacity: '0',
-        transform: 'translateZ(0) scaleY(0.95)'
-      }
-    ] : [
-      { height: startHeight + 'px', opacity: '1' },
-      { height: '0px', opacity: '0' }
-    ];
-
-    panel.style.height = startHeight + 'px';
-    panel.style.opacity = '1';
-    if (isMobile()) panel.style.transform = 'translateZ(0) scaleY(1)';
-    void panel.offsetHeight; // reflow
-
-    const anim = panel.animate(keyframes, {
-      duration,
-      easing: isMobile() ? 'cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'cubic-bezier(0.22, 1, 0.36, 1)',
-      fill: 'forwards'
-    });
-    
-    panel._accAnim = anim;
-
-    try {
-      await anim.finished;
-      panel.style.height = '0px';
-      panel.style.opacity = '0';
-      if (isMobile()) panel.style.transform = 'translateZ(0) scaleY(0.95)';
-    } catch {
-      /* canceled */
-    }
-
-    panel._accAnim = null;
-  }
-
-  // Enhanced mobile touch handling
-  function addTouchFeedback(button) {
-    if (!isTouch || !button) return;
-
-    let touchTimeout;
-    
-    button.addEventListener('touchstart', () => {
-      button.classList.add('scale-[0.98]', 'bg-slate-100/50');
-      clearTimeout(touchTimeout);
-    }, { passive: true });
-
-    button.addEventListener('touchend', () => {
-      touchTimeout = setTimeout(() => {
-        button.classList.remove('scale-[0.98]', 'bg-slate-100/50');
-      }, 150);
-    }, { passive: true });
-
-    button.addEventListener('touchcancel', () => {
-      button.classList.remove('scale-[0.98]', 'bg-slate-100/50');
-      clearTimeout(touchTimeout);
-    }, { passive: true });
-  }
-
-  // Public: called by toggleInstructions()
-  window.smoothAccordionToggle = async function(panel, button, chevron) {
-    if (!panel) return;
-
-    // Prevent double-clicks on mobile
-    if (panel._isAnimating) return;
-    panel._isAnimating = true;
-
-    if (panel._accAnim) {
-      try { panel._accAnim.cancel(); } catch {}
-      panel._accAnim = null;
-    }
-
-    const isOpen = panel.dataset.open === 'true';
-    
-    // Enhanced haptic feedback on mobile
-    if (isTouch && 'vibrate' in navigator) {
-      navigator.vibrate(10); // Subtle haptic feedback
-    }
-
-    if (isOpen) {
-      setAria(button, panel, false);
-      enhancedChevronRotation(chevron, false);
-      await collapse(panel, button);
-    } else {
-      setAria(button, panel, true);
-      enhancedChevronRotation(chevron, true);
-      await expand(panel, button);
-    }
-
-    panel._isAnimating = false;
-  };
-
-  // Public: initialize on page load
-  window.initInstructionsAccordion = function() {
-    const panel = document.getElementById('instructionsContent');
-    const button = document.getElementById('instructionsButton');
-    const chevron = document.getElementById('instructionsToggle');
-    if (!panel || !button) return;
-
-    // Enhanced initialization
-    setAria(button, panel, false);
-    enhancedChevronRotation(chevron, false);
-    ensurePanelBaseStyles(panel);
-    panel.style.height = '0px';
-    panel.style.opacity = '0';
-    panel.dataset._initialized = 'true';
-    panel._isAnimating = false;
-
-    // Add touch feedback for mobile
-    addTouchFeedback(button);
-
-    // Enhanced keyboard navigation
-    button.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        toggleInstructions();
-      }
-    });
-
-    // Initialize commissioner controls accordion as well
-    initCommissionerAccordion();
-
-    // Responsive behavior - adjust animations on window resize
-    let resizeTimeout;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(() => {
-        // Handle instructions panel
-        if (panel._accAnim) {
-          panel._accAnim.cancel();
-          panel._accAnim = null;
-        }
-        // Re-calculate height if open
-        if (panel.dataset.open === 'true') {
-          panel.style.height = 'auto';
-        }
+      const step = () => {
+        // Spring physics calculation
+        const displacement = this.target - this.value;
+        const springForce = displacement * SPRING.stiffness;
+        const dampingForce = -this.velocity * SPRING.damping;
+        const acceleration = (springForce + dampingForce) / SPRING.mass;
         
-        // Also handle commissioner panel
-        const commissionerPanel = document.getElementById('commissionerContent');
-        if (commissionerPanel && commissionerPanel._accAnim) {
-          commissionerPanel._accAnim.cancel();
-          commissionerPanel._accAnim = null;
-        }
-        if (commissionerPanel && commissionerPanel.dataset.open === 'true') {
-          commissionerPanel.style.height = 'auto';
-        }
-      }, 150);
-    }, { passive: true });
+        this.velocity += acceleration;
+        this.value += this.velocity;
 
-    console.log('✨ Enhanced Instructions Accordion initialized with mobile optimizations');
+        // Check if animation is complete
+        if (Math.abs(this.velocity) < SPRING.precision && 
+            Math.abs(displacement) < SPRING.precision) {
+          this.value = this.target;
+          this.velocity = 0;
+          
+          if (this.onUpdate) this.onUpdate(this.value);
+          if (this.onComplete) this.onComplete();
+          
+          cancelAnimationFrame(this.animationId);
+          this.animationId = null;
+          return;
+        }
+
+        if (this.onUpdate) this.onUpdate(this.value);
+        this.animationId = requestAnimationFrame(step);
+      };
+
+      this.animationId = requestAnimationFrame(step);
+    }
+
+    stop() {
+      if (this.animationId) {
+        cancelAnimationFrame(this.animationId);
+        this.animationId = null;
+      }
+    }
+  }
+
+  // ============================================
+  // ACCORDION CONTROLLER
+  // ============================================
+
+  class AccordionController {
+    constructor(panel, button, chevron) {
+      this.panel = panel;
+      this.button = button;
+      this.chevron = chevron;
+      this.isOpen = false;
+      this.isAnimating = false;
+      
+      // Spring animations for smooth transitions
+      this.scaleAnimation = new SpringAnimation(0);
+      this.opacityAnimation = new SpringAnimation(0);
+      this.chevronAnimation = new SpringAnimation(0);
+      
+      // Cached measurements
+      this.contentHeight = 0;
+      this.lastWidth = window.innerWidth;
+      
+      this.init();
+    }
+
+    init() {
+      // Set initial state
+      this.measureContent();
+      this.setupAnimations();
+      this.setupStyles();
+      this.setupEventListeners();
+      this.setAriaAttributes();
+    }
+
+    measureContent() {
+      // Temporarily show content to measure height
+      const originalStyles = {
+        height: this.panel.style.height,
+        opacity: this.panel.style.opacity,
+        transform: this.panel.style.transform,
+        display: this.panel.style.display
+      };
+
+      this.panel.style.height = 'auto';
+      this.panel.style.opacity = '1';
+      this.panel.style.transform = 'none';
+      this.panel.style.display = 'block';
+      
+      this.contentHeight = this.panel.scrollHeight;
+      
+      // Restore original styles
+      Object.assign(this.panel.style, originalStyles);
+    }
+
+    setupAnimations() {
+      // Scale animation (for height)
+      this.scaleAnimation.onUpdate = (value) => {
+        if (!this.panel) return;
+        
+        // Use transform for GPU acceleration
+        this.panel.style.transform = `scaleY(${value})`;
+        this.panel.style.maxHeight = `${this.contentHeight * value}px`;
+      };
+
+      // Opacity animation
+      this.opacityAnimation.onUpdate = (value) => {
+        if (!this.panel) return;
+        this.panel.style.opacity = value;
+      };
+
+      // Chevron rotation animation
+      this.chevronAnimation.onUpdate = (value) => {
+        if (!this.chevron) return;
+        this.chevron.style.transform = `rotate(${value * 180}deg)`;
+      };
+
+      // Animation complete callback
+      const onAnimationComplete = () => {
+        this.isAnimating = false;
+        
+        if (this.isOpen) {
+          // When open, allow content to be naturally sized
+          this.panel.style.height = 'auto';
+          this.panel.style.maxHeight = 'none';
+          this.panel.style.transform = 'none';
+        } else {
+          // When closed, ensure it's fully hidden
+          this.panel.style.display = 'none';
+        }
+      };
+
+      this.scaleAnimation.onComplete = onAnimationComplete;
+    }
+
+    setupStyles() {
+      // Optimize panel for animations
+      Object.assign(this.panel.style, {
+        transformOrigin: 'top',
+        willChange: 'auto',
+        contain: 'layout style paint',
+        overflow: 'hidden',
+        height: '0',
+        opacity: '0',
+        transform: 'scaleY(0)',
+        display: 'none'
+      });
+
+      // Optimize chevron
+      if (this.chevron) {
+        Object.assign(this.chevron.style, {
+          transformOrigin: 'center',
+          willChange: 'auto',
+          transition: 'none'
+        });
+      }
+
+      // Optimize button
+      this.button.style.touchAction = 'manipulation';
+      this.button.style.webkitTapHighlightColor = 'transparent';
+    }
+
+    setupEventListeners() {
+      // Enhanced touch handling
+      if (supportsTouch) {
+        let touchStartY = 0;
+        let touchStartTime = 0;
+
+        this.button.addEventListener('touchstart', (e) => {
+          touchStartY = e.touches[0].clientY;
+          touchStartTime = performance.now();
+          
+          // Immediate visual feedback
+          this.button.classList.add('touch-active');
+          
+          // Ultra-quick haptic feedback
+          if (supportsHaptic && !prefersReducedMotion) {
+            navigator.vibrate(HAPTIC_DURATION);
+          }
+        }, { passive: true });
+
+        this.button.addEventListener('touchend', (e) => {
+          const touchEndY = e.changedTouches[0].clientY;
+          const touchDuration = performance.now() - touchStartTime;
+          const touchDistance = Math.abs(touchEndY - touchStartY);
+          
+          // Remove visual feedback
+          this.button.classList.remove('touch-active');
+          
+          // Only toggle if it's a tap (not a scroll)
+          if (touchDuration < 300 && touchDistance < 10) {
+            e.preventDefault();
+            this.toggle();
+          }
+        }, { passive: false });
+
+        this.button.addEventListener('touchcancel', () => {
+          this.button.classList.remove('touch-active');
+        }, { passive: true });
+      }
+
+      // Click handling for desktop
+      this.button.addEventListener('click', (e) => {
+        if (!supportsTouch) {
+          e.preventDefault();
+          this.toggle();
+        }
+      });
+
+      // Keyboard accessibility
+      this.button.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          this.toggle();
+        }
+      });
+
+      // Handle window resize efficiently
+      let resizeTimeout;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+          const currentWidth = window.innerWidth;
+          
+          // Only recalculate if width actually changed
+          if (Math.abs(currentWidth - this.lastWidth) > 50) {
+            this.lastWidth = currentWidth;
+            this.measureContent();
+            
+            // If open, adjust to new content height
+            if (this.isOpen) {
+              this.panel.style.height = 'auto';
+              this.panel.style.maxHeight = 'none';
+            }
+          }
+        }, 250);
+      }, { passive: true });
+    }
+
+    setAriaAttributes() {
+      this.button.setAttribute('aria-expanded', this.isOpen);
+      this.button.setAttribute('aria-controls', this.panel.id);
+      this.panel.setAttribute('aria-hidden', !this.isOpen);
+      this.panel.setAttribute('role', 'region');
+      this.panel.setAttribute('aria-labelledby', this.button.id);
+    }
+
+    toggle() {
+      if (this.isAnimating) return;
+      
+      this.isOpen = !this.isOpen;
+      this.isAnimating = true;
+      
+      // Update ARIA
+      this.setAriaAttributes();
+      
+      // Trigger animations
+      if (this.isOpen) {
+        this.open();
+      } else {
+        this.close();
+      }
+    }
+
+    open() {
+      // Prepare panel for animation
+      this.panel.style.display = 'block';
+      this.panel.style.height = '0';
+      
+      // Ensure content is measured
+      if (this.contentHeight === 0) {
+        this.measureContent();
+      }
+      
+      // Add will-change for animation
+      this.panel.style.willChange = 'transform, opacity, max-height';
+      
+      // Force reflow
+      void this.panel.offsetHeight;
+      
+      // Start spring animations
+      this.scaleAnimation.setTarget(1);
+      this.opacityAnimation.setTarget(1);
+      this.chevronAnimation.setTarget(1);
+      
+      // Remove will-change after animation
+      setTimeout(() => {
+        if (this.panel) {
+          this.panel.style.willChange = 'auto';
+        }
+      }, 500);
+    }
+
+    close() {
+      // Add will-change for animation
+      this.panel.style.willChange = 'transform, opacity, max-height';
+      
+      // Start spring animations
+      this.scaleAnimation.setTarget(0);
+      this.opacityAnimation.setTarget(0);
+      this.chevronAnimation.setTarget(0);
+      
+      // Remove will-change after animation
+      setTimeout(() => {
+        if (this.panel) {
+          this.panel.style.willChange = 'auto';
+        }
+      }, 500);
+    }
+
+    destroy() {
+      // Clean up animations
+      this.scaleAnimation.stop();
+      this.opacityAnimation.stop();
+      this.chevronAnimation.stop();
+    }
+  }
+
+  // ============================================
+  // PUBLIC API
+  // ============================================
+
+  // Store accordion instances
+  const accordions = new Map();
+
+  // Initialize accordion
+  function initAccordion(panelId, buttonId, chevronId) {
+    const panel = document.getElementById(panelId);
+    const button = document.getElementById(buttonId);
+    const chevron = document.getElementById(chevronId);
+    
+    if (!panel || !button) {
+      console.warn(`Accordion elements not found: ${panelId}, ${buttonId}`);
+      return;
+    }
+    
+    // Create and store accordion instance
+    const accordion = new AccordionController(panel, button, chevron);
+    accordions.set(panelId, accordion);
+    
+    return accordion;
+  }
+
+  // Toggle accordion by ID
+  function toggleAccordion(panelId) {
+    const accordion = accordions.get(panelId);
+    if (accordion) {
+      accordion.toggle();
+    }
+  }
+
+  // ============================================
+  // INITIALIZATION
+  // ============================================
+
+  // Initialize instructions accordion
+  window.initInstructionsAccordion = function() {
+    const accordion = initAccordion('instructionsContent', 'instructionsButton', 'instructionsToggle');
+    
+    if (accordion) {
+      // Also initialize commissioner accordion
+      initAccordion('commissionerContent', 'commissionerButton', 'commissionerToggle');
+      console.log('✨ Ultra-smooth accordion system initialized');
+    }
   };
 
-  // Initialize commissioner controls accordion
-  function initCommissionerAccordion() {
-    const panel = document.getElementById('commissionerContent');
-    const button = document.getElementById('commissionerButton');
-    const chevron = document.getElementById('commissionerToggle');
+  // Public toggle functions
+  window.smoothAccordionToggle = function(panel, button, chevron) {
     if (!panel || !button) return;
+    
+    // Get or create accordion instance
+    let accordion = accordions.get(panel.id);
+    if (!accordion) {
+      accordion = new AccordionController(panel, button, chevron);
+      accordions.set(panel.id, accordion);
+    }
+    
+    accordion.toggle();
+  };
 
-    // Enhanced initialization
-    setAria(button, panel, false);
-    enhancedChevronRotation(chevron, false);
-    ensurePanelBaseStyles(panel);
-    panel.style.height = '0px';
-    panel.style.opacity = '0';
-    panel.dataset._initialized = 'true';
-    panel._isAnimating = false;
+  // Legacy support for direct function calls
+  window.toggleInstructions = function() {
+    toggleAccordion('instructionsContent');
+  };
 
-    // Add touch feedback for mobile
-    addTouchFeedback(button);
+  window.toggleCommissionerControls = function() {
+    toggleAccordion('commissionerContent');
+  };
 
-    // Enhanced keyboard navigation
-    button.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        toggleCommissionerControls();
+  // ============================================
+  // PERFORMANCE MONITORING (Dev Only)
+  // ============================================
+
+  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    function monitorFPS() {
+      const now = performance.now();
+      const delta = now - lastTime;
+      
+      if (delta >= 1000) {
+        fps = Math.round((frameCount * 1000) / delta);
+        frameCount = 0;
+        lastTime = now;
+        
+        // Log if FPS drops below threshold
+        if (fps < 55) {
+          console.warn(`⚠️ FPS dropped to ${fps}`);
+        }
       }
-    });
-
-    console.log('✨ Enhanced Commissioner Accordion initialized');
+      
+      frameCount++;
+      requestAnimationFrame(monitorFPS);
+    }
+    
+    // Start monitoring
+    requestAnimationFrame(monitorFPS);
   }
 
 })();
