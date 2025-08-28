@@ -480,9 +480,10 @@
   object-fit: contain; /* Show full image without cropping */
   object-position: center;
   opacity: 0;
-  transition: opacity 0.3s ease-in-out; /* Much faster transition */
+  transition: opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smooth crossfade transition */
   transform: translateZ(0); /* GPU acceleration */
-  will-change: opacity, filter;
+  will-change: opacity, transform;
+  backface-visibility: hidden; /* Better performance */
 }
 
 .background-image.active {
