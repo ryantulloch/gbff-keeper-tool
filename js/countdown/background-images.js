@@ -2,7 +2,7 @@
  * Background Images Module - 57 Cowboys/Micah/Jerry Images for Countdown Seconds 60-4
  */
 
-console.log('🖼️ BACKGROUND IMAGES VERSION: 2025-01-28-v3 (57 images system - FIXED PATHS)');
+console.log('🖼️ BACKGROUND IMAGES VERSION: 2025-01-28-CROSSFADE-FIX (smooth transitions)');
 
 let imageContainer = null;
 let currentImageElement = null;
@@ -148,37 +148,52 @@ function showImageAtSecond(remainingSeconds) {
         }
     }
     
-    // Remove previous image
-    if (currentImageElement) {
-        currentImageElement.remove();
-        currentImageElement = null;
-    }
-    
-    // Create and show new image
-    currentImageElement = document.createElement('img');
-    currentImageElement.className = 'background-image active';
-    currentImageElement.src = imagePath;
-    currentImageElement.alt = '';
+    // Create new image element
+    const newImageElement = document.createElement('img');
+    newImageElement.className = 'background-image'; // Start without 'active' class
+    newImageElement.src = imagePath;
+    newImageElement.alt = '';
     
     // Add error handling
-    currentImageElement.onload = () => {
-        console.log(`✅ Image ${imageIndex + 1} loaded and should be VISIBLE: ${imagePath}`);
+    newImageElement.onload = () => {
+        console.log(`✅ Image ${imageIndex + 1} loaded successfully: ${imagePath}`);
     };
     
-    currentImageElement.onerror = () => {
+    newImageElement.onerror = () => {
         console.error(`❌ Failed to load image ${imageIndex + 1}: ${imagePath}`);
     };
     
-    imageContainer.appendChild(currentImageElement);
+    // Add new image to container (overlapping with previous if exists)
+    imageContainer.appendChild(newImageElement);
     
-    // FIXED: Remove after 0.8 seconds (giving time for CSS transition which is now 0.3s)
-    setTimeout(() => {
-        if (currentImageElement) {
-            currentImageElement.remove();
-            currentImageElement = null;
-            console.log(`🗑️ Removed image ${imageIndex + 1} after display`);
-        }
-    }, 800);
+    // Trigger fade-in animation after a brief delay (for CSS to register)
+    requestAnimationFrame(() => {
+        newImageElement.classList.add('active');
+        console.log(`✨ Crossfade: Image ${imageIndex + 1} fading in`);
+    });
+    
+    // Handle previous image with crossfade
+    if (currentImageElement) {
+        const previousImage = currentImageElement;
+        const previousIndex = imageIndex > 0 ? imageIndex : 56; // Handle wrap-around
+        
+        // Start fading out previous image after new one starts fading in
+        setTimeout(() => {
+            previousImage.classList.remove('active');
+            console.log(`✨ Crossfade: Image ${previousIndex} fading out`);
+            
+            // Remove previous image from DOM after fade-out completes
+            setTimeout(() => {
+                if (previousImage && previousImage.parentNode) {
+                    previousImage.remove();
+                    console.log(`✨ Crossfade transition complete for image ${previousIndex}`);
+                }
+            }, 400); // Match CSS transition duration
+        }, 100); // Small overlap for smooth crossfade
+    }
+    
+    // Update current reference
+    currentImageElement = newImageElement;
 }
 
 /**
