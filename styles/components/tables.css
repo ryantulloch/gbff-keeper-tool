@@ -162,6 +162,17 @@
     display: block !important;
     visibility: visible !important;
     opacity: 1 !important;
+    color: #1f2937 !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    margin-bottom: 8px !important;
+  }
+  
+  /* Also target the span inside the label */
+  label[for="team-select"] span {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
   
   /* Ensure team dropdown button is visible and clickable */
