@@ -85,10 +85,10 @@ window.submitKeepersFromTable = function() {
             return;
         }
 
-        // Check if team already submitted
+        // Check if team already submitted (bypass if editing)
         const teamKey = teamSlug.replace(/[.$#\[\]\/]/g, '_');
         const submissions = window.getSubmissions();
-        if (submissions[teamKey]) {
+        if (submissions[teamKey] && !window.isEditingSubmission) {
             alert('This team has already submitted');
             return;
         }
