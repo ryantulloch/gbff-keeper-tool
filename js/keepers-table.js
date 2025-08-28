@@ -41,125 +41,56 @@ function initializeKeeperTables() {
   function populateTeamDropdown() {
     if (!teamSelect) return;
     
-    const optionsContainer = teamSelect.querySelector('el-options');
-    if (!optionsContainer) return;
+    // Clear existing options (except the first placeholder)
+    teamSelect.innerHTML = '<option value="">Select a team...</option>';
     
-    // Clear existing options
-    optionsContainer.innerHTML = '';
-    
-    // Create option elements with checkmarks hidden by default
-    window.TEAM_OPTIONS.forEach((opt, index) => {
-      const optionHTML = `
-        <el-option value="${opt.value}" class="group/option relative block cursor-default py-2 pr-9 pl-3 text-gray-900 select-none hover:bg-indigo-50 focus:bg-indigo-600 focus:text-white focus:outline-hidden dark:text-white dark:focus:bg-indigo-500">
-          <span class="block truncate font-normal group-aria-selected/option:font-semibold">${opt.label}</span>
-          <span class="absolute inset-y-0 right-0 items-center pr-4 text-indigo-600 group-focus/option:text-white dark:text-indigo-400" style="display: none;">
-            <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="size-5">
-              <path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" fill-rule="evenodd" />
-            </svg>
-          </span>
-        </el-option>
-      `;
-      optionsContainer.insertAdjacentHTML('beforeend', optionHTML);
+    // Add team options with checkmark in the label for selected item
+    window.TEAM_OPTIONS.forEach((opt) => {
+      const option = document.createElement('option');
+      option.value = opt.value;
+      option.textContent = opt.label;
+      teamSelect.appendChild(option);
     });
   }
 
   function setupTeamSelectHandler() {
     if (!teamSelect) return;
     
-    const selectButton = teamSelect.querySelector('button');
-    const optionsContainer = teamSelect.querySelector('el-options');
-    
-    if (!selectButton || !optionsContainer) return;
-    
-    let isDropdownOpen = false;
-    
-    // Handle button click to toggle dropdown
-    selectButton.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
+    // Simple native select change handler
+    teamSelect.addEventListener('change', (e) => {
+      const value = e.target.value;
       
-      if (isDropdownOpen) {
-        closeDropdown();
-      } else {
-        openDropdown();
-      }
-    });
-    
-    // Close dropdown when clicking outside
-    document.addEventListener('click', (e) => {
-      if (!teamSelect.contains(e.target) && isDropdownOpen) {
-        closeDropdown();
-      }
-    });
-    
-    // Handle option selection with event delegation
-    optionsContainer.addEventListener('click', (e) => {
-      e.stopPropagation(); // Prevent event from bubbling up
-      
-      const option = e.target.closest('el-option');
-      if (!option) return;
-      
-      const value = option.getAttribute('value');
-      const label = option.querySelector('span').textContent;
-      const selectedContent = teamSelect.querySelector('el-selectedcontent');
-      
-      // Update the selected content text
-      if (selectedContent) {
-        selectedContent.textContent = label;
-      }
-      
-      // Hide all checkmarks first
-      optionsContainer.querySelectorAll('el-option').forEach(opt => {
-        opt.removeAttribute('aria-selected');
-        const checkmark = opt.querySelector('.absolute.inset-y-0.right-0');
-        if (checkmark) {
-          checkmark.style.display = 'none';
+      if (!value) {
+        // No team selected
+        currentTeamSlug = null;
+        clearSelection(false);
+        tableContainer.innerHTML = '';
+        
+        // Hide password section when no team selected
+        const passwordSection = document.getElementById('password-section');
+        if (passwordSection) {
+          passwordSection.style.display = 'none';
         }
-      });
+        return;
+      }
       
-      // Show checkmark for selected option
-      option.setAttribute('aria-selected', 'true');
-      const selectedCheckmark = option.querySelector('.absolute.inset-y-0.right-0');
-      if (selectedCheckmark) {
-        selectedCheckmark.style.display = 'flex';
+      // Update selected text with checkmark
+      const selectedOption = teamSelect.querySelector(`option[value="${value}"]`);
+      if (selectedOption) {
+        // Add checkmark to selected option text (visual indicator)
+        window.TEAM_OPTIONS.forEach(opt => {
+          const option = teamSelect.querySelector(`option[value="${opt.value}"]`);
+          if (option) {
+            option.textContent = opt.value === value ? `✓ ${opt.label}` : opt.label;
+          }
+        });
       }
       
       // Update state and render table
       currentTeamSlug = value;
       clearSelection(false);
       renderTeamTable(currentTeamSlug);
-      
-      // Close dropdown after selection
-      closeDropdown();
     });
-    
-    function openDropdown() {
-      if (!optionsContainer) return;
-      
-      isDropdownOpen = true;
-      optionsContainer.style.display = 'block';
-      optionsContainer.style.opacity = '1';
-      optionsContainer.style.visibility = 'visible';
-      optionsContainer.classList.add('dropdown-open');
-    }
-    
-    function closeDropdown() {
-      if (!optionsContainer) return;
-      
-      isDropdownOpen = false;
-      optionsContainer.classList.remove('dropdown-open');
-      optionsContainer.style.display = 'none';
-      optionsContainer.style.opacity = '0';
-      optionsContainer.style.visibility = 'hidden';
-    }
-    
-    // Initialize dropdown as closed - set initial state directly without calling closeDropdown
-    if (optionsContainer) {
-      optionsContainer.style.display = 'none';
-      optionsContainer.style.opacity = '0';
-      optionsContainer.style.visibility = 'hidden';
-      optionsContainer.classList.remove('dropdown-open');
-    }
   }
 
   // --- Table Rendering ---
