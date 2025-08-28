@@ -431,23 +431,50 @@ function initializeKeeperTables() {
   
   // --- Edit Keepers Functionality ---
   function editExistingSubmission() {
+    console.log('editExistingSubmission called');
+    
+    // Debug: Check if dependencies are available
+    console.log('window.getSubmissions available:', typeof window.getSubmissions);
+    console.log('window.decrypt available:', typeof window.decrypt);
+    console.log('window.getDb available:', typeof window.getDb);
+    console.log('window.TEAM_OPTIONS available:', typeof window.TEAM_OPTIONS);
+    
     const teamName = prompt('Enter your team name to edit submission:');
-    if (!teamName) return;
+    if (!teamName) {
+      console.log('No team name entered');
+      return;
+    }
+    
+    console.log('Team name entered:', teamName);
     
     const teamKey = teamName.trim().replace(/[.$#\[\]\/]/g, '_');
+    console.log('Team key:', teamKey);
+    
     const submissions = window.getSubmissions();
+    console.log('Submissions retrieved:', submissions);
+    console.log('Available team keys:', Object.keys(submissions || {}));
+    
     const submission = submissions[teamKey];
+    console.log('Found submission:', submission);
     
     if (!submission) {
       alert('No submission found for this team name');
+      console.log('No submission found for team key:', teamKey);
       return;
     }
     
     const password = prompt('Enter your password:');
-    if (!password) return;
+    if (!password) {
+      console.log('No password entered');
+      return;
+    }
+    
+    console.log('Password entered, attempting decrypt');
     
     // Try to decrypt to verify password
     const decrypted = window.decrypt(submission.encryptedKeepers, password);
+    console.log('Decrypt result:', decrypted ? 'Success' : 'Failed');
+    
     if (!decrypted) {
       alert('Incorrect password!');
       return;
