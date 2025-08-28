@@ -54,7 +54,7 @@ function initiateCountdown() {
 }
 
 /**
- * Start the 30-second reveal countdown
+ * Start the 60-second reveal countdown
  */
 function startCountdown() {
     if (window.getIsCountdownActive() || window.getIsAutoRevealing()) {
