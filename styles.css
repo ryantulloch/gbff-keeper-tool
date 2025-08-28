@@ -2247,7 +2247,7 @@ textarea:focus-visible {
     display: none !important;
   }
   
-  /* Style mobile player cards */
+  /* Style mobile player cards with better text visibility */
   .player-card {
     transition: background-color 0.15s ease;
   }
@@ -2260,20 +2260,27 @@ textarea:focus-visible {
     background-color: rgb(49 46 129 / 0.3) !important;
   }
   
-  /* Very small checkboxes for mobile - 10px */
+  /* Fix player name text color - make it dark and readable */
+  .player-card .text-xs {
+    color: #1f2937 !important; /* Dark gray for better readability */
+    font-weight: 500 !important;
+  }
+  
+  /* Larger, more touch-friendly checkboxes for mobile - 16px */
   .mobile-checkbox,
   .player-checkbox-mobile {
     appearance: none !important;
     -webkit-appearance: none !important;
-    width: 10px !important;
-    height: 10px !important;
-    min-width: 10px !important;
-    min-height: 10px !important;
-    border: 1.5px solid #d1d5db !important;
-    border-radius: 2px !important;
+    width: 16px !important;
+    height: 16px !important;
+    min-width: 16px !important;
+    min-height: 16px !important;
+    border: 2px solid #d1d5db !important;
+    border-radius: 3px !important;
     background: white !important;
     position: relative !important;
     cursor: pointer !important;
+    margin: 4px !important; /* Add margin for easier tapping */
   }
   
   .mobile-checkbox:checked,
@@ -2286,22 +2293,42 @@ textarea:focus-visible {
   .player-checkbox-mobile:checked::after {
     content: '';
     position: absolute;
-    left: 2px;
-    top: 0px;
-    width: 3px;
-    height: 5px;
+    left: 4px;
+    top: 1px;
+    width: 6px;
+    height: 10px;
     border: solid white;
-    border-width: 0 1.5px 1.5px 0;
+    border-width: 0 2px 2px 0;
     transform: rotate(45deg);
   }
   
-  /* Keep team dropdown visible and functional on mobile */
+  /* Ensure team dropdown is visible and functional on mobile */
   #team-select {
-    /* Dropdown remains visible and functional on all screen sizes */
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
   
-  /* Keep Pick a Team label visible on mobile for accessibility */
+  /* Ensure Pick a Team label is visible on mobile */
   label[for="team-select"] {
-    /* Label remains visible for proper form accessibility */
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  
+  /* Ensure team dropdown button is visible and clickable */
+  #team-select-button {
+    display: grid !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    background-color: white !important;
+    border: 1px solid #d1d5db !important;
+    color: #1f2937 !important;
+  }
+  
+  /* Ensure dropdown text is visible */
+  #team-select-text {
+    color: #1f2937 !important;
+    font-weight: 500 !important;
   }
 }
