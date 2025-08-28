@@ -451,15 +451,15 @@ function initializeKeeperTables() {
     console.log('window.getDb available:', typeof window.getDb);
     console.log('window.TEAM_OPTIONS available:', typeof window.TEAM_OPTIONS);
     
-    const teamName = prompt('Enter your team name to edit submission:');
-    if (!teamName) {
-      console.log('No team name entered');
+    // Use currently selected team instead of prompting
+    if (!currentTeamSlug) {
+      alert('Please select your team first, then click Edit Keepers.');
       return;
     }
     
-    console.log('Team name entered:', teamName);
+    console.log('Using currently selected team:', currentTeamSlug);
     
-    const teamKey = teamName.trim().replace(/[.$#\[\]\/]/g, '_');
+    const teamKey = currentTeamSlug.replace(/[.$#\[\]\/]/g, '_');
     console.log('Team key:', teamKey);
     
     const submissions = window.getSubmissions();
@@ -475,10 +475,14 @@ function initializeKeeperTables() {
       return;
     }
     
-    const password = prompt('Enter your password:');
+    // Check if password is already in the form field
+    let password = document.getElementById('password')?.value;
     if (!password) {
-      console.log('No password entered');
-      return;
+      password = prompt('Enter your password:');
+      if (!password) {
+        console.log('No password entered');
+        return;
+      }
     }
     
     console.log('Password entered, attempting decrypt');
@@ -500,29 +504,11 @@ function initializeKeeperTables() {
       return;
     }
     
-    // Set the team selection
-    currentTeamSlug = teamSlug;
-    
-    // Update dropdown UI
-    const teamSelectText = document.getElementById('team-select-text');
-    if (teamSelectText) {
-      teamSelectText.textContent = teamOption.label;
+    // Team is already selected, just verify it matches
+    if (currentTeamSlug !== teamSlug) {
+      alert('The submission is for a different team than currently selected. Please select the correct team first.');
+      return;
     }
-    
-    // Update checkmarks in dropdown
-    document.querySelectorAll('#team-select-dropdown .absolute.inset-y-0.right-0').forEach(check => {
-      check.style.display = 'none';
-    });
-    const selectedOption = document.querySelector(`#team-select-dropdown [data-value="${teamSlug}"]`);
-    if (selectedOption) {
-      const checkmark = selectedOption.querySelector('.absolute.inset-y-0.right-0');
-      if (checkmark) {
-        checkmark.style.display = 'flex';
-      }
-    }
-    
-    // Render the team table
-    renderTeamTable(currentTeamSlug);
     
     // Parse the keepers and select them
     const keeperNames = decrypted.split('\n').map(k => k.trim()).filter(k => k);
