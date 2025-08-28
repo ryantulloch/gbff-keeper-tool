@@ -117,6 +117,9 @@ function preloadImages() {
  * @param {number} remainingSeconds - Countdown seconds remaining (60 to 0)
  */
 function showImageAtSecond(remainingSeconds) {
+    // DEBUG: Always log what's happening
+    console.log(`🖼️ showImageAtSecond() called with remainingSeconds = ${remainingSeconds}`);
+    
     // Only show images for seconds 60-4 (NOT during final 3 seconds)
     if (remainingSeconds < 4 || remainingSeconds > 60) {
         console.log(`⏰ COUNTDOWN ${remainingSeconds}s: No image (preserving FUCK/YOU/DANNY text)`);
