@@ -30,6 +30,9 @@ const COUNTDOWN_DURATION = 60; // seconds - needed for 57 images (seconds 60-4)
 const COUNTDOWN_STALE_THRESHOLD = 60000; // 60 seconds in ms
 const EXPIRY_AUTO_START_WINDOW = 86400000; // 24 hours in ms
 
+// Debug logging for countdown duration
+console.log('🔧 CONFIG LOADED: COUNTDOWN_DURATION =', COUNTDOWN_DURATION, 'seconds');
+
 // Default deadline
 const DEFAULT_DEADLINE = '2025-09-02T00:00';
 
