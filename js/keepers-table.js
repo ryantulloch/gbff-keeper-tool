@@ -66,7 +66,7 @@ function initializeKeeperTables() {
   function setupTeamSelectHandler() {
     if (!teamSelect) return;
     
-    // Listen for value changes on the el-select component
+    // Listen for value changes on the el-select component (web component standard)
     teamSelect.addEventListener('change', (event) => {
       currentTeamSlug = event.target.value;
       clearSelection(false);
@@ -76,6 +76,7 @@ function initializeKeeperTables() {
     // Also handle clicks on options for immediate feedback
     const optionsContainer = teamSelect.querySelector('el-options');
     if (optionsContainer) {
+      // Use event delegation for dynamically added options
       optionsContainer.addEventListener('click', (e) => {
         const option = e.target.closest('el-option');
         if (option) {
@@ -85,9 +86,14 @@ function initializeKeeperTables() {
           if (selectedContent) {
             selectedContent.textContent = label;
           }
+          // Update the el-select value attribute for web component
+          teamSelect.setAttribute('value', value);
           currentTeamSlug = value;
           clearSelection(false);
           renderTeamTable(currentTeamSlug);
+          
+          // Dispatch change event for consistency
+          teamSelect.dispatchEvent(new Event('change', { bubbles: true }));
         }
       });
     }
@@ -245,8 +251,19 @@ function initializeKeeperTables() {
   initialize();
 }
 
-// Initialize when DOM is ready, with a slight delay for TailwindPlus
+// Initialize when DOM is ready, with proper delay for TailwindPlus Elements
 document.addEventListener('DOMContentLoaded', () => {
-  // Give TailwindPlus Elements time to initialize and define custom elements
-  setTimeout(initializeKeeperTables, 500);
+  // Wait for custom elements to be defined
+  const checkElements = () => {
+    if (customElements.get('el-select')) {
+      // Elements are ready, initialize
+      initializeKeeperTables();
+    } else {
+      // Check again in 100ms
+      setTimeout(checkElements, 100);
+    }
+  };
+  
+  // Start checking after a small initial delay
+  setTimeout(checkElements, 100);
 });

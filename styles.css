@@ -69,7 +69,7 @@ html {
 
 /* Set base font family for inheritance */
 body {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
 }
 
 /* =================================================================
