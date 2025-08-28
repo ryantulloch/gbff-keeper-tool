@@ -121,15 +121,11 @@ function updateCountdown() {
     const countdownText = document.getElementById('countdownText');
     const countdownMessage = document.getElementById('countdownMessage');
     
-    // TEST: Show meme for exactly 1 second at 25-second mark only
-    if (remaining === 25) {
-        console.log('⏰ COUNTDOWN: At 25-second mark, checking for meme function...');
-        if (typeof window.showMemeAt25Seconds === 'function') {
-            console.log('✅ COUNTDOWN: showMemeAt25Seconds function found, calling it now');
-            window.showMemeAt25Seconds();
-        } else {
-            console.error('❌ COUNTDOWN: showMemeAt25Seconds function not available on window');
-        }
+    // Show image for current countdown second (60-4 only, NO images during final 3 seconds)
+    if (typeof window.showImageAtSecond === 'function') {
+        window.showImageAtSecond(remaining);
+    } else {
+        console.error('❌ COUNTDOWN: showImageAtSecond function not available on window');
     }
     
     // Smooth transition function with premium timing
