@@ -122,8 +122,14 @@ function updateCountdown() {
     const countdownMessage = document.getElementById('countdownMessage');
     
     // TEST: Show meme for exactly 1 second at 25-second mark only
-    if (remaining === 25 && typeof window.showMemeAt25Seconds === 'function') {
-        window.showMemeAt25Seconds();
+    if (remaining === 25) {
+        console.log('⏰ COUNTDOWN: At 25-second mark, checking for meme function...');
+        if (typeof window.showMemeAt25Seconds === 'function') {
+            console.log('✅ COUNTDOWN: showMemeAt25Seconds function found, calling it now');
+            window.showMemeAt25Seconds();
+        } else {
+            console.error('❌ COUNTDOWN: showMemeAt25Seconds function not available on window');
+        }
     }
     
     // Smooth transition function with premium timing

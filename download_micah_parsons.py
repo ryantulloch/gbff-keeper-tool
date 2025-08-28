@@ -91,16 +91,9 @@ if __name__ == "__main__":
     print("=" * 50)
     print("MICAH PARSONS IMAGE DOWNLOADER")
     print("=" * 50)
-    print("\nChoose download method:")
-    print("1. Automatic (using bing-image-downloader) - RECOMMENDED")
-    print("2. Manual (requires adding URLs manually)")
     
-    choice = input("\nEnter choice (1 or 2): ").strip()
-    
-    if choice == "2":
-        download_images_manual()
-    else:
-        download_images_simple()
+    # Auto-run the recommended method
+    download_images_simple()
     
     print("\n" + "=" * 50)
     print("Download process complete!")

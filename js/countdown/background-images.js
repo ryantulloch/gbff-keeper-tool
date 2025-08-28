@@ -40,9 +40,19 @@ function preloadTestImage() {
  * Show meme for exactly 1 second at 25-second mark
  */
 function showMemeAt25Seconds() {
-    if (!imageContainer) return;
+    console.log('🎊 TEST: showMemeAt25Seconds() called');
     
-    console.log('🎊 TEST: Showing meme for 1 second at 25-second mark');
+    if (!imageContainer) {
+        console.error('❌ Image container not found!');
+        imageContainer = document.querySelector('.background-image-container');
+        if (!imageContainer) {
+            console.error('❌ Could not find .background-image-container in DOM');
+            return;
+        }
+        console.log('✅ Found image container on retry');
+    }
+    
+    console.log('🖼️ Creating test image element...');
     
     // Create and show the test image
     testImageElement = document.createElement('img');
@@ -50,7 +60,26 @@ function showMemeAt25Seconds() {
     testImageElement.src = `images/${TEST_IMAGE}`;
     testImageElement.alt = '';
     
+    // Add error handling for image loading
+    testImageElement.onload = () => {
+        console.log('✅ Test image loaded successfully:', testImageElement.src);
+        console.log('📐 Image dimensions:', testImageElement.naturalWidth, 'x', testImageElement.naturalHeight);
+    };
+    
+    testImageElement.onerror = () => {
+        console.error('❌ Failed to load test image:', testImageElement.src);
+    };
+    
+    // Temporarily increase parent container opacity for debugging
+    const parentContainer = document.querySelector('.countdown-background-images');
+    if (parentContainer) {
+        console.log('🔧 Temporarily increasing parent container opacity for debugging');
+        parentContainer.style.opacity = '0.3'; // Much more visible for testing
+    }
+    
     imageContainer.appendChild(testImageElement);
+    console.log('✅ Test image added to DOM');
+    console.log('🎨 Applied CSS classes:', testImageElement.className);
     
     // Remove after exactly 1 second
     setTimeout(() => {
@@ -58,6 +87,12 @@ function showMemeAt25Seconds() {
             testImageElement.remove();
             testImageElement = null;
             console.log('✅ Test meme removed after 1 second');
+            
+            // Reset parent container opacity
+            if (parentContainer) {
+                parentContainer.style.opacity = '0.06';
+                console.log('🔧 Reset parent container opacity to 0.06');
+            }
         }
     }, 1000);
 }
