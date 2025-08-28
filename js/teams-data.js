@@ -124,7 +124,7 @@ window.TEAMS = {
     { name: 'Bijan Robinson', cost: 111 }, { name: 'Puka Nacua', cost: 9 },
     { name: 'Tyreek Hill', cost: 42 }, { name: 'Hunter Henry', cost: 6 },
     { name: 'Chase Brown', cost: 12 }, { name: 'Jameson Williams', cost: 19 },
-    { name: 'Darnell Mooney', cost: 5 }, { name: 'Daniel Lock', cost: 10 },
+    { name: 'Darnell Mooney', cost: 5 }, { name: 'Drew Lock', cost: 10 },
     { name: 'Kenny Pickett', cost: 10 }, { name: 'Anthony Richardson', cost: 34 },
     { name: 'Jaleel McLaughlin', cost: 14 }, { name: 'Ke\'Shawn Vaughn', cost: 10 },
     { name: 'Raheem Blackshear', cost: 10 }, { name: 'Tank Bigsby', cost: 6 },
