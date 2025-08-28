@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GBFF Keepers</title>
+    
+    <!-- Inter Font for Professional Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Playfair Display - Elegant serif font -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Raleway Font for Countdown -->
+    <link href="https://fonts.googleapis.com/css?family=Raleway:400,300,600,800,900" rel="stylesheet" type="text/css">
+    
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['-apple-system', 'BlinkMacSystemFont', 'Inter', 'Segoe UI', 'Roboto', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.3s ease-in',
+                        'slide-up': 'slideUp 0.3s ease-out',
+                        'pulse-subtle': 'pulseSubtle 2s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(10px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        pulseSubtle: {
+                            '0%, 100%': { opacity: '1' },
+                            '50%': { opacity: '0.8' },
+                        }
+                    },
+                    backdropBlur: {
+                        xs: '2px',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- ProgressBar.js for smooth circular progress animation -->
+    <script src="https://cdn.jsdelivr.net/npm/progressbar.js@1.1.0/dist/progressbar.min.js"></script>
+    
+    <!-- TailwindPlus Elements for enhanced components -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module"></script>
+    
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    
+    <!-- Premium Custom Styles -->
+    <style>
+        /* Premium Design System */
+        :root {
+            --primary-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            --success-gradient: linear-gradient(135deg, #047857 0%, #059669 100%);
+            --accent-gradient: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+        }
+        
+        /* Smooth transitions for all interactive elements */
+        * {
+            transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 200ms;
+        }
+        
+        /* Premium scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+        
+        /* Premium focus states - moved to styles.css for consistency */
+        
+        /* Glass morphism effect */
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        
+        /* Premium card hover effect */
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        /* Premium button styles */
+        .btn-primary {
+            background: var(--accent-gradient);
+            box-shadow: 0 4px 6px -1px rgba(30, 64, 175, 0.2), 0 2px 4px -1px rgba(30, 64, 175, 0.12);
+        }
+        
+        .btn-primary:hover {
+            box-shadow: 0 10px 15px -3px rgba(30, 64, 175, 0.3), 0 4px 6px -2px rgba(30, 64, 175, 0.15);
+            transform: translateY(-1px);
+        }
+        
+        .btn-success {
+            background: var(--success-gradient);
+            box-shadow: 0 4px 6px -1px rgba(4, 120, 87, 0.2), 0 2px 4px -1px rgba(4, 120, 87, 0.12);
+        }
+        
+        .btn-success:hover {
+            box-shadow: 0 10px 15px -3px rgba(4, 120, 87, 0.3), 0 4px 6px -2px rgba(4, 120, 87, 0.15);
+            transform: translateY(-1px);
+        }
+        
+        /* Animated gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, #3b82f6 0%, #10b981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 via-gray-50 to-slate-100 min-h-screen antialiased">
+    <!-- Premium Dark Countdown Overlay -->
+    <div id="countdownOverlay" class="countdown-overlay">
+        <div class="countdown-backdrop"></div>
+        <div class="countdown-content">
+            <!-- Header -->
+            <div class="countdown-header">
+                <span class="countdown-label">GBFF KEEPERS</span>
+                <h1 class="countdown-title">Countdown to Reveal</h1>
+            </div>
+            
+            <!-- Main Timer Display -->
+            <div class="countdown-main">
+                <div class="countdown-circle">
+                    <!-- Custom ProgressBar.js Container -->
+                    <div id="container"></div>
+                    <div class="countdown-overlay-display">
+                        <div id="countdownNumber" class="countdown-number">10</div>
+                        <div id="countdownText" class="countdown-text">SECONDS</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Footer Message -->
+            <div class="countdown-footer">
+                <p id="countdownMessage" class="countdown-message">Preparing to reveal all keepers</p>
+            </div>
+            
+            <!-- Escape Button -->
+            <button onclick="escapeCountdown()" class="countdown-escape">
+                Continue in Background
+            </button>
+        </div>
+    </div>
+    
+    <!-- Auto-reveal notice banner -->
+    <div id="autoRevealNotice" class="auto-reveal-notice" style="display: none;">
+        <span>⏰ AUTO-REVEAL COUNTDOWN IN PROGRESS!</span>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+        <!-- Premium Header with Refined Elegance -->
+        <header id="mainHeader" class="relative overflow-hidden rounded-2xl shadow-2xl mb-8 animate-fade-in">
+            <!-- Clean gradient background -->
+            <div class="absolute inset-0 bg-gradient-to-r from-slate-900 to-slate-800 opacity-95"></div>
+            
+            <!-- Subtle overlay for depth -->
+            <div class="absolute inset-0 opacity-20">
+                <div class="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-emerald-500/10"></div>
+            </div>
+            
+            <!-- Content Container - Reduced padding -->
+            <div class="relative px-6 py-6 md:py-8">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                    <!-- Title Section -->
+                    <div class="text-center md:text-left">
+                        <!-- Main Title with Playfair Display -->
+                        <h1 id="headerTitle" class="text-3xl md:text-4xl font-light text-white tracking-wide mb-1 transition-all duration-300" style="font-family: 'Playfair Display', serif; font-weight: 300;">
+                            <span class="relative inline-block bg-gradient-to-r from-white to-slate-200 bg-clip-text text-transparent 
+                                  after:absolute after:bottom-0 after:left-0 after:w-full after:h-[1px]
+                                  after:bg-gradient-to-r after:from-white/90 after:to-blue-300/40
+                                  after:scale-x-0 after:origin-left after:transition-transform after:duration-300 after:ease-out
+                                  hover:after:scale-x-100">
+                                GBFF Keepers
+                            </span>
+                        </h1>
+                        
+                        <!-- Refined Subtitle -->
+                        <p id="headerSubtitle" class="text-slate-400 text-xs font-light tracking-[0.2em] uppercase" style="font-family: 'Playfair Display', serif; font-weight: 300;">
+                            Keeper Management System
+                        </p>
+                    </div>
+                    
+                    <!-- Premium Sync Status Indicator -->
+                    <div id="syncStatus" class="group relative">
+                        <!-- Glassmorphic container with enhanced styling -->
+                        <div class="flex items-center gap-3 bg-gradient-to-r from-emerald-500/10 to-blue-500/10 backdrop-blur-md rounded-full pl-4 pr-5 py-3 border border-white/10 shadow-lg transition-all duration-300 hover:shadow-emerald-500/20 hover:border-white/20">
+                            <!-- Animated status light -->
+                            <span class="relative flex h-3 w-3">
+                                <span class="animate-pulse absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75 blur-sm"></span>
+                                <span class="relative inline-flex rounded-full h-3 w-3 bg-gradient-to-br from-emerald-400 to-emerald-500 shadow-emerald-500/50 shadow-sm"></span>
+                            </span>
+                            
+                            <!-- Status Text -->
+                            <div class="flex flex-col">
+                                <span class="text-xs font-semibold text-emerald-400 uppercase tracking-wider">
+                                    Live Sync
+                                </span>
+                                <span class="text-[10px] text-slate-400 tracking-wide">
+                                    Connected
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- Hover tooltip -->
+                        <div class="absolute -bottom-8 right-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+                            <span class="text-xs text-slate-500 whitespace-nowrap">Firebase Connected</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bottom gradient border effect -->
+            <div class="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
+        </header>
+
+        <!-- Enhanced Premium Instructions Panel -->
+        <div id="instructionsSection" class="glass-morphism rounded-xl border border-slate-200/50 shadow-lg mb-6 overflow-hidden group">
+            <button id="instructionsButton"
+                    onclick="toggleInstructions()"
+                    aria-controls="instructionsContent"
+                    aria-expanded="false"
+                    aria-label="Expand How It Works instructions"
+                    class="flex items-center justify-between w-full px-4 md:px-6 py-4 hover:bg-slate-50/50 active:bg-slate-100/50 transition-all duration-200 focus:outline-none focus:bg-slate-50/70 touch-manipulation">
+                <div class="flex items-center min-w-0">
+                    <span class="inline-flex items-center justify-center w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg mr-3 shadow-sm group-hover:shadow-md transition-shadow duration-200 flex-shrink-0">
+                        <i class="fas fa-info text-white text-sm"></i>
+                    </span>
+                    <h2 id="instructionsHeading" class="text-lg font-semibold text-slate-800 truncate">How It Works</h2>
+                </div>
+                <i class="fas fa-chevron-down transition-all duration-300 ease-out text-slate-400 group-hover:text-slate-600 ml-2 flex-shrink-0"
+                   id="instructionsToggle"
+                   style="transform: rotate(0deg)"></i>
+            </button>
+            <div id="instructionsContent"
+                 role="region"
+                 aria-labelledby="instructionsHeading"
+                 aria-hidden="true"
+                 data-open="false"
+                 class="accordion-content overflow-hidden"
+                 style="height: 0px; opacity: 0;">
+                <div class="px-4 md:px-6 pb-6 border-t border-slate-100">
+                    <!-- Mobile-optimized grid that stacks on small screens -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                        <div class="flex gap-3 p-3 rounded-lg hover:bg-slate-50/50 transition-colors">
+                            <span class="flex-shrink-0 w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center text-slate-600 font-semibold text-sm shadow-sm">1</span>
+                            <div class="min-w-0">
+                                <p class="font-normal text-slate-800 text-sm mb-1" style="font-family: 'Inter', sans-serif; font-weight: 500;">Team Setup</p>
+                                <p class="text-slate-600 text-sm leading-relaxed" style="font-family: 'Inter', sans-serif;">Enter your team name and select your keeper players</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-3 p-3 rounded-lg hover:bg-slate-50/50 transition-colors">
+                            <span class="flex-shrink-0 w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center text-slate-600 font-semibold text-sm shadow-sm">2</span>
+                            <div class="min-w-0">
+                                <p class="font-normal text-slate-800 text-sm mb-1" style="font-family: 'Inter', sans-serif; font-weight: 500;">Secure Encryption</p>
+                                <p class="text-slate-600 text-sm leading-relaxed" style="font-family: 'Inter', sans-serif;">Set a password to encrypt your submission</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-3 p-3 rounded-lg hover:bg-slate-50/50 transition-colors">
+                            <span class="flex-shrink-0 w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center text-slate-600 font-semibold text-sm shadow-sm">3</span>
+                            <div class="min-w-0">
+                                <p class="font-normal text-slate-800 text-sm mb-1" style="font-family: 'Inter', sans-serif; font-weight: 500;">Submit Before Deadline</p>
+                                <p class="text-slate-600 text-sm leading-relaxed" style="font-family: 'Inter', sans-serif;">Submissions remain encrypted until the deadline</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-3 p-3 rounded-lg hover:bg-slate-50/50 transition-colors">
+                            <span class="flex-shrink-0 w-8 h-8 bg-slate-100 rounded-full flex items-center justify-center text-slate-600 font-semibold text-sm shadow-sm">4</span>
+                            <div class="min-w-0">
+                                <p class="font-normal text-slate-800 text-sm mb-1" style="font-family: 'Inter', sans-serif; font-weight: 500;">Auto Reveal</p>
+                                <p class="text-slate-600 text-sm leading-relaxed" style="font-family: 'Inter', sans-serif;">All submissions become visible after the deadline</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Enhanced warning callout -->
+                    <div class="mt-5 p-4 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200/60 rounded-xl shadow-sm">
+                        <p class="text-amber-800 text-sm font-medium flex items-start gap-3">
+                            <i class="fas fa-exclamation-triangle mt-0.5 text-amber-600 flex-shrink-0"></i>
+                            <span class="leading-relaxed" style="font-family: 'Inter', sans-serif;">Remember your password - you'll need it to edit your submission later</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Premium Status Bar with Deadline Controls -->
+        <div id="statusBar" class="glass-morphism rounded-xl border border-slate-200/50 shadow-lg p-6 mb-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                <!-- Left Side: Set Deadline -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2" style="font-family: 'Inter', sans-serif;">
+                        Submission Deadline
+                    </label>
+                    <div class="flex gap-2">
+                        <input type="datetime-local" id="deadlineInput" 
+                               class="flex-1 px-4 py-2.5 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-slate-700 font-medium"
+                               style="font-family: 'Inter', sans-serif;">
+                        <button onclick="setDeadline()" 
+                                class="btn-primary px-6 py-2.5 text-white font-medium rounded-lg flex items-center gap-2 hover:scale-105 transition-all">
+                            <i class="fas fa-clock"></i>
+                            <span style="font-family: 'Inter', sans-serif;">Set</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Right Side: Countdown Display - Matching Left Side Structure -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2" style="font-family: 'Inter', sans-serif;">
+                        Time Until Lock
+                    </label>
+                    <div class="flex items-center justify-center h-[44px] bg-slate-50 rounded-lg border border-slate-200 px-4">
+                        <div id="phaseIndicator" class="hidden mr-2 flex-shrink-0"></div>
+                        <div id="timerDisplay" class="text-xl font-bold text-slate-800 tabular-nums tracking-tight">
+                            <!-- Timer will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Enhanced Premium Commissioner Controls -->
+            <div id="commissionerSection" class="mt-6 pt-6 border-t border-slate-200">
+                <button id="commissionerButton"
+                        onclick="toggleCommissionerControls()"
+                        aria-controls="commissionerContent"
+                        aria-expanded="false"
+                        aria-label="Expand Commissioner Controls"
+                        class="cursor-pointer inline-flex items-center gap-2 text-sm font-medium text-slate-600 w-full justify-start">
+                    <span class="inline-flex items-center justify-center w-6 h-6 bg-slate-100 rounded-md flex-shrink-0">
+                        <i class="fas fa-user-shield text-xs"></i>
+                    </span>
+                    <span style="font-family: 'Inter', sans-serif;">Commissioner Controls</span>
+                    <i class="fas fa-chevron-down text-xs transition-all duration-300 ease-out ml-auto flex-shrink-0"
+                       id="commissionerToggle"
+                       style="transform: rotate(0deg)"></i>
+                </button>
+                <div id="commissionerContent"
+                     role="region"
+                     aria-labelledby="commissionerButton"
+                     aria-hidden="true"
+                     data-open="false"
+                     class="accordion-content overflow-hidden"
+                     style="height: 0px; opacity: 0;">
+                    <div class="mt-4 space-y-3 px-0">
+                        <div class="flex gap-2">
+                            <input type="password" id="commissionerPassword"
+                                   placeholder="Enter commissioner password"
+                                   class="flex-1 px-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                   style="font-family: 'Inter', sans-serif;">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="clearAllSubmissions()"
+                                    class="px-4 py-2 bg-gradient-to-r from-slate-600 to-slate-700 text-white rounded-lg text-sm font-medium hover:from-slate-700 hover:to-slate-800 shadow-sm hover:shadow-md transition-all"
+                                    style="font-family: 'Inter', sans-serif;">
+                                <i class="fas fa-trash-alt mr-1.5"></i>Clear All
+                            </button>
+                            <button onclick="exportSubmissions()"
+                                    class="px-4 py-2 bg-gradient-to-r from-slate-600 to-slate-700 text-white rounded-lg text-sm font-medium hover:from-slate-700 hover:to-slate-800 shadow-sm hover:shadow-md transition-all"
+                                    style="font-family: 'Inter', sans-serif;">
+                                <i class="fas fa-download mr-1.5"></i>Export
+                            </button>
+                        </div>
+                        <div class="mt-2">
+                            <button onclick="testCountdownWithAuth()"
+                                    class="w-full px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg text-sm font-medium hover:from-red-600 hover:to-red-700 shadow-sm hover:shadow-md transition-all"
+                                    style="font-family: 'Inter', sans-serif;">
+                                <i class="fas fa-vial mr-1.5"></i>Test Countdown (Dev)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Premium Tabs Container -->
+        <div id="tabsContainer" class="glass-morphism rounded-xl border border-slate-200/50 shadow-xl overflow-hidden">
+            <div class="flex bg-gradient-to-r from-slate-50 to-slate-100 border-b border-slate-200">
+                <button id="submitTab" onclick="switchTab('submit')" 
+                        class="flex-1 px-6 py-4 text-center font-semibold transition-all relative group bg-white border-b-2 border-blue-500 text-slate-800">
+                    <div class="flex items-center justify-center gap-2">
+                        <span class="inline-flex items-center justify-center w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg shadow-sm">
+                            <i class="fas fa-edit text-white text-sm"></i>
+                        </span>
+                        <span style="font-family: 'Inter', sans-serif;">Submit Keepers</span>
+                    </div>
+                </button>
+                <button id="viewTab" onclick="switchTab('view')"
+                        class="flex-1 px-6 py-4 text-center font-semibold transition-all relative group text-slate-600 hover:text-slate-800 hover:bg-white/50">
+                    <div class="flex items-center justify-center gap-2">
+                        <span class="inline-flex items-center justify-center w-8 h-8 bg-slate-200 rounded-lg group-hover:bg-slate-300 transition-colors">
+                            <i class="fas fa-list text-slate-600 text-sm"></i>
+                        </span>
+                        <span style="font-family: 'Inter', sans-serif;">View Submissions</span>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Submit Tab Content -->
+            <div id="submitContent" class="p-8 bg-gradient-to-br from-white via-slate-50/50 to-white">
+                <div class="space-y-4">
+                    <!-- Team Selection Dropdown -->
+                    <div>
+                        <label for="team-select" class="block text-sm/6 font-medium text-gray-900 dark:text-white">
+                            Select Your Team
+                        </label>
+                        <el-select id="team-select" name="team" class="mt-2 block">
+                            <!-- Options are populated from TEAM_OPTIONS in keepers-table.js. -->
+                            <!-- The capitalized manager name (label) is displayed to the user. -->
+                        </el-select>
+                    </div>
+
+                    <!-- Keeper Selection Table -->
+                    <div id="keepers-table-container">
+                        <!-- Table will be rendered here by keepers-table.js -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- View Tab Content -->
+            <div id="viewContent" class="hidden p-8 bg-gradient-to-br from-white via-slate-50/50 to-white">
+                <div class="mb-6 flex flex-col sm:flex-row gap-3">
+                    <div class="relative flex-1">
+                        <input type="text" id="searchInput" placeholder="Search teams..." 
+                               onkeyup="filterSubmissions()"
+                               class="w-full px-4 py-2.5 pl-10 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-slate-700 placeholder-slate-400"
+                               style="font-family: 'Inter', sans-serif;">
+                        <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    </div>
+                    <button onclick="refreshSubmissions()" 
+                            class="px-6 py-2.5 bg-gradient-to-r from-slate-600 to-slate-700 text-white font-medium rounded-lg hover:from-slate-700 hover:to-slate-800 shadow-sm hover:shadow-md transition-all flex items-center justify-center gap-2">
+                        <i class="fas fa-sync-alt"></i>
+                        <span style="font-family: 'Inter', sans-serif;">Refresh</span>
+                    </button>
+                </div>
+                
+                <!-- Premium Submissions List -->
+                <div id="submissionsList" class="mx-auto max-w-7xl">
+                    <!-- Submissions will be dynamically added here -->
+                    <div class="text-center py-16">
+                        <div class="inline-flex items-center justify-center w-20 h-20 bg-slate-100 rounded-2xl mb-4">
+                            <i class="fas fa-inbox text-3xl text-slate-400"></i>
+                        </div>
+                        <p class="text-slate-600 font-medium" style="font-family: 'Inter', sans-serif;">No submissions yet</p>
+                        <p class="text-slate-400 text-sm mt-1" style="font-family: 'Inter', sans-serif;">Submissions will appear here after teams submit their keepers</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Selection Bar (add this before the closing </body> tag) -->
+    <div id="floating-bar" class="fixed bottom-4 right-4 z-50 bg-blue-600 text-white rounded-lg shadow-lg transition-all duration-300 ease-in-out opacity-0 translate-y-4 pointer-events-none">
+        <div class="px-4 py-3">
+            <div class="flex items-center justify-between space-x-6">
+                <!-- Info Section -->
+                <div class="flex items-center space-x-4">
+                    <span id="selection-count" class="text-sm font-medium">0 players</span>
+                    <div class="text-right">
+                        <div class="text-xs text-blue-200">Total Cost</div>
+                        <div id="total-cost" class="text-lg font-bold">$0</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-xs text-blue-200">Budget Left</div>
+                        <div id="remaining-budget" class="text-lg font-bold">$300</div>
+                    </div>
+                </div>
+                <!-- Actions Section -->
+                <div class="flex items-center space-x-2">
+                    <button type="button" id="clear-selection" title="Clear selection" class="p-2 text-blue-200 hover:text-white rounded-full focus:outline-none focus:ring-2 focus:ring-white">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                    <button type="button" id="submit-selection" class="rounded-md bg-white/10 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+                        Submit Keepers
+                    </button>
+                </div>
+            </div>
+            <div id="constraint-notice" class="text-center text-yellow-300 text-xs pt-2 h-4"></div>
+        </div>
+    </div>
+
+    <!-- JavaScript - Modular Architecture -->
+    <!-- Configuration must load first -->
+    <script src="js/config.js"></script>
+    
+    <!-- Core utilities -->
+    <script src="js/encryption.js"></script>
+    
+    <!-- Firebase manager -->
+    <script src="js/firebase-manager.js"></script>
+    
+    <!-- Feature modules -->
+    <script src="js/countdown.js"></script>
+    <script src="js/ui-controller.js"></script>
+    <script src="js/teams-data.js"></script>
+    <script src="js/keepers-table.js"></script>
+    <script src="js/submissions.js"></script>
+    <script src="js/commissioner.js"></script>
+    <script src="js/accordion.js"></script>
+    
+    <!-- Main initialization -->
+    <script>
+        /**
+         * Initialize app on page load
+         */
+        window.onload = function() {
+            // Auto-connect to Firebase
+            connectFirebase();
+            
+            // Initialize keeper fields
+            initializeKeeperFields();
+
+            // Init smooth accordion for instructions
+            initInstructionsAccordion();
+            
+            // Ensure default deadline is set in the input
+            if (!document.getElementById('deadlineInput').value) {
+                document.getElementById('deadlineInput').value = CONFIG.DEFAULT_DEADLINE;
+            }
+        };
+        
+        // Additional UI helpers for mobile - ultra-smooth accordion
+        function toggleInstructions() {
+          window.smoothAccordionToggle(
+            document.getElementById('instructionsContent'),
+            document.getElementById('instructionsButton'),
+            document.getElementById('instructionsToggle')
+          );
+        }
+
+        // Commissioner accordion toggle
+        function toggleCommissionerControls() {
+          window.smoothAccordionToggle(
+            document.getElementById('commissionerContent'),
+            document.getElementById('commissionerButton'),
+            document.getElementById('commissionerToggle')
+          );
+        }
+
+        // Instructions accordion init handled in initInstructionsAccordion()
+    </script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(E:\\templates-and-tailwind-components\\tailwindui-components/**)",
+      "Bash(start index.html)",
+      "Bash(explorer.exe:*)",
+      "Bash(cmd.exe /c start index.html)",
+      "Read(E:\\templates-and-tailwind-components\\tailwindui-components/**)",
+      "Bash(npm install)",
+      "Bash(find:*)",
+      "Bash(sed:*)"
+    ],
+    "deny": [],
+    "ask": [],
+    "additionalDirectories": [
+      "E:\\templates-and-tailwind-components\\tailwindui-components\\react\\ui-blocks\\application-ui\\lists\\stacked-lists",
+      "E:\\templates-and-tailwind-components\\tailwindui-components\\react\\ui-blocks\\application-ui\\layout\\cards",
+      "E:\\templates-and-tailwind-components"
+    ]
+  }
+}

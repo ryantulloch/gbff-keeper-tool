@@ -1,0 +1,178 @@
+[
+  {
+    "session_id": "171118aa",
+    "parent_session_id": "a4c2d9b8",
+    "timestamp": "2025-08-25T20:08:00Z",
+    "type": "bug-fix",
+    "description": "template-pipeline-root-fixes",
+    "priority": "high",
+    "completion_percentage": "85",
+    "summary_file_path": "E:\\legal-auto-app\\docs\\sessions\\2025-08\\2025-08-25\\2025-08-25-1408-template-pipeline-root-fixes-171118aa.md",
+    "metrics": {
+      "lines_added": 88,
+      "lines_removed": 55,
+      "files_modified": 5,
+      "files_created": 0
+    }
+  },
+  {
+    "session_id": "4fd1a7b3",
+    "parent_session_id": "171118aa",
+    "timestamp": "2025-08-25T23:25:31Z",
+    "type": "bug-fix",
+    "description": "review-analyze-page-deterministic-outputs-and-realtime-fixes",
+    "priority": "high",
+    "completion_percentage": "100",
+    "summary_file_path": "E:\\legal-auto-app\\docs\\sessions\\2025-08\\2025-08-25\\2025-08-25-1722-review-analyze-page-deterministic-outputs-and-realtime-fixes-4fd1a7b3.md",
+    "metrics": {
+      "lines_added": 0,
+      "lines_removed": 0,
+      "files_modified": 7,
+      "files_created": 5
+    }
+  },
+  {
+    "session_id": "c9f2d8e1",
+    "parent_session_id": "4fd1a7b3",
+    "timestamp": "2025-08-26T01:23:00Z",
+    "type": "bug-fix",
+    "description": "fix-pipeline-spawn-logging",
+    "priority": "high",
+    "completion_percentage": "95",
+    "summary_file_path": "E:\\legal-auto-app\\docs\\sessions\\2025-08\\2025-08-25\\2025-08-25-1923-fix-pipeline-spawn-logging-c9f2d8e1.md",
+    "metrics": {
+      "lines_added": 690,
+      "lines_removed": 65,
+      "files_modified": 7,
+      "files_created": 2
+    }
+  },
+  {
+    "session_id": "a7f3b2c5",
+    "parent_session_id": "c9f2d8e1",
+    "timestamp": "2025-08-26T13:31:00Z",
+    "type": "feature",
+    "description": "template-results-page-integration-failure",
+    "priority": "high",
+    "completion_percentage": "75",
+    "summary_file_path": "E:\\legal-auto-app\\docs\\sessions\\2025-08\\2025-08-26\\2025-08-26-0731-template-results-page-integration-failure-a7f3b2c5.md",
+    "metrics": {
+      "lines_added": 130,
+      "lines_removed": 65,
+      "files_modified": 2,
+      "files_created": 0
+    }
+  },
+  {
+    "session_id": "b5f8e2c7",
+    "parent_session_id": "a7f3b2c5",
+    "timestamp": "2025-08-26T14:00:31Z",
+    "type": "feature",
+    "description": "template-results-integration-fix",
+    "priority": "high",
+    "completion_percentage": "90",
+    "summary_file_path": "E:\\legal-auto-app\\docs\\sessions\\2025-08\\2025-08-26\\2025-08-26-0800-template-results-integration-fix-b5f8e2c7.md",
+    "metrics": {
+      "lines_added": 100,
+      "lines_removed": 20,
+      "files_modified": 1,
+      "files_created": 0
+    }
+  },
+  {
+    "session_id": "4e8a9f1c",
+    "parent_session_id": "b5f8e2c7",
+    "timestamp": "2025-08-26T14:43:37.382Z",
+    "type": "feature",
+    "description": "fix-template-results-data-loading",
+    "priority": "high",
+    "completion_percentage": "0",
+    "summary_file_path": "e:/legal-auto-app/docs/sessions/2025-08/2025-08-26/2025-08-26-0844-fix-template-results-data-loading-4e8a9f1c.md",
+    "metrics": {
+      "lines_added": 0,
+      "lines_removed": 0,
+      "files_modified": 0,
+      "files_created": 1
+    }
+  },
+  {
+    "session_id": "9b2e7c4a",
+    "parent_session_id": "4e8a9f1c",
+    "timestamp": "2025-08-26T16:26:54Z",
+    "type": "bug-fix",
+    "description": "template-analysis-outputs-not-loading",
+    "priority": "high",
+    "completion_percentage": "10",
+    "summary_file_path": "e:/legal-auto-app/docs/sessions/2025-08/2025-08-26/2025-08-26-1026-template-analysis-outputs-not-loading-9b2e7c4a.md",
+    "metrics": {
+      "lines_added": 80,
+      "lines_removed": 0,
+      "files_modified": 0,
+      "files_created": 1
+    }
+  },
+  {
+    "session_id": "d3f8a9c2",
+    "parent_session_id": "9b2e7c4a",
+    "timestamp": "2025-08-27T00:45:00Z",
+    "type": "bug-fix",
+    "description": "template-analysis-artifacts-investigation",
+    "priority": "high",
+    "completion_percentage": "90",
+    "summary_file_path": "E:\\legal-auto-app\\docs\\sessions\\2025-08\\2025-08-26\\2025-08-26-1845-template-analysis-artifacts-investigation-d3f8a9c2.md",
+    "metrics": {
+      "lines_added": 135,
+      "lines_removed": 20,
+      "files_modified": 2,
+      "files_created": 1
+    }
+  },
+  {
+    "session_id": "e7a9f3c2",
+    "parent_session_id": "d3f8a9c2",
+    "timestamp": "2025-08-26T19:16:00Z",
+    "type": "bug-fix",
+    "description": "cvd-metadata-finaljson-fixes",
+    "priority": "high",
+    "completion_percentage": "100",
+    "summary_file_path": "E:\\legal-auto-app\\docs\\sessions\\2025-08\\2025-08-26\\2025-08-26-1316-cvd-metadata-finaljson-fixes-e7a9f3c2.md",
+    "metrics": {
+      "lines_added": 101,
+      "lines_removed": 25,
+      "files_modified": 3,
+      "files_created": 0
+    }
+  },
+  {
+    "session_id": "ac4f92b1",
+    "parent_session_id": "d3f8a9c2",
+    "timestamp": "2025-08-26T20:25:20.266Z",
+    "type": "refactor",
+    "description": "file-pipeline-refactor-thin-orchestrator",
+    "priority": "high",
+    "completion_percentage": "90",
+    "summary_file_path": "e:/legal-auto-app/docs/sessions/2025-08/2025-08-26/2025-08-26-1418-file-pipeline-refactor-thin-orchestrator-ac4f92b1.md",
+    "metrics": {
+      "lines_added": 1358,
+      "lines_removed": 0,
+      "files_modified": 2,
+      "files_created": 11
+    }
+  },
+  {
+    "session_id": "ac4f92b1",
+    "parent_session_id": "d3f8a9c2",
+    "timestamp": "2025-08-26T20:26:45.429Z",
+    "type": "refactor",
+    "description": "file-pipeline-refactor-thin-orchestrator",
+    "priority": "high",
+    "completion_percentage": "90",
+    "summary_file_path": "e:/legal-auto-app/docs/sessions/2025-08/2025-08-26/2025-08-26-1418-file-pipeline-refactor-thin-orchestrator-ac4f92b1.md",
+    "metrics": {
+      "lines_added": 1358,
+      "lines_removed": 0,
+      "files_modified": 2,
+      "files_created": 11
+    }
+  }
+]
