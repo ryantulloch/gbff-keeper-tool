@@ -510,30 +510,12 @@ function initializeKeeperTables() {
       return;
     }
     
-    // Parse the keepers and select them
+    // Parse the keepers for reference (but don't auto-select them)
     const keeperNames = decrypted.split('\n').map(k => k.trim()).filter(k => k);
     
-    // Clear current selection
+    // Clear current selection - start fresh
     selectedPlayers.clear();
-    
-    // Wait a brief moment for table to render, then select keepers
-    setTimeout(() => {
-      keeperNames.forEach(keeperName => {
-        // Find checkboxes for this keeper (both desktop and mobile)
-        const desktopCheckbox = document.querySelector(`.player-checkbox[data-player-name="${keeperName.replace(/['"]/g, '&quot;')}"]`);
-        const mobileCheckbox = document.querySelector(`.player-checkbox-mobile[data-player-name="${keeperName.replace(/['"]/g, '&quot;')}"]`);
-        
-        if (desktopCheckbox) {
-          desktopCheckbox.checked = true;
-          handlePlayerSelection(desktopCheckbox, true); // bypass limits when loading existing
-        }
-        if (mobileCheckbox) {
-          mobileCheckbox.checked = true;
-        }
-      });
-      
-      updateFloatingBar();
-    }, 100);
+    updateFloatingBar();
     
     // Try to decrypt and populate cost data if available (for password fields)
     let passwordValue = '';
@@ -559,10 +541,10 @@ function initializeKeeperTables() {
     
     // Delete the old submission from Firebase
     window.getDb().ref('submissions/' + teamKey).remove().then(() => {
-      alert('Your submission has been loaded for editing. Make your changes and submit again.');
+      alert('Previous submission loaded for editing. IMPORTANT: Select ALL keepers you want to keep (including previous ones). This will completely replace your old submission.');
       
       // Show a notice about the loaded submission
-      showNotice(`✓ Loaded ${keeperNames.length} keeper${keeperNames.length === 1 ? '' : 's'} from your previous submission.`);
+      showNotice(`✓ Loaded ${keeperNames.length} previous keeper${keeperNames.length === 1 ? '' : 's'}. Select ALL keepers you want (old + new).`);
     }).catch((error) => {
       alert('Error loading submission: ' + error.message);
     });
