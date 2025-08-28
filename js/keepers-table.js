@@ -150,8 +150,18 @@ function initializeKeeperTables() {
     
     function openDropdown() {
       const optionsContainer = teamSelect.querySelector('el-options');
-      if (!optionsContainer) return;
+      const selectButton = teamSelect.querySelector('button');
+      if (!optionsContainer || !selectButton) return;
       
+      // Calculate position relative to viewport since we're using position: fixed
+      const rect = selectButton.getBoundingClientRect();
+      
+      // Position the dropdown
+      optionsContainer.style.top = `${rect.bottom + 4}px`; // 4px margin
+      optionsContainer.style.left = `${rect.left}px`;
+      optionsContainer.style.width = `${rect.width}px`;
+      
+      // Show dropdown
       optionsContainer.style.display = 'block';
       optionsContainer.style.opacity = '1';
       optionsContainer.style.visibility = 'visible';
@@ -171,6 +181,22 @@ function initializeKeeperTables() {
       // Remove open class
       optionsContainer.classList.remove('dropdown-open');
     }
+    
+    // Update dropdown position on scroll/resize
+    function updateDropdownPosition() {
+      const optionsContainer = teamSelect.querySelector('el-options');
+      const selectButton = teamSelect.querySelector('button');
+      if (!optionsContainer || !selectButton || !optionsContainer.classList.contains('dropdown-open')) return;
+      
+      const rect = selectButton.getBoundingClientRect();
+      optionsContainer.style.top = `${rect.bottom + 4}px`;
+      optionsContainer.style.left = `${rect.left}px`;
+      optionsContainer.style.width = `${rect.width}px`;
+    }
+    
+    // Listen for scroll and resize events to update dropdown position
+    window.addEventListener('scroll', updateDropdownPosition);
+    window.addEventListener('resize', updateDropdownPosition);
     
     // Initialize dropdown as closed
     closeDropdown();

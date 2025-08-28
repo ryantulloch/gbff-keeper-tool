@@ -26,8 +26,8 @@ const COMMISSIONER_PASSWORD = 'teaisbest';
 const SYSTEM_KEY = 'SYSTEM_KEY_2024';
 
 // Countdown settings
-const COUNTDOWN_DURATION = 10; // seconds
-const COUNTDOWN_STALE_THRESHOLD = 10000; // 10 seconds in ms
+const COUNTDOWN_DURATION = 60; // seconds
+const COUNTDOWN_STALE_THRESHOLD = 60000; // 60 seconds in ms
 const EXPIRY_AUTO_START_WINDOW = 86400000; // 24 hours in ms
 
 // Default deadline

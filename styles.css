@@ -421,7 +421,8 @@ body {
 }
 
 .countdown-label {
-  font-size: 14px;
+  font-family: 'Playfair Display', serif !important;
+  font-size: clamp(18px, 3vw, 28px);
   font-weight: 300;
   letter-spacing: 0.3em;
   color: rgb(148 163 184);
@@ -433,7 +434,8 @@ body {
 }
 
 .countdown-title {
-  font-size: 48px;
+  font-family: 'Playfair Display', serif !important;
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
   font-weight: 300;
   letter-spacing: 0.02em;
   margin: 0;
@@ -544,7 +546,8 @@ body {
 }
 
 .countdown-number {
-  font-size: 120px;
+  font-family: 'Playfair Display', serif !important;
+  font-size: clamp(80px, 12vw, 140px);
   font-weight: 300;
   line-height: 1;
   background: linear-gradient(180deg, #FFFFFF 0%, #F4E4C1 50%, var(--dark-gold) 100%);
@@ -569,7 +572,8 @@ body {
 
 
 .countdown-text {
-  font-size: 18px;
+  font-family: 'Playfair Display', serif !important;
+  font-size: clamp(0.8rem, 2vw, 1.2rem);
   font-weight: 300;
   letter-spacing: 0.4em;
   color: var(--primary-gold);
@@ -583,7 +587,8 @@ body {
 
 /* Special countdown states - smoother premium transitions */
 .countdown-number.fuck-text {
-  font-size: 180px;
+  font-family: 'Playfair Display', serif !important;
+  font-size: clamp(80px, 12vw, 140px);
   font-weight: 300;
   background: linear-gradient(180deg, var(--primary-gold) 0%, var(--dark-gold) 100%);
   -webkit-background-clip: text;
@@ -595,7 +600,8 @@ body {
 }
 
 .countdown-number.you-text {
-  font-size: 180px;
+  font-family: 'Playfair Display', serif !important;
+  font-size: clamp(80px, 12vw, 140px);
   font-weight: 300;
   background: linear-gradient(180deg, var(--primary-gold) 0%, var(--dark-gold) 100%);
   -webkit-background-clip: text;
@@ -607,7 +613,8 @@ body {
 }
 
 .countdown-number.danny-text {
-  font-size: 170px;
+  font-family: 'Playfair Display', serif !important;
+  font-size: clamp(80px, 12vw, 140px);
   font-weight: 300;
   background: linear-gradient(180deg, #FF4444 0%, var(--danger-red) 100%);
   -webkit-background-clip: text;
@@ -635,7 +642,8 @@ body {
 }
 
 .countdown-message {
-  font-size: 20px;
+  font-family: 'Playfair Display', serif !important;
+  font-size: clamp(18px, 3vw, 28px);
   font-weight: 300;
   color: var(--text-secondary);
   letter-spacing: 0.05em;
@@ -1313,67 +1321,56 @@ textarea:focus-visible {
   pointer-events: auto;
 }
 
-/* Fix dropdown positioning */
+/* Fix dropdown positioning and overflow issues */
 #team-select {
   position: relative;
-  z-index: 20;
+  z-index: 50;
+}
+
+/* Ensure parent containers allow dropdown overflow */
+#submitContent,
+#tabsContainer,
+.space-y-4 {
+  overflow: visible !important;
+}
+
+/* Team select container needs static overflow */
+.space-y-4 > div:has(#team-select) {
+  position: relative;
+  z-index: 50;
+  overflow: visible !important;
 }
 
 #team-select el-options {
-  position: absolute !important;
-  top: 100% !important;
-  left: 0 !important;
-  right: 0 !important;
-  margin-top: 0.25rem !important;
-  z-index: 999 !important;
+  position: fixed !important;
+  z-index: 9999 !important;
   transform: none !important;
   display: none;
+  min-width: 200px;
+  max-height: 240px;
+  overflow-y: auto;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
-#team-select el-options[popover]:popover-open {
-  position: absolute !important;
-  top: 100% !important;
-  left: 0 !important;
-  right: 0 !important;
-  margin-top: 0.25rem !important;
-  z-index: 999 !important;
-  transform: none !important;
+#team-select el-options.dropdown-open {
   display: block !important;
-  inset: auto !important;
 }
 
-/* Override TailwindPlus positioning */
-#team-select el-options[anchor] {
-  position: absolute !important;
-  top: 100% !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: auto !important;
-  inset: auto !important;
-  margin-top: 0.25rem !important;
-  z-index: 999 !important;
-  transform: none !important;
-}
-
-/* Ensure proper container positioning */
-.space-y-4 > div:has(#team-select) {
-  position: relative;
-  z-index: 10;
-}
-
-/* Fix for popover positioning anchor system */
+/* Override any conflicting TailwindPlus positioning */
+#team-select el-options[popover]:popover-open,
+#team-select el-options[anchor],
 #team-select[popover-target] + el-options,
 #team-select el-options[popover] {
-  position: absolute !important;
-  top: 100% !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: auto !important;
-  margin-top: 0.25rem !important;
-  z-index: 999 !important;
+  position: fixed !important;
+  z-index: 9999 !important;
   transform: none !important;
   max-height: 240px;
   overflow-y: auto;
+  inset: auto !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
 }
 
 /* Fix checkbox styling and checkmarks */

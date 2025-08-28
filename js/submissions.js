@@ -223,7 +223,7 @@ function submitKeepers(event) {
         document.getElementById('password').value = '';
         document.getElementById('confirmPassword').value = '';
 
-        messageDiv.innerHTML = '<div class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded mb-4">✅ Keepers submitted successfully! Your keepers will be auto-revealed after the deadline + 10 second countdown!</div>';
+        messageDiv.innerHTML = '<div class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded mb-4">✅ Keepers submitted successfully! Your keepers will be auto-revealed after the deadline + 60 second countdown!</div>';
     }).catch((error) => {
         messageDiv.innerHTML = '<div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">Error submitting: ' + error.message + '</div>';
     });
