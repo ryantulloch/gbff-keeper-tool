@@ -182,7 +182,7 @@ function initializeKeeperTables() {
 
   function attachTableEventListeners() {
     document.querySelectorAll('.player-checkbox').forEach(cb => {
-      cb.addEventListener('change', (e) => handlePlayerSelection(e.target));
+      cb.addEventListener('change', (e) => handlePlayerSelection(e.target, false)); // explicitly pass false for individual selections
     });
     const headerCheckbox = document.getElementById('toggle-all-checkbox');
     if(headerCheckbox) {
@@ -216,6 +216,7 @@ function initializeKeeperTables() {
           return;
         }
       }
+      // When bypassLimits is true, we add regardless of limits
       selectedPlayers.set(name, { name, cost });
       
       // Add selected styling to row
@@ -253,6 +254,10 @@ function initializeKeeperTables() {
                   handlePlayerSelection(cb, true); // bypass limits for select all
               }
           });
+          // Show notice if over limits
+          if (selectedPlayers.size > window.MAX_KEEPERS || window.getTotalKeeperCost() > window.TEAM_BUDGET) {
+              showNotice(`⚠️ You've selected all players. You'll need to deselect some before submitting (max ${window.MAX_KEEPERS} keepers, $${window.TEAM_BUDGET} budget).`);
+          }
       } else {
           // Deselect all
           checkboxes.forEach(cb => {
@@ -296,7 +301,25 @@ function initializeKeeperTables() {
     if (count > 0) {
       selectionCountEl.textContent = `${count} ${count === 1 ? 'player' : 'players'}`;
       totalCostEl.textContent = window.currency.format(totalCost);
-      remainingBudgetEl.textContent = window.currency.format(remainingBudget);
+      
+      // Show warning colors if over limits
+      if (count > window.MAX_KEEPERS) {
+        selectionCountEl.style.color = '#ef4444'; // red
+        selectionCountEl.textContent += ` (max ${window.MAX_KEEPERS})`;
+      } else {
+        selectionCountEl.style.color = '';
+      }
+      
+      if (remainingBudget < 0) {
+        remainingBudgetEl.textContent = window.currency.format(remainingBudget);
+        remainingBudgetEl.style.color = '#ef4444'; // red
+        totalCostEl.style.color = '#ef4444'; // red
+      } else {
+        remainingBudgetEl.textContent = window.currency.format(remainingBudget);
+        remainingBudgetEl.style.color = '';
+        totalCostEl.style.color = '';
+      }
+      
       floatingBar.classList.add('visible');
     } else {
       floatingBar.classList.remove('visible');
@@ -309,7 +332,7 @@ function initializeKeeperTables() {
         headerCheckbox.indeterminate = count > 0 && !allChecked;
     }
     
-    showNotice(''); // Clear any existing notices
+    // Don't clear notices here - let them timeout naturally
   }
 
   let noticeTimeout;

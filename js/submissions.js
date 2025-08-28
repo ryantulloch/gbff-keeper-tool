@@ -109,16 +109,25 @@ window.submitKeepersFromTable = function() {
 
         // Convert keepers to string format for compatibility with existing system
         const keepersString = keepers.map(k => k.name).join('\n');
+        
+        // Store cost data as JSON string for later display
+        const keepersCostData = JSON.stringify({
+            keepers: keepers,
+            totalCost: totalCost,
+            remainingBudget: remainingBudget
+        });
 
         // Create submission compatible with existing Firebase structure
         const submission = {
             teamName: teamSlug,
             encryptedKeepers: window.encrypt(keepersString, password),
             encryptedPassword: window.encrypt(password, window.CONFIG.SYSTEM_KEY),
+            encryptedKeepersCostData: window.encrypt(keepersCostData, password), // Store encrypted cost data
             hash: window.hash(keepersString + password),
             timestamp: Date.now(),
             revealed: false,
-            keepers: null
+            keepers: null,
+            keepersCostData: null // Will be populated when revealed
         };
 
         // Save to Firebase
@@ -281,9 +290,29 @@ function revealSubmission(teamKey) {
         return;
     }
 
+    // Try to decrypt cost data if it exists
+    let costData = null;
+    if (submission.encryptedKeepersCostData) {
+        const decryptedCostData = window.decrypt(submission.encryptedKeepersCostData, password);
+        if (decryptedCostData) {
+            try {
+                costData = decryptedCostData;
+            } catch (e) {
+                console.log('Could not parse cost data:', e);
+            }
+        }
+    }
+    
     // Update submission with revealed data
-    window.getDb().ref('submissions/' + teamKey + '/revealed').set(true);
-    window.getDb().ref('submissions/' + teamKey + '/keepers').set(decrypted).then(() => {
+    const updates = {
+        revealed: true,
+        keepers: decrypted
+    };
+    if (costData) {
+        updates.keepersCostData = costData;
+    }
+    
+    window.getDb().ref('submissions/' + teamKey).update(updates).then(() => {
         alert('Keepers revealed successfully!');
     }).catch((error) => {
         alert('Error revealing: ' + error.message);
@@ -317,11 +346,22 @@ function executeAutoReveal() {
             const decryptedKeepers = window.decrypt(submission.encryptedKeepers, decryptedPassword);
             
             if (decryptedKeepers) {
-                // Update Firebase with revealed data
-                return Promise.all([
+                const updatePromises = [
                     window.getDb().ref('submissions/' + teamKey + '/revealed').set(true),
                     window.getDb().ref('submissions/' + teamKey + '/keepers').set(decryptedKeepers)
-                ]);
+                ];
+                
+                // Also decrypt and store cost data if available
+                if (submission.encryptedKeepersCostData) {
+                    const decryptedCostData = window.decrypt(submission.encryptedKeepersCostData, decryptedPassword);
+                    if (decryptedCostData) {
+                        updatePromises.push(
+                            window.getDb().ref('submissions/' + teamKey + '/keepersCostData').set(decryptedCostData)
+                        );
+                    }
+                }
+                
+                return Promise.all(updatePromises);
             }
         }
         return Promise.resolve();
