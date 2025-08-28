@@ -39,47 +39,94 @@ function initializeKeeperTables() {
   }
 
   function populateTeamDropdown() {
-    if (!teamSelect) return;
+    const dropdown = document.getElementById('team-select-dropdown');
+    if (!dropdown) return;
     
-    // Clear existing options (except the first placeholder)
-    teamSelect.innerHTML = '<option value="">Select a team...</option>';
+    // Clear existing options
+    dropdown.innerHTML = '';
     
-    // Add team options with checkmark in the label for selected item
+    // Add team options with checkmark on the right for selected item
     window.TEAM_OPTIONS.forEach((opt) => {
-      const option = document.createElement('option');
-      option.value = opt.value;
-      option.textContent = opt.label;
-      teamSelect.appendChild(option);
+      const optionDiv = document.createElement('div');
+      optionDiv.className = 'relative block cursor-pointer py-2 pr-9 pl-3 text-gray-900 hover:bg-indigo-600 hover:text-white dark:text-white dark:hover:bg-indigo-500';
+      optionDiv.dataset.value = opt.value;
+      optionDiv.innerHTML = `
+        <span class="block truncate font-normal">${opt.label}</span>
+        <span class="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600 dark:text-indigo-400" style="display: none;">
+          <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="size-5">
+            <path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" fill-rule="evenodd" />
+          </svg>
+        </span>
+      `;
+      dropdown.appendChild(optionDiv);
     });
   }
 
   function setupTeamSelectHandler() {
-    if (!teamSelect) return;
+    const button = document.getElementById('team-select-button');
+    const dropdown = document.getElementById('team-select-dropdown');
+    const text = document.getElementById('team-select-text');
     
-    // Simple native select change handler
-    teamSelect.addEventListener('change', (e) => {
-      const value = e.target.value;
-      
-      if (!value) {
-        // No team selected
-        currentTeamSlug = null;
-        clearSelection(false);
-        tableContainer.innerHTML = '';
-        
-        // Hide password section when no team selected
-        const passwordSection = document.getElementById('password-section');
-        if (passwordSection) {
-          passwordSection.style.display = 'none';
-        }
-        return;
+    if (!button || !dropdown || !text) return;
+    
+    let isOpen = false;
+    
+    // Toggle dropdown on button click
+    button.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (isOpen) {
+        closeDropdown();
+      } else {
+        openDropdown();
       }
+    });
+    
+    // Handle option selection
+    dropdown.addEventListener('click', (e) => {
+      const option = e.target.closest('[data-value]');
+      if (!option) return;
       
+      const value = option.dataset.value;
+      const label = option.querySelector('span').textContent;
+      
+      // Update button text
+      text.textContent = label;
+      
+      // Update checkmarks - hide all first
+      dropdown.querySelectorAll('.absolute.inset-y-0.right-0').forEach(check => {
+        check.style.display = 'none';
+      });
+      
+      // Show checkmark for selected option
+      const checkmark = option.querySelector('.absolute.inset-y-0.right-0');
+      if (checkmark) {
+        checkmark.style.display = 'flex';
+      }
       
       // Update state and render table
       currentTeamSlug = value;
       clearSelection(false);
       renderTeamTable(currentTeamSlug);
+      
+      closeDropdown();
     });
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!button.contains(e.target) && !dropdown.contains(e.target)) {
+        closeDropdown();
+      }
+    });
+    
+    function openDropdown() {
+      dropdown.classList.remove('hidden');
+      isOpen = true;
+    }
+    
+    function closeDropdown() {
+      dropdown.classList.add('hidden');
+      isOpen = false;
+    }
   }
 
   // --- Table Rendering ---
