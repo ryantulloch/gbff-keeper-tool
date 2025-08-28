@@ -429,6 +429,120 @@ function initializeKeeperTables() {
     }
   }
   
+  // --- Edit Keepers Functionality ---
+  function editExistingSubmission() {
+    const teamName = prompt('Enter your team name to edit submission:');
+    if (!teamName) return;
+    
+    const teamKey = teamName.trim().replace(/[.$#\[\]\/]/g, '_');
+    const submissions = window.getSubmissions();
+    const submission = submissions[teamKey];
+    
+    if (!submission) {
+      alert('No submission found for this team name');
+      return;
+    }
+    
+    const password = prompt('Enter your password:');
+    if (!password) return;
+    
+    // Try to decrypt to verify password
+    const decrypted = window.decrypt(submission.encryptedKeepers, password);
+    if (!decrypted) {
+      alert('Incorrect password!');
+      return;
+    }
+    
+    // Find the team slug for this submission
+    const teamSlug = submission.teamName;
+    const teamOption = window.TEAM_OPTIONS.find(opt => opt.value === teamSlug);
+    if (!teamOption) {
+      alert('Could not find team in roster. Please contact the commissioner.');
+      return;
+    }
+    
+    // Set the team selection
+    currentTeamSlug = teamSlug;
+    
+    // Update dropdown UI
+    const teamSelectText = document.getElementById('team-select-text');
+    if (teamSelectText) {
+      teamSelectText.textContent = teamOption.label;
+    }
+    
+    // Update checkmarks in dropdown
+    document.querySelectorAll('#team-select-dropdown .absolute.inset-y-0.right-0').forEach(check => {
+      check.style.display = 'none';
+    });
+    const selectedOption = document.querySelector(`#team-select-dropdown [data-value="${teamSlug}"]`);
+    if (selectedOption) {
+      const checkmark = selectedOption.querySelector('.absolute.inset-y-0.right-0');
+      if (checkmark) {
+        checkmark.style.display = 'flex';
+      }
+    }
+    
+    // Render the team table
+    renderTeamTable(currentTeamSlug);
+    
+    // Parse the keepers and select them
+    const keeperNames = decrypted.split('\n').map(k => k.trim()).filter(k => k);
+    
+    // Clear current selection
+    selectedPlayers.clear();
+    
+    // Wait a brief moment for table to render, then select keepers
+    setTimeout(() => {
+      keeperNames.forEach(keeperName => {
+        // Find checkboxes for this keeper (both desktop and mobile)
+        const desktopCheckbox = document.querySelector(`.player-checkbox[data-player-name="${keeperName.replace(/['"]/g, '&quot;')}"]`);
+        const mobileCheckbox = document.querySelector(`.player-checkbox-mobile[data-player-name="${keeperName.replace(/['"]/g, '&quot;')}"]`);
+        
+        if (desktopCheckbox) {
+          desktopCheckbox.checked = true;
+          handlePlayerSelection(desktopCheckbox, true); // bypass limits when loading existing
+        }
+        if (mobileCheckbox) {
+          mobileCheckbox.checked = true;
+        }
+      });
+      
+      updateFloatingBar();
+    }, 100);
+    
+    // Try to decrypt and populate cost data if available (for password fields)
+    let passwordValue = '';
+    if (submission.encryptedKeepersCostData) {
+      try {
+        const decryptedCostData = window.decrypt(submission.encryptedKeepersCostData, password);
+        if (decryptedCostData) {
+          // We have the correct password, so we can prefill it
+          passwordValue = password;
+        }
+      } catch (e) {
+        console.log('Could not decrypt cost data, password will need to be re-entered');
+      }
+    }
+    
+    // Populate password fields if we have the password
+    if (passwordValue) {
+      const passwordField = document.getElementById('password');
+      const confirmPasswordField = document.getElementById('confirmPassword');
+      if (passwordField) passwordField.value = passwordValue;
+      if (confirmPasswordField) confirmPasswordField.value = passwordValue;
+    }
+    
+    // Delete the old submission from Firebase
+    window.getDb().ref('submissions/' + teamKey).remove().then(() => {
+      alert('Your submission has been loaded for editing. Make your changes and submit again.');
+      
+      // Show a notice about the loaded submission
+      showNotice(`✓ Loaded ${keeperNames.length} keeper${keeperNames.length === 1 ? '' : 's'} from your previous submission.`);
+    }).catch((error) => {
+      alert('Error loading submission: ' + error.message);
+    });
+  }
+  
   // Expose showNotice globally for other modules
   window.showNotice = showNotice;
 
