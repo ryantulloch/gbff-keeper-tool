@@ -71,18 +71,19 @@ function initializeKeeperTables() {
     
     if (!selectButton || !optionsContainer) return;
     
-    // Handle button click to toggle dropdown
-    selectButton.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      toggleDropdown();
-    });
-    
-    // Close dropdown when clicking outside
+    // Consolidated click handler to prevent event conflicts from the web component
     document.addEventListener('click', (e) => {
-      if (!teamSelect.contains(e.target)) {
+      const isVisible = optionsContainer.style.display === 'block';
+
+      if (selectButton.contains(e.target)) {
+        // User clicked the button, so we toggle the dropdown.
+        e.preventDefault();
+        toggleDropdown();
+      } else if (isVisible && !teamSelect.contains(e.target)) {
+        // User clicked outside the open dropdown, so we close it.
         closeDropdown();
       }
+      // Clicks on the options themselves are handled by the 'optionsContainer' listener.
     });
     
     // Listen for value changes on the el-select component (web component standard)
