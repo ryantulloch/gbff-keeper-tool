@@ -74,17 +74,6 @@ function initializeKeeperTables() {
         return;
       }
       
-      // Update selected text with checkmark
-      const selectedOption = teamSelect.querySelector(`option[value="${value}"]`);
-      if (selectedOption) {
-        // Add checkmark to selected option text (visual indicator)
-        window.TEAM_OPTIONS.forEach(opt => {
-          const option = teamSelect.querySelector(`option[value="${opt.value}"]`);
-          if (option) {
-            option.textContent = opt.value === value ? `✓ ${opt.label}` : opt.label;
-          }
-        });
-      }
       
       // Update state and render table
       currentTeamSlug = value;
@@ -206,10 +195,12 @@ function initializeKeeperTables() {
       const isChecked = event.target.checked;
       const checkboxes = document.querySelectorAll('.player-checkbox');
       
-      if (!isChecked) {
-          checkboxes.forEach(cb => { if(cb.checked) { cb.click(); } });
-      } else {
+      if (isChecked) {
+          // Select all unchecked boxes
           checkboxes.forEach(cb => { if(!cb.checked) { cb.click(); } });
+      } else {
+          // Deselect all checked boxes
+          checkboxes.forEach(cb => { if(cb.checked) { cb.click(); } });
       }
       updateFloatingBar();
   }
