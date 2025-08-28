@@ -2238,6 +2238,10 @@ textarea:focus-visible {
     display: block !important;
   }
   
+  .keeper-table-container .mobile-team-dropdown {
+    display: block !important;
+  }
+  
   /* Hide desktop header checkbox */
   .keeper-table-container .desktop-table-header {
     display: none !important;
@@ -2256,32 +2260,48 @@ textarea:focus-visible {
     background-color: rgb(49 46 129 / 0.3) !important;
   }
   
-  /* Fix checkbox alignment on mobile */
+  /* Very small checkboxes for mobile - 10px */
+  .mobile-checkbox,
   .player-checkbox-mobile {
-    width: 18px;
-    height: 18px;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    width: 10px !important;
+    height: 10px !important;
+    min-width: 10px !important;
+    min-height: 10px !important;
+    border: 1.5px solid #d1d5db !important;
+    border-radius: 2px !important;
+    background: white !important;
+    position: relative !important;
+    cursor: pointer !important;
   }
   
-  /* Ensure team dropdown is visible */
+  .mobile-checkbox:checked,
+  .player-checkbox-mobile:checked {
+    background: #4f46e5 !important;
+    border-color: #4f46e5 !important;
+  }
+  
+  .mobile-checkbox:checked::after,
+  .player-checkbox-mobile:checked::after {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 0px;
+    width: 3px;
+    height: 5px;
+    border: solid white;
+    border-width: 0 1.5px 1.5px 0;
+    transform: rotate(45deg);
+  }
+  
+  /* Hide main team dropdown on mobile - we show team name in table */
   #team-select {
-    display: block !important;
-    width: 100%;
+    display: none !important;
   }
   
-  #team-select-button {
-    width: 100%;
-    font-size: 16px; /* Prevent zoom on iOS */
-  }
-  
-  #team-select-dropdown {
-    width: 100%;
-    max-height: 300px;
-  }
-  
-  /* Make label visible on mobile */
+  /* Hide Pick a Team label on mobile */
   label[for="team-select"] {
-    display: block !important;
-    margin-bottom: 0.5rem;
-    font-size: 0.875rem;
+    display: none !important;
   }
 }
