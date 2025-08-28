@@ -103,7 +103,8 @@ window.TEAMS = {
     { name: 'Trey Lance', cost: 10 }, { name: 'Ameer Abdullah', cost: 10 },
     { name: 'Marquez Valdes-Scantling', cost: 10 }, { name: 'Diontae Johnson', cost: 13 },
     { name: 'Jalen Tolbert', cost: 10 }, { name: 'Alijah Pierce', cost: 10 },
-    { name: 'Josh Downs', cost: 7 }, { name: 'Mike Gesicki', cost: 5 }
+    { name: 'Josh Downs', cost: 7 }, { name: 'Mike Gesicki', cost: 5 },
+    { name: 'Sam Laporta', cost: 15 }, { name: 'Juan Jennings', cost: 10 }
   ],
   'randy-s': [
     { name: 'Bo Nix', cost: 19 }, { name: 'James Cook', cost: 41 },
