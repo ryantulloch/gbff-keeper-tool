@@ -2,7 +2,13 @@
 
 // Wait for both DOM and TailwindPlus Elements to be ready
 function initializeKeeperTables() {
-  if (!window.ENABLE_TEAM_TABLES) return;
+  console.log('initializeKeeperTables called');
+  console.log('ENABLE_TEAM_TABLES:', window.ENABLE_TEAM_TABLES);
+  
+  if (!window.ENABLE_TEAM_TABLES) {
+    console.log('Team tables disabled, exiting...');
+    return;
+  }
 
   // --- Element Cache ---
   const teamSelect = document.getElementById('team-select');
@@ -15,6 +21,12 @@ function initializeKeeperTables() {
   const submitSelectionBtn = document.getElementById('submit-selection');
   const editKeepersBtn = document.getElementById('edit-keepers');
   const noticeEl = document.getElementById('constraint-notice');
+  
+  console.log('Element cache results:');
+  console.log('- editKeepersBtn:', editKeepersBtn);
+  console.log('- clearSelectionBtn:', clearSelectionBtn);
+  console.log('- submitSelectionBtn:', submitSelectionBtn);
+  console.log('- floatingBar:', floatingBar);
 
   // --- State ---
   let selectedPlayers = new Map();
