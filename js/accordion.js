@@ -1,4 +1,4 @@
- you (() => {
+(function() {
   'use strict';
 
   const MD_BREAKPOINT = 768;

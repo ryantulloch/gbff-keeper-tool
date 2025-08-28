@@ -1,10 +1,13 @@
 // js/keepers-table.js
 
-document.addEventListener('DOMContentLoaded', () => {
+// Wait for both DOM and TailwindPlus Elements to be ready
+function initializeKeeperTables() {
   if (!window.ENABLE_TEAM_TABLES) return;
 
   // --- Element Cache ---
-  const teamSelect = document.getElementById('team-select');
+  const teamDropdownButton = document.getElementById('team-dropdown-button');
+  const teamDropdownSelected = document.getElementById('team-dropdown-selected');
+  const teamDropdownOptions = document.getElementById('team-dropdown-options');
   const tableContainer = document.getElementById('keepers-table-container');
   const floatingBar = document.getElementById('floating-bar');
   const selectionCountEl = document.getElementById('selection-count');
@@ -32,24 +35,58 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- Initialization ---
   function initialize() {
     populateTeamDropdown();
-    teamSelect.addEventListener('change', handleTeamChange);
+    setupDropdownHandlers();
     clearSelectionBtn.addEventListener('click', () => clearSelection(true));
     submitSelectionBtn.addEventListener('click', () => window.submitKeepersFromTable());
   }
 
   function populateTeamDropdown() {
+    const optionsContainer = document.getElementById('team-options');
+    if (!optionsContainer) return;
+    
+    // Clear existing options
+    optionsContainer.innerHTML = '';
+    
+    // Create option elements with proper structure
     window.TEAM_OPTIONS.forEach(opt => {
-      const option = document.createElement('el-option');
-      option.value = opt.value;
-      option.textContent = opt.label;
-      teamSelect.appendChild(option);
+      const optionHTML = `
+        <el-option value="${opt.value}" class="group/option relative block cursor-default py-2 pr-9 pl-3 text-gray-900 select-none focus:bg-indigo-600 focus:text-white focus:outline-hidden dark:text-white dark:focus:bg-indigo-500">
+          <span class="block truncate font-normal group-aria-selected/option:font-semibold">${opt.label}</span>
+          <span class="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600 group-not-aria-selected/option:hidden group-focus/option:text-white in-[el-selectedcontent]:hidden dark:text-indigo-400">
+            <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="size-5">
+              <path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" fill-rule="evenodd" />
+            </svg>
+          </span>
+        </el-option>
+      `;
+      optionsContainer.insertAdjacentHTML('beforeend', optionHTML);
     });
+    
+    // Update selected content when option is clicked
+    const selectedContent = teamSelect.querySelector('el-selectedcontent');
+    if (selectedContent) {
+      optionsContainer.addEventListener('click', (e) => {
+        const option = e.target.closest('el-option');
+        if (option) {
+          const value = option.getAttribute('value');
+          const label = option.querySelector('span').textContent;
+          selectedContent.textContent = label;
+          currentTeamSlug = value;
+          clearSelection(false);
+          renderTeamTable(currentTeamSlug);
+        }
+      });
+    }
   }
 
   function handleTeamChange(event) {
-    currentTeamSlug = event.target.value;
-    clearSelection(false);
-    renderTeamTable(currentTeamSlug);
+    // This is now handled in the populateTeamDropdown click event
+    // Keep this for backward compatibility if needed
+    if (event && event.target && event.target.value) {
+      currentTeamSlug = event.target.value;
+      clearSelection(false);
+      renderTeamTable(currentTeamSlug);
+    }
   }
 
   // --- Table Rendering ---
@@ -202,4 +239,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   initialize();
+}
+
+// Initialize when DOM is ready, with a slight delay for TailwindPlus
+document.addEventListener('DOMContentLoaded', () => {
+  // Give TailwindPlus Elements time to initialize
+  setTimeout(initializeKeeperTables, 100);
 });
