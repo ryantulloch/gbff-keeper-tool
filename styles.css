@@ -2222,3 +2222,66 @@ textarea:focus-visible {
     animation: none;
   }
 }
+
+/* Keeper Table Mobile Styles */
+@media (max-width: 640px) {
+  /* Hide desktop table and show mobile view */
+  .keeper-table-container .desktop-table-wrapper {
+    display: none !important;
+  }
+  
+  .keeper-table-container .mobile-list-view {
+    display: block !important;
+  }
+  
+  .keeper-table-container .mobile-table-header {
+    display: block !important;
+  }
+  
+  /* Hide desktop header checkbox */
+  .keeper-table-container .desktop-table-header {
+    display: none !important;
+  }
+  
+  /* Style mobile player cards */
+  .player-card {
+    transition: background-color 0.15s ease;
+  }
+  
+  .player-card.selected {
+    background-color: rgb(238 242 255) !important;
+  }
+  
+  .dark .player-card.selected {
+    background-color: rgb(49 46 129 / 0.3) !important;
+  }
+  
+  /* Fix checkbox alignment on mobile */
+  .player-checkbox-mobile {
+    width: 18px;
+    height: 18px;
+  }
+  
+  /* Ensure team dropdown is visible */
+  #team-select {
+    display: block !important;
+    width: 100%;
+  }
+  
+  #team-select-button {
+    width: 100%;
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+  
+  #team-select-dropdown {
+    width: 100%;
+    max-height: 300px;
+  }
+  
+  /* Make label visible on mobile */
+  label[for="team-select"] {
+    display: block !important;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+  }
+}

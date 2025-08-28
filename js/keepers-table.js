@@ -140,38 +140,69 @@ function initializeKeeperTables() {
     }
     
     const tableHtml = `
-      <div class="px-4 sm:px-6 lg:px-8">
-        <div class="mt-8 flow-root">
-          <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-            <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-              <table id="keepers-table" class="min-w-full table-fixed divide-y divide-gray-300 dark:divide-white/15">
-                <thead>
+      <div class="keeper-table-container">
+        <div class="mt-4 sm:mt-8">
+          <!-- Mobile-friendly header -->
+          <div class="mobile-table-header hidden">
+            <div class="flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+              <div class="flex items-center gap-3">
+                <input type="checkbox" id="toggle-all-checkbox-mobile" class="rounded" />
+                <span class="text-sm font-semibold text-gray-700 dark:text-gray-300">Select All</span>
+              </div>
+              <span class="text-sm font-semibold text-gray-700 dark:text-gray-300">Cost</span>
+            </div>
+          </div>
+          
+          <!-- Desktop Table -->
+          <div class="desktop-table-wrapper overflow-x-auto">
+            <div class="inline-block min-w-full align-middle">
+              <table id="keepers-table" class="min-w-full divide-y divide-gray-300 dark:divide-white/15">
+                <thead class="desktop-table-header">
                   <tr>
-                    <th scope="col" class="relative px-7 sm:w-12 sm:px-6">
-                      <div class="absolute top-1/2 left-4 -mt-2">
-                        <input type="checkbox" id="toggle-all-checkbox" />
-                      </div>
+                    <th scope="col" class="w-12 px-4 py-3.5">
+                      <input type="checkbox" id="toggle-all-checkbox" class="rounded" />
                     </th>
-                    <th scope="col" class="min-w-48 py-3.5 pr-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Player</th>
+                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Player</th>
                     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Cost</th>
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200 bg-white dark:divide-white/10 dark:bg-gray-900">
                   ${roster.map(player => `
                     <tr class="keepers-table-row hover:bg-gray-50 dark:hover:bg-gray-800" data-player-name="${sanitizeForAttribute(player.name)}">
-                      <td class="relative px-7 sm:w-12 sm:px-6">
-                        <div class="absolute inset-y-0 left-0 w-0.5 bg-indigo-500 opacity-0 row-selected-indicator"></div>
-                        <div class="absolute top-1/2 left-4 -mt-2">
-                            <input type="checkbox" data-player-name="${sanitizeForAttribute(player.name)}" data-player-cost="${player.cost}" class="player-checkbox" />
+                      <td class="w-12 px-4 py-3 checkbox-cell">
+                        <div class="relative">
+                          <div class="absolute inset-y-0 -left-4 w-0.5 bg-indigo-500 opacity-0 row-selected-indicator"></div>
+                          <input type="checkbox" data-player-name="${sanitizeForAttribute(player.name)}" data-player-cost="${player.cost}" class="player-checkbox rounded" />
                         </div>
                       </td>
-                      <td class="py-4 pr-3 text-sm font-medium whitespace-nowrap text-gray-900 dark:text-white player-name">${player.name}</td>
-                      <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">${window.currency.format(player.cost)}</td>
+                      <td class="px-3 py-3 text-sm font-medium text-gray-900 dark:text-white player-name">
+                        <span class="player-name-text">${player.name}</span>
+                      </td>
+                      <td class="px-3 py-3 text-sm text-gray-500 dark:text-gray-400">
+                        <span class="player-cost-text">${window.currency.format(player.cost)}</span>
+                      </td>
                     </tr>
                   `).join('')}
                 </tbody>
               </table>
             </div>
+          </div>
+          
+          <!-- Mobile List View -->
+          <div class="mobile-list-view hidden">
+            ${roster.map(player => `
+              <div class="player-card flex items-center gap-3 px-4 py-3 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800" data-player-name="${sanitizeForAttribute(player.name)}">
+                <div class="flex-shrink-0">
+                  <input type="checkbox" data-player-name="${sanitizeForAttribute(player.name)}" data-player-cost="${player.cost}" class="player-checkbox-mobile rounded" />
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-sm font-medium text-gray-900 dark:text-white">${player.name}</div>
+                </div>
+                <div class="flex-shrink-0">
+                  <span class="text-sm font-semibold text-gray-700 dark:text-gray-400">${window.currency.format(player.cost)}</span>
+                </div>
+              </div>
+            `).join('')}
           </div>
         </div>
       </div>
@@ -181,12 +212,26 @@ function initializeKeeperTables() {
   }
 
   function attachTableEventListeners() {
+    // Desktop checkboxes
     document.querySelectorAll('.player-checkbox').forEach(cb => {
       cb.addEventListener('change', (e) => handlePlayerSelection(e.target, false)); // explicitly pass false for individual selections
     });
+    
+    // Mobile checkboxes
+    document.querySelectorAll('.player-checkbox-mobile').forEach(cb => {
+      cb.addEventListener('change', (e) => handlePlayerSelection(e.target, false));
+    });
+    
+    // Desktop header checkbox
     const headerCheckbox = document.getElementById('toggle-all-checkbox');
     if(headerCheckbox) {
         headerCheckbox.addEventListener('change', handleSelectAll);
+    }
+    
+    // Mobile header checkbox
+    const mobileHeaderCheckbox = document.getElementById('toggle-all-checkbox-mobile');
+    if(mobileHeaderCheckbox) {
+        mobileHeaderCheckbox.addEventListener('change', handleSelectAll);
     }
   }
 
@@ -219,7 +264,7 @@ function initializeKeeperTables() {
       // When bypassLimits is true, we add regardless of limits
       selectedPlayers.set(name, { name, cost });
       
-      // Add selected styling to row
+      // Add selected styling to row (desktop)
       if (row) {
         row.classList.add('selected');
         const indicator = row.querySelector('.row-selected-indicator');
@@ -227,10 +272,16 @@ function initializeKeeperTables() {
           indicator.style.opacity = '1';
         }
       }
+      
+      // Add selected styling to card (mobile)
+      const card = checkbox.closest('.player-card');
+      if (card) {
+        card.classList.add('selected');
+      }
     } else {
       selectedPlayers.delete(name);
       
-      // Remove selected styling from row
+      // Remove selected styling from row (desktop)
       if (row) {
         row.classList.remove('selected');
         const indicator = row.querySelector('.row-selected-indicator');
@@ -238,13 +289,20 @@ function initializeKeeperTables() {
           indicator.style.opacity = '0';
         }
       }
+      
+      // Remove selected styling from card (mobile)
+      const card = checkbox.closest('.player-card');
+      if (card) {
+        card.classList.remove('selected');
+      }
     }
     updateFloatingBar();
   }
   
   function handleSelectAll(event) {
       const isChecked = event.target.checked;
-      const checkboxes = document.querySelectorAll('.player-checkbox');
+      // Select both desktop and mobile checkboxes
+      const checkboxes = document.querySelectorAll('.player-checkbox, .player-checkbox-mobile');
       
       if (isChecked) {
           // Select all - bypass individual limits
@@ -275,7 +333,7 @@ function initializeKeeperTables() {
     if (reRender && currentTeamSlug) {
       renderTeamTable(currentTeamSlug);
     } else {
-      // Clear checkboxes and row highlighting
+      // Clear desktop checkboxes and row highlighting
       document.querySelectorAll('.player-checkbox').forEach(cb => {
         cb.checked = false;
         const row = cb.closest('tr');
@@ -285,6 +343,14 @@ function initializeKeeperTables() {
           if (indicator) {
             indicator.style.opacity = '0';
           }
+        }
+      });
+      // Clear mobile checkboxes
+      document.querySelectorAll('.player-checkbox-mobile').forEach(cb => {
+        cb.checked = false;
+        const card = cb.closest('.player-card');
+        if (card) {
+          card.classList.remove('selected');
         }
       });
     }
@@ -326,10 +392,19 @@ function initializeKeeperTables() {
     }
     
     if (headerCheckbox) {
-        const allCheckboxes = document.querySelectorAll('.player-checkbox');
+        const allCheckboxes = document.querySelectorAll('.player-checkbox, .player-checkbox-mobile');
         const allChecked = count === allCheckboxes.length && count > 0;
         headerCheckbox.checked = allChecked;
         headerCheckbox.indeterminate = count > 0 && !allChecked;
+    }
+    
+    // Update mobile header checkbox
+    const mobileHeaderCheckbox = document.getElementById('toggle-all-checkbox-mobile');
+    if (mobileHeaderCheckbox) {
+        const allCheckboxes = document.querySelectorAll('.player-checkbox, .player-checkbox-mobile');
+        const allChecked = count === allCheckboxes.length && count > 0;
+        mobileHeaderCheckbox.checked = allChecked;
+        mobileHeaderCheckbox.indeterminate = count > 0 && !allChecked;
     }
     
     // Don't clear notices here - let them timeout naturally
