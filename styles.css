@@ -2295,13 +2295,13 @@ textarea:focus-visible {
     transform: rotate(45deg);
   }
   
-  /* Hide main team dropdown on mobile - we show team name in table */
+  /* Keep team dropdown visible and functional on mobile */
   #team-select {
-    display: none !important;
+    /* Dropdown remains visible and functional on all screen sizes */
   }
   
-  /* Hide Pick a Team label on mobile */
+  /* Keep Pick a Team label visible on mobile for accessibility */
   label[for="team-select"] {
-    display: none !important;
+    /* Label remains visible for proper form accessibility */
   }
 }
