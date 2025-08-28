@@ -141,15 +141,20 @@ function initializeKeeperTables() {
     
     const tableHtml = `
       <div class="keeper-table-container">
-        <div class="mt-4 sm:mt-8">
+        <!-- Mobile Team Dropdown -->
+        <div class="mobile-team-dropdown hidden px-3 pb-2">
+          <div class="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Team Selected:</div>
+          <div class="text-sm font-bold text-gray-900 dark:text-white">${currentTeamSlug ? window.TEAM_OPTIONS.find(opt => opt.value === currentTeamSlug)?.label || 'None' : 'None'}</div>
+        </div>
+        <div class="mt-2 sm:mt-8">
           <!-- Mobile-friendly header -->
           <div class="mobile-table-header hidden">
-            <div class="flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-              <div class="flex items-center gap-3">
-                <input type="checkbox" id="toggle-all-checkbox-mobile" class="rounded" />
-                <span class="text-sm font-semibold text-gray-700 dark:text-gray-300">Select All</span>
+            <div class="flex items-center justify-between px-3 py-2 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+              <div class="flex items-center gap-2">
+                <input type="checkbox" id="toggle-all-checkbox-mobile" class="mobile-checkbox" />
+                <span class="text-xs font-semibold text-gray-700 dark:text-gray-300">Select All</span>
               </div>
-              <span class="text-sm font-semibold text-gray-700 dark:text-gray-300">Cost</span>
+              <span class="text-xs font-semibold text-gray-700 dark:text-gray-300">Cost</span>
             </div>
           </div>
           
@@ -191,15 +196,15 @@ function initializeKeeperTables() {
           <!-- Mobile List View -->
           <div class="mobile-list-view hidden">
             ${roster.map(player => `
-              <div class="player-card flex items-center gap-3 px-4 py-3 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800" data-player-name="${sanitizeForAttribute(player.name)}">
+              <div class="player-card flex items-center gap-2 px-3 py-1.5 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800" data-player-name="${sanitizeForAttribute(player.name)}">
                 <div class="flex-shrink-0">
-                  <input type="checkbox" data-player-name="${sanitizeForAttribute(player.name)}" data-player-cost="${player.cost}" class="player-checkbox-mobile rounded" />
+                  <input type="checkbox" data-player-name="${sanitizeForAttribute(player.name)}" data-player-cost="${player.cost}" class="player-checkbox-mobile mobile-checkbox" />
                 </div>
                 <div class="flex-1 min-w-0">
-                  <div class="text-sm font-medium text-gray-900 dark:text-white">${player.name}</div>
+                  <div class="text-xs font-medium text-gray-800 dark:text-gray-200">${player.name}</div>
                 </div>
                 <div class="flex-shrink-0">
-                  <span class="text-sm font-semibold text-gray-700 dark:text-gray-400">${window.currency.format(player.cost)}</span>
+                  <span class="text-xs font-semibold text-gray-600 dark:text-gray-400">${window.currency.format(player.cost)}</span>
                 </div>
               </div>
             `).join('')}
@@ -301,8 +306,11 @@ function initializeKeeperTables() {
   
   function handleSelectAll(event) {
       const isChecked = event.target.checked;
-      // Select both desktop and mobile checkboxes
-      const checkboxes = document.querySelectorAll('.player-checkbox, .player-checkbox-mobile');
+      // Only select checkboxes that are actually visible
+      const isMobile = window.innerWidth <= 640;
+      const checkboxes = isMobile 
+          ? document.querySelectorAll('.player-checkbox-mobile')
+          : document.querySelectorAll('.player-checkbox');
       
       if (isChecked) {
           // Select all - bypass individual limits
@@ -317,12 +325,18 @@ function initializeKeeperTables() {
               showNotice(`⚠️ You've selected all players. You'll need to deselect some before submitting (max ${window.MAX_KEEPERS} keepers, $${window.TEAM_BUDGET} budget).`);
           }
       } else {
-          // Deselect all
+          // Deselect all - clear the Map completely first
+          selectedPlayers.clear();
+          // Then uncheck all visible checkboxes
           checkboxes.forEach(cb => {
-              if (cb.checked) {
-                  cb.checked = false;
-                  handlePlayerSelection(cb, true); // bypass limits for deselect
-              }
+              cb.checked = false;
+          });
+          // Update all row/card styling
+          document.querySelectorAll('.keepers-table-row.selected, .player-card.selected').forEach(el => {
+              el.classList.remove('selected');
+          });
+          document.querySelectorAll('.row-selected-indicator').forEach(el => {
+              el.style.opacity = '0';
           });
       }
       updateFloatingBar();
@@ -392,7 +406,7 @@ function initializeKeeperTables() {
     }
     
     if (headerCheckbox) {
-        const allCheckboxes = document.querySelectorAll('.player-checkbox, .player-checkbox-mobile');
+        const allCheckboxes = document.querySelectorAll('.player-checkbox');
         const allChecked = count === allCheckboxes.length && count > 0;
         headerCheckbox.checked = allChecked;
         headerCheckbox.indeterminate = count > 0 && !allChecked;
@@ -401,7 +415,7 @@ function initializeKeeperTables() {
     // Update mobile header checkbox
     const mobileHeaderCheckbox = document.getElementById('toggle-all-checkbox-mobile');
     if (mobileHeaderCheckbox) {
-        const allCheckboxes = document.querySelectorAll('.player-checkbox, .player-checkbox-mobile');
+        const allCheckboxes = document.querySelectorAll('.player-checkbox-mobile');
         const allChecked = count === allCheckboxes.length && count > 0;
         mobileHeaderCheckbox.checked = allChecked;
         mobileHeaderCheckbox.indeterminate = count > 0 && !allChecked;
