@@ -460,18 +460,33 @@ function initializeKeeperTables() {
     console.log('Using currently selected team:', currentTeamSlug);
     
     const teamKey = currentTeamSlug.replace(/[.$#\[\]\/]/g, '_');
-    console.log('Team key:', teamKey);
+    console.log('Team key (slug format):', teamKey);
     
     const submissions = window.getSubmissions();
     console.log('Submissions retrieved:', submissions);
     console.log('Available team keys:', Object.keys(submissions || {}));
     
-    const submission = submissions[teamKey];
-    console.log('Found submission:', submission);
+    // Also try the original team name format
+    const teamOption = window.TEAM_OPTIONS.find(opt => opt.value === currentTeamSlug);
+    let originalTeamKey = '';
+    if (teamOption) {
+      originalTeamKey = teamOption.label.trim().replace(/[.$#\[\]\/]/g, '_');
+      console.log('Original team name:', teamOption.label);
+      console.log('Original team key format:', originalTeamKey);
+    }
+    
+    let submission = submissions[teamKey];
+    console.log('Found submission with slug key:', submission);
+    
+    // If not found with slug, try with original team name format
+    if (!submission && originalTeamKey) {
+      submission = submissions[originalTeamKey];
+      console.log('Found submission with original team name key:', submission);
+    }
     
     if (!submission) {
-      alert('No submission found for this team name');
-      console.log('No submission found for team key:', teamKey);
+      alert(`No submission found for this team. Looked for keys: "${teamKey}" and "${originalTeamKey}". Available keys: ${Object.keys(submissions || {}).join(', ')}`);
+      console.log('No submission found for team. Available keys:', Object.keys(submissions || {}));
       return;
     }
     
@@ -498,8 +513,8 @@ function initializeKeeperTables() {
     
     // Find the team slug for this submission
     const teamSlug = submission.teamName;
-    const teamOption = window.TEAM_OPTIONS.find(opt => opt.value === teamSlug);
-    if (!teamOption) {
+    const foundTeamOption = window.TEAM_OPTIONS.find(opt => opt.value === teamSlug);
+    if (!foundTeamOption) {
       alert('Could not find team in roster. Please contact the commissioner.');
       return;
     }
