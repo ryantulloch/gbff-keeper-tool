@@ -125,10 +125,11 @@ Edit `js/config.js` to customize:
 
 ### The Reveal Experience
 When the deadline hits:
-- 10-second full-screen countdown begins
-- Smooth animations from 10 → 9 → 8...
-- Final 3 seconds: "FUCK" → "YOU" → "DANNY"
-- All keepers revealed simultaneously
+- 60-second full-screen countdown begins with dramatic gold-accented overlay
+- 57 rotating meme images (Cowboys/Micah/Jerry) with smooth crossfade transitions
+- Images display at 30% opacity, one per second from 60→4
+- Final 3 seconds: "FUCK" → "YOU" → "DANNY" (no background images)
+- All keepers revealed simultaneously with staggered animations
 - Header updates to "Final Results"
 
 ## 🛠️ Technical Stack
@@ -196,9 +197,18 @@ Premium countdown experience dedicated to Danny.
 
 ---
 
-**Status**: ✅ Production Ready | **Version**: 2.1 | **Last Updated**: August 2025
+**Status**: ✅ Production Ready | **Version**: 2.2 | **Last Updated**: January 2025
 
-## 🔄 Recent Updates (v2.1)
+## 🔄 Recent Updates (v2.2)
+
+### 🎬 Countdown Background Images with Smooth Crossfade
+- **57 Rotating Meme Images**: Cowboys/Micah Parsons/Jerry Jones themed backgrounds during 60-second countdown
+- **Smooth Crossfade Transitions**: Images blend seamlessly without black gaps between transitions
+- **Optimized Performance**: GPU-accelerated CSS transitions with 400ms crossfade duration
+- **Smart Image Management**: Previous images fade out while new images fade in with 100ms overlap
+- **Final 3 Seconds**: Background images pause for dramatic "FUCK/YOU/DANNY" text display
+
+## 🔄 Previous Updates (v2.1)
 
 ### ✨ Enhanced Edit Functionality
 - **Complete Submission Overwrite**: Edit keepers with full replacement system
