@@ -1141,15 +1141,7 @@ button:focus-visible {
 }
 
 button:active:not(:disabled) {
-  transform: translateY(1px);
   filter: brightness(0.98);
-}
-
-/* Override for commissioner button - no active state */
-#commissionerButton:active {
-  transform: none !important;
-  filter: none !important;
-  background-color: transparent !important;
 }
 
 button:disabled {
@@ -1800,12 +1792,6 @@ textarea:focus-visible {
   border-radius: 0.5rem;
 }
 
-/* Remove active transform to prevent conflicts with spring physics */
-#instructionsButton:active {
-  transform: none !important;
-  background-color: transparent !important;
-  filter: none !important;
-}
 
 /* Chevron Animation - No CSS transitions, handled by spring physics */
 #instructionsToggle {
