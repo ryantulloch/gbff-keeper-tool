@@ -48,11 +48,11 @@ function initializeKeeperTables() {
     optionsContainer.innerHTML = '';
     
     // Create option elements with proper structure for TailwindPlus Elements
-    window.TEAM_OPTIONS.forEach(opt => {
+    window.TEAM_OPTIONS.forEach((opt, index) => {
       const optionHTML = `
         <el-option value="${opt.value}" class="group/option relative block cursor-default py-2 pr-9 pl-3 text-gray-900 select-none focus:bg-indigo-600 focus:text-white focus:outline-hidden dark:text-white dark:focus:bg-indigo-500">
           <span class="block truncate font-normal group-aria-selected/option:font-semibold">${opt.label}</span>
-          <span class="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600 group-not-aria-selected/option:hidden group-focus/option:text-white in-[el-selectedcontent]:hidden dark:text-indigo-400">
+          <span class="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600 group-not-aria-selected/option:hidden group-focus/option:text-white dark:text-indigo-400">
             <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="size-5">
               <path d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" fill-rule="evenodd" />
             </svg>
@@ -86,6 +86,23 @@ function initializeKeeperTables() {
           if (selectedContent) {
             selectedContent.textContent = label;
           }
+          
+          // Hide all checkmarks first
+          optionsContainer.querySelectorAll('el-option').forEach(opt => {
+            opt.removeAttribute('aria-selected');
+            const checkmark = opt.querySelector('.absolute.inset-y-0.right-0');
+            if (checkmark) {
+              checkmark.style.display = 'none';
+            }
+          });
+          
+          // Show checkmark for selected option
+          option.setAttribute('aria-selected', 'true');
+          const selectedCheckmark = option.querySelector('.absolute.inset-y-0.right-0');
+          if (selectedCheckmark) {
+            selectedCheckmark.style.display = 'flex';
+          }
+          
           // Update the el-select value attribute for web component
           teamSelect.setAttribute('value', value);
           currentTeamSlug = value;
@@ -102,6 +119,13 @@ function initializeKeeperTables() {
   // --- Table Rendering ---
   function renderTeamTable(slug) {
     const roster = window.TEAMS[slug] || [];
+    
+    // Show password section when team is selected
+    const passwordSection = document.getElementById('password-section');
+    if (passwordSection) {
+      passwordSection.style.display = 'block';
+    }
+    
     const tableHtml = `
       <div class="px-4 sm:px-6 lg:px-8">
         <div class="mt-8 flow-root">
@@ -201,7 +225,7 @@ function initializeKeeperTables() {
       updateFloatingBar();
   }
 
-  function clearSelection(reRender = true) {
+  window.clearSelection = function clearSelection(reRender = true) {
     selectedPlayers.clear();
     if (reRender && currentTeamSlug) {
       renderTeamTable(currentTeamSlug);

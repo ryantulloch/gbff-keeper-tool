@@ -35,11 +35,25 @@ window.submitKeepersFromTable = function() {
             return;
         }
 
-        const password = prompt('Please enter your team password to confirm your submission:');
-        if (password === null) return; // User cancelled prompt
-
+        // Get password from the form fields
+        const password = document.getElementById('password')?.value;
+        const confirmPassword = document.getElementById('confirmPassword')?.value;
+        
+        if (!password) {
+            alert('Please enter a password to secure your submission.');
+            document.getElementById('password')?.focus();
+            return;
+        }
+        
+        if (password !== confirmPassword) {
+            alert('Passwords do not match. Please check and try again.');
+            document.getElementById('confirmPassword')?.focus();
+            return;
+        }
+        
         if (password.length < 4) {
             alert('Password must be at least 4 characters');
+            document.getElementById('password')?.focus();
             return;
         }
 
@@ -82,6 +96,13 @@ window.submitKeepersFromTable = function() {
         // Save to Firebase
         window.getDb().ref('submissions/' + teamKey).set(submission).then(() => {
             alert('Your keeper submission has been successfully recorded!');
+            
+            // Clear password fields
+            const passwordField = document.getElementById('password');
+            const confirmPasswordField = document.getElementById('confirmPassword');
+            if (passwordField) passwordField.value = '';
+            if (confirmPasswordField) confirmPasswordField.value = '';
+            
             // Clear selection
             if (window.getSelectedTeam && typeof window.clearSelection === 'function') {
                 window.clearSelection();
