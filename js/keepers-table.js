@@ -485,7 +485,7 @@ function initializeKeeperTables() {
       .map(p => `${p.name} (${window.currency.format(p.cost)})`)
       .join('\n');
     
-    const confirmMessage = `Update your keeper submission with these ${selectedPlayers.size} players?\n\n${keepersList}\n\nTotal Cost: ${window.currency.format(totalCost)}`;
+    const confirmMessage = `⚠️ COMPLETE REPLACEMENT ⚠️\n\nThis will be your NEW ENTIRE keeper team, completely replacing any previous submission.\n\nYour NEW TEAM (${selectedPlayers.size} keepers):\n${keepersList}\n\nTotal Cost: ${window.currency.format(totalCost)}\n\n✅ Confirm this as your complete new keeper team?`;
     
     if (!confirm(confirmMessage)) {
       return;
