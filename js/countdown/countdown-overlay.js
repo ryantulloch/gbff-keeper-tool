@@ -108,7 +108,7 @@ function startCountdown() {
 /**
  * Update countdown display every second
  * Premium version with smooth transitions for FUCK/YOU/DANNY at 3/2/1
- * Now includes faint pulsing background images!
+ * TEST: Single meme flash at 25-second mark only!
  */
 function updateCountdown() {
     if (!window.getCountdownStartTime()) return;
@@ -121,21 +121,9 @@ function updateCountdown() {
     const countdownText = document.getElementById('countdownText');
     const countdownMessage = document.getElementById('countdownMessage');
     
-    // Trigger background image pulse on each second
-    if (typeof window.triggerImagePulse === 'function') {
-        window.triggerImagePulse();
-    }
-    
-    // Cycle images every 7 seconds for variety
-    if (remaining % 7 === 0 && typeof window.cycleToNextImage === 'function') {
-        window.cycleToNextImage();
-    }
-    
-    // Special test: Show meme at 25 seconds instead of countdown number
+    // TEST: Show meme for exactly 1 second at 25-second mark only
     if (remaining === 25 && typeof window.showMemeAt25Seconds === 'function') {
         window.showMemeAt25Seconds();
-        // Skip normal text update when showing meme
-        return;
     }
     
     // Smooth transition function with premium timing
