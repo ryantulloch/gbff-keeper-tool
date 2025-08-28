@@ -2396,6 +2396,16 @@ textarea:focus-visible {
 
 /* Mobile Floating Bar - Final safe-area and grid fixes */
 @media (max-width: 640px) {
+  /* Container: fit viewport and sit at bottom with top-rounded corners */
+  #floating-bar {
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    max-width: 100vw !important;
+    border-radius: 0.5rem 0.5rem 0 0 !important;
+    box-sizing: border-box !important;
+  }
+
   /* Respect iOS safe areas so content isn't clipped off-screen */
   #floating-bar > .px-4 {
     padding-left: calc(1rem + env(safe-area-inset-left, 0px)) !important;
