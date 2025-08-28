@@ -116,6 +116,12 @@ function updateCountdown() {
     const elapsed = Date.now() - window.getCountdownStartTime();
     const remaining = Math.max(0, window.CONFIG.COUNTDOWN_DURATION - Math.floor(elapsed / 1000));
     
+    // DEBUG: Log countdown duration and remaining time
+    if (remaining === window.CONFIG.COUNTDOWN_DURATION) {
+        console.log('🕐 COUNTDOWN DEBUG: Using duration =', window.CONFIG.COUNTDOWN_DURATION, 'seconds');
+        console.log('🕐 COUNTDOWN DEBUG: Starting from', remaining, 'seconds');
+    }
+    
     // Get display elements
     const countdownNumber = document.getElementById('countdownNumber');
     const countdownText = document.getElementById('countdownText');
