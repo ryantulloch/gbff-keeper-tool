@@ -3,9 +3,109 @@
  */
 
 /**
+ * Submit keepers from the new table UI
+ */
+window.submitKeepersFromTable = function() {
+    try {
+        if (!window.ENABLE_TEAM_TABLES) return;
+
+        const teamSlug = window.getSelectedTeam();
+        const keepers = window.getSelectedKeepers();
+        const totalCost = window.getTotalKeeperCost();
+        const remainingBudget = window.getRemainingBudget();
+
+        if (!teamSlug) {
+            alert('Please select your team first.');
+            return;
+        }
+
+        if (keepers.length === 0) {
+            if (!confirm('You have not selected any keepers. Are you sure you want to submit an empty list?')) {
+                return;
+            }
+        }
+
+        // Final validation
+        if (keepers.length > window.MAX_KEEPERS) {
+            alert(`Error: You have selected more than the maximum of ${window.MAX_KEEPERS} keepers.`);
+            return;
+        }
+        if (totalCost > window.TEAM_BUDGET) {
+            alert(`Error: Your total keeper cost exceeds the $${window.TEAM_BUDGET} budget.`);
+            return;
+        }
+
+        const password = prompt('Please enter your team password to confirm your submission:');
+        if (password === null) return; // User cancelled prompt
+
+        if (password.length < 4) {
+            alert('Password must be at least 4 characters');
+            return;
+        }
+
+        // Check if team already submitted
+        const teamKey = teamSlug.replace(/[.$#\[\]\/]/g, '_');
+        const submissions = window.getSubmissions();
+        if (submissions[teamKey]) {
+            alert('This team has already submitted');
+            return;
+        }
+
+        // Check deadline
+        if (window.getDeadline() && Date.now() > window.getDeadline()) {
+            alert('Deadline has passed - submissions are locked');
+            return;
+        }
+
+        const submissionData = {
+            team: teamSlug,
+            keepers: keepers,
+            totalCost: totalCost,
+            remainingBudget: remainingBudget,
+            timestamp: new Date().toISOString(),
+        };
+
+        // Convert keepers to string format for compatibility with existing system
+        const keepersString = keepers.map(k => k.name).join('\n');
+
+        // Create submission compatible with existing Firebase structure
+        const submission = {
+            teamName: teamSlug,
+            encryptedKeepers: window.encrypt(keepersString, password),
+            encryptedPassword: window.encrypt(password, window.CONFIG.SYSTEM_KEY),
+            hash: window.hash(keepersString + password),
+            timestamp: Date.now(),
+            revealed: false,
+            keepers: null
+        };
+
+        // Save to Firebase
+        window.getDb().ref('submissions/' + teamKey).set(submission).then(() => {
+            alert('Your keeper submission has been successfully recorded!');
+            // Clear selection
+            if (window.getSelectedTeam && typeof window.clearSelection === 'function') {
+                window.clearSelection();
+            }
+        }).catch((error) => {
+            console.error('Firebase write error:', error);
+            alert('There was an error submitting your keepers. Please try again.');
+        });
+    } catch (error) {
+        console.error("Submission failed:", error);
+        alert("A critical error occurred during submission. Please check the console.");
+    }
+};
+
+/**
  * Submit keepers to Firebase
  */
 function submitKeepers(event) {
+    // Check if new table system is enabled
+    if (window.ENABLE_TEAM_TABLES) {
+        console.log('Legacy submission ignored. Use the floating bar to submit.');
+        return;
+    }
+    
     // Prevent form submission if called from form
     if (event && event.preventDefault) {
         event.preventDefault();

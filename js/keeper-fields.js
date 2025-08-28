@@ -8,6 +8,28 @@ let keeperFieldCount = 0;
  * Initialize keeper fields on page load
  */
 function initializeKeeperFields() {
+    if (window.ENABLE_TEAM_TABLES) {
+        // Hide the old container if it exists
+        const oldContainer = document.getElementById('keepersList');
+        if (oldContainer) {
+            oldContainer.style.display = 'none';
+        }
+        // Also hide the parent container if it exists
+        const keeperFieldsContainer = document.getElementById('keeper-fields-container');
+        if (keeperFieldsContainer) {
+            keeperFieldsContainer.style.display = 'none';
+        }
+        // Hide any other old form elements
+        const submitContent = document.getElementById('submitContent');
+        if (submitContent) {
+            const oldFormElements = submitContent.querySelectorAll('.keeper-form-section, #keeperCount, #addKeeperBtn');
+            oldFormElements.forEach(el => {
+                el.style.display = 'none';
+            });
+        }
+        return; // Do not initialize old logic
+    }
+
     const keepersList = document.getElementById('keepersList');
     if (!keepersList) return; // Guard against missing element
     
