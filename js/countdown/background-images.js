@@ -9,17 +9,17 @@ let currentImageElement = null;
 
 // Complete array of 57 images for countdown seconds 60-4
 const COUNTDOWN_IMAGES = [
-    // Cowboys Memes Square (10 images) - NOTE: No cowboys_memes_square directory found, using available images
-    'cowboys_memes_funny_crop/cowboys_memes_funny_crop_006.jpg',
-    'jerry_jones_solo_crop/jerry_jones_solo_crop_001.jpg',
-    'jerry_jones_solo_crop/jerry_jones_solo_crop_002.jpg',
-    'jerry_jones_solo_crop/jerry_jones_solo_crop_003.jpg',
-    'jerry_jones_solo_crop/jerry_jones_solo_crop_004.jpg',
-    'jerry_jones_solo_crop/jerry_jones_solo_crop_006.jpg',
-    'jerry_jones_solo_crop/jerry_jones_solo_crop_008.jpg',
-    'jerry_jones_solo_crop/jerry_jones_solo_crop_009.jpg',
-    'jerry_jones_solo_crop/jerry_jones_solo_crop_010.jpg',
-    'jerry_jones_solo_crop/jerry_jones_solo_crop_011.jpg',
+    // Cowboys Memes Square (10 images) - FOUND THE DIRECTORY!
+    'cowboys_memes_square/cowboys_meme_002.jpg',
+    'cowboys_memes_square/cowboys_meme_003.jpg',
+    'cowboys_memes_square/cowboys_meme_006.jpg',
+    'cowboys_memes_square/cowboys_meme_010.jpg',
+    'cowboys_memes_square/cowboys_meme_013.jpg',
+    'cowboys_memes_square/cowboys_meme_014.jpg',
+    'cowboys_memes_square/cowboys_meme_015.jpg',
+    'cowboys_memes_square/cowboys_meme_017.jpg',
+    'cowboys_memes_square/cowboys_meme_018.jpg',
+    'cowboys_memes_square/cowboys_meme_019.jpg',
     
     // Micah Solo Square Crop (24 images)
     'micah_solo_square_crop/micah_solo_001.jpg',
